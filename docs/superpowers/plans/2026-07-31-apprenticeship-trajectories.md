@@ -1523,11 +1523,15 @@ class TestStrictnessRuns(unittest.TestCase):
         self.assertEqual(runs["pooled"]["n"], 23)
 
     def test_revenue_strict_excludes_fallback(self):
+        # Two primary rows so a median exists; the fallback row's 50 would
+        # drag it far off if the filter leaked.
         rows = [clock_row("a", "software_internet", "primary", 5),
-                clock_row("b", "software_internet", "fallback", 50)]
+                clock_row("b", "software_internet", "primary", 7),
+                clock_row("c", "software_internet", "fallback", 50)]
         runs = report.strictness_runs(rows, "clock_education")
-        self.assertEqual(runs["revenue_strict"]["n"], 1)
-        self.assertEqual(runs["revenue_strict"]["median"], 5)
+        self.assertEqual(runs["revenue_strict"]["n"], 2)
+        self.assertEqual(runs["revenue_strict"]["median"], 6)
+        self.assertEqual(runs["all_commercial"]["n"], 3)
 
 
 class TestSliceBy(unittest.TestCase):
