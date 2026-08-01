@@ -62,11 +62,18 @@ def slice_by(clock_rows, key, clock=PRIMARY_CLOCK):
 
 
 def _fmt(summary):
-    """One table cell: median, CI, and n — or a reason there is none."""
+    """One table cell: median, CI, and n — or a reason there is none.
+
+    The undersized flag applies to every slice below MIN_SLICE_N, including
+    those too small to have a median at all. A one-person slice is the most
+    misreadable of all, not the least.
+    """
     if summary["median"] is None:
-        return "n=%d, too few to summarise" % summary["n"]
-    text = "%.1f yr (95%% CI %.1f-%.1f), n=%d" % (
-        summary["median"], summary["ci_lo"], summary["ci_hi"], summary["n"])
+        text = "n=%d, too few to summarise" % summary["n"]
+    else:
+        text = "%.1f yr (95%% CI %.1f-%.1f), n=%d" % (
+            summary["median"], summary["ci_lo"], summary["ci_hi"],
+            summary["n"])
     if summary["n"] < MIN_SLICE_N:
         text += " — **too small to read as a finding**"
     return text

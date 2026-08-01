@@ -91,14 +91,38 @@ class TestBuildReport(unittest.TestCase):
         self.assertIn("All commercial", text)
         self.assertIn("Pooled", text)
 
-    def test_small_slices_are_flagged(self):
-        text = report.build_report(sample_rows())
-        # science_research has n=5, far below the 30 needed to mean anything.
-        self.assertIn("too small to read", text)
+    def test_flag_is_attached_to_the_undersized_row_only(self):
+        rows = [clock_row("big%02d" % i, "software_internet", "primary",
+                          8 + (i % 7)) for i in range(35)]
+        rows += [clock_row("s%02d" % i, "science_research", "equivalent",
+                           18 + (i % 4)) for i in range(5)]
+        text = report.build_report(rows)
+        small = [l for l in text.splitlines()
+                 if l.startswith("| science_research")]
+        large = [l for l in text.splitlines()
+                 if l.startswith("| software_internet")]
+        self.assertEqual(len(small), 1)
+        self.assertEqual(len(large), 1)
+        self.assertIn("too small to read", small[0])
+        self.assertNotIn("too small to read", large[0])
 
-    def test_reports_stopping_rule_verdict(self):
+    def test_single_row_slice_is_flagged(self):
+        # n=1 has no median at all, which makes it the most misreadable
+        # slice, not an exempt one.
+        rows = [clock_row("a", "software_internet", "primary", 5),
+                clock_row("b", "science_research", "equivalent", 20)]
+        text = report.build_report(rows)
+        line = [l for l in text.splitlines()
+                if l.startswith("| science_research")][0]
+        self.assertIn("n=1", line)
+        self.assertIn("too small to read", line)
+
+    def test_reports_stopping_rule_numbers(self):
         text = report.build_report(sample_rows())
         self.assertIn("Stopping rule", text)
+        # 12 of the 23 sample rows are hit_basis == "primary".
+        self.assertIn("Revenue-strict n = 12", text)
+        self.assertIn("threshold 1.00", text)
 
 
 if __name__ == "__main__":

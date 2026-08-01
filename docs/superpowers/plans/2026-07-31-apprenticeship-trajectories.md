@@ -1556,14 +1556,38 @@ class TestBuildReport(unittest.TestCase):
         self.assertIn("All commercial", text)
         self.assertIn("Pooled", text)
 
-    def test_small_slices_are_flagged(self):
-        text = report.build_report(sample_rows())
-        # science_research has n=5, far below the 30 needed to mean anything.
-        self.assertIn("too small to read", text)
+    def test_flag_is_attached_to_the_undersized_row_only(self):
+        rows = [clock_row("big%02d" % i, "software_internet", "primary",
+                          8 + (i % 7)) for i in range(35)]
+        rows += [clock_row("s%02d" % i, "science_research", "equivalent",
+                           18 + (i % 4)) for i in range(5)]
+        text = report.build_report(rows)
+        small = [l for l in text.splitlines()
+                 if l.startswith("| science_research")]
+        large = [l for l in text.splitlines()
+                 if l.startswith("| software_internet")]
+        self.assertEqual(len(small), 1)
+        self.assertEqual(len(large), 1)
+        self.assertIn("too small to read", small[0])
+        self.assertNotIn("too small to read", large[0])
 
-    def test_reports_stopping_rule_verdict(self):
+    def test_single_row_slice_is_flagged(self):
+        # n=1 has no median at all, which makes it the most misreadable
+        # slice, not an exempt one.
+        rows = [clock_row("a", "software_internet", "primary", 5),
+                clock_row("b", "science_research", "equivalent", 20)]
+        text = report.build_report(rows)
+        line = [l for l in text.splitlines()
+                if l.startswith("| science_research")][0]
+        self.assertIn("n=1", line)
+        self.assertIn("too small to read", line)
+
+    def test_reports_stopping_rule_numbers(self):
         text = report.build_report(sample_rows())
         self.assertIn("Stopping rule", text)
+        # 12 of the 23 sample rows are hit_basis == "primary".
+        self.assertIn("Revenue-strict n = 12", text)
+        self.assertIn("threshold 1.00", text)
 
 
 if __name__ == "__main__":
@@ -1644,11 +1668,18 @@ def slice_by(clock_rows, key, clock=PRIMARY_CLOCK):
 
 
 def _fmt(summary):
-    """One table cell: median, CI, and n — or a reason there is none."""
+    """One table cell: median, CI, and n — or a reason there is none.
+
+    The undersized flag applies to every slice below MIN_SLICE_N, including
+    those too small to have a median at all. A one-person slice is the most
+    misreadable of all, not the least.
+    """
     if summary["median"] is None:
-        return "n=%d, too few to summarise" % summary["n"]
-    text = "%.1f yr (95%% CI %.1f-%.1f), n=%d" % (
-        summary["median"], summary["ci_lo"], summary["ci_hi"], summary["n"])
+        text = "n=%d, too few to summarise" % summary["n"]
+    else:
+        text = "%.1f yr (95%% CI %.1f-%.1f), n=%d" % (
+            summary["median"], summary["ci_lo"], summary["ci_hi"],
+            summary["n"])
     if summary["n"] < MIN_SLICE_N:
         text += " — **too small to read as a finding**"
     return text
@@ -1748,12 +1779,12 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_report -v`
-Expected: PASS, 11 tests
+Expected: PASS, 12 tests
 
 - [ ] **Step 5: Run the whole suite**
 
 Run: `python3 -m unittest discover -s tests -t . -v`
-Expected: PASS, 67 tests total
+Expected: PASS, 81 tests total
 
 - [ ] **Step 6: Commit**
 
