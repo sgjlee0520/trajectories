@@ -65,6 +65,51 @@ class TestStoppingRule(unittest.TestCase):
                                            ci_half_width=0.9)
         self.assertTrue(result["stop"])
 
+    def test_drift_exactly_at_threshold_blocks(self):
+        # Spec: drift must be strictly under 0.5 yr, so 0.5 does not qualify.
+        result = stats.check_stopping_rule([10.0, 10.5, 11.0], n=100,
+                                           ci_half_width=0.5)
+        self.assertFalse(result["stop"])
+        self.assertIn("drift", result["reason"])
+
+    def test_half_width_exactly_at_threshold_passes(self):
+        # Spec: CI half-width of exactly 1.0 yr satisfies the rule.
+        result = stats.check_stopping_rule([11.8, 12.0, 12.2], n=210,
+                                           ci_half_width=1.0)
+        self.assertTrue(result["stop"])
+
+
+class TestRevenueStrictValues(unittest.TestCase):
+    def rows(self):
+        return [
+            {"hit_basis": "primary", "clock_education": 11},
+            {"hit_basis": "primary", "clock_education": 9},
+            {"hit_basis": "fallback", "clock_education": 40},
+            {"hit_basis": "equivalent", "clock_education": 50},
+            {"hit_basis": "primary", "clock_education": None},
+        ]
+
+    def test_keeps_only_primary_basis(self):
+        self.assertEqual(stats.revenue_strict_values(self.rows()), [11, 9])
+
+    def test_excludes_fallback_and_equivalent(self):
+        values = stats.revenue_strict_values(self.rows())
+        self.assertNotIn(40, values)
+        self.assertNotIn(50, values)
+
+    def test_drops_none_clock_values(self):
+        self.assertNotIn(None, stats.revenue_strict_values(self.rows()))
+
+    def test_honours_the_clock_argument(self):
+        rows = [{"hit_basis": "primary", "clock_venture": 3,
+                 "clock_education": 11}]
+        self.assertEqual(
+            stats.revenue_strict_values(rows, clock="clock_venture"), [3])
+
+    def test_empty_when_no_primary_rows(self):
+        rows = [{"hit_basis": "fallback", "clock_education": 7}]
+        self.assertEqual(stats.revenue_strict_values(rows), [])
+
 
 class TestAudit(unittest.TestCase):
     def test_samples_fifteen_percent(self):
