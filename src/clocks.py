@@ -27,7 +27,9 @@ ERA_SPLIT = 1995
 
 
 def era_of(hit_year):
-    """Era label used for slicing. None when the hit year is unknown."""
+    """Era label for slicing: 'pre1995', 'post1995', or '' when the hit
+    year is unknown. The empty label is deliberate — such rows contribute
+    to no median, and Task 6 renders the group as '(unknown)'."""
     if hit_year is None:
         return ""
     return "pre1995" if hit_year < ERA_SPLIT else "post1995"

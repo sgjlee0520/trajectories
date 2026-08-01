@@ -835,7 +835,7 @@ git commit -m "Add largest-remainder wave allocation"
 - Produces:
   - `CLOCK_COLUMNS` — list of str, the clocks.csv header
   - `compute_clocks(row)` -> dict with keys `person_id`, `bucket`, `hit_basis`, `country_primary`, `gender`, `era`, `clock_education`, `clock_age18`, `clock_venture`, `age_at_first_hit`. Clock values are int or `None`.
-  - `era_of(hit_year)` -> `"pre1995"` or `"post1995"`
+  - `era_of(hit_year)` -> `"pre1995"`, `"post1995"`, or `""` when the hit year is unknown
   - `write_clocks(clock_rows, path)` -> None
 
 - [ ] **Step 1: Write the failing test**
@@ -858,6 +858,9 @@ class TestEra(unittest.TestCase):
 
     def test_1995_is_post1995(self):
         self.assertEqual(clocks.era_of(1995), "post1995")
+
+    def test_unknown_hit_year_gives_empty_era(self):
+        self.assertEqual(clocks.era_of(None), "")
 
 
 class TestComputeClocks(unittest.TestCase):
@@ -884,6 +887,20 @@ class TestComputeClocks(unittest.TestCase):
         )
         result = clocks.compute_clocks(row)
         self.assertIsNone(result["clock_education"])
+        self.assertEqual(result["clock_venture"], 3)
+
+    def test_unknown_birth_nulls_only_the_birth_derived_clocks(self):
+        # birth + 18 is arithmetic on a possibly-None value. If the guard is
+        # ever refactored away, this is the test that catches it.
+        row = valid_row(
+            a1_birth_conf="none",
+            a1_birth_date="unknown",
+            a1_birth_src="",
+        )
+        result = clocks.compute_clocks(row)
+        self.assertIsNone(result["clock_age18"])
+        self.assertIsNone(result["age_at_first_hit"])
+        self.assertEqual(result["clock_education"], 11)
         self.assertEqual(result["clock_venture"], 3)
 
     def test_excluded_row_yields_all_none_clocks(self):
@@ -933,6 +950,37 @@ class TestWriteClocks(unittest.TestCase):
         finally:
             os.remove(path)
 
+    def test_load_clocks_roundtrips_none(self):
+        row = valid_row(
+            a4_first_venture_conf="none",
+            a4_first_venture_date="unknown",
+            a4_first_venture_src="",
+        )
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            clocks.write_clocks([clocks.compute_clocks(row)], path)
+            loaded = clocks.load_clocks(path)
+            self.assertEqual(len(loaded), 1)
+            self.assertIsNone(loaded[0]["clock_venture"])
+            self.assertEqual(loaded[0]["clock_education"], 11)
+        finally:
+            os.remove(path)
+
+    def test_load_clocks_treats_whitespace_cell_as_unknown(self):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            with open(path, "w", newline="", encoding="utf-8") as f:
+                f.write(",".join(clocks.CLOCK_COLUMNS) + "\n")
+                f.write("p001,software_internet,primary,US,f,post1995,"
+                        "11,15,   ,33\n")
+            loaded = clocks.load_clocks(path)
+            self.assertIsNone(loaded[0]["clock_venture"])
+            self.assertEqual(loaded[0]["clock_age18"], 15)
+        finally:
+            os.remove(path)
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -977,7 +1025,9 @@ ERA_SPLIT = 1995
 
 
 def era_of(hit_year):
-    """Era label used for slicing. None when the hit year is unknown."""
+    """Era label for slicing: 'pre1995', 'post1995', or '' when the hit
+    year is unknown. The empty label is deliberate — such rows contribute
+    to no median, and Task 6 renders the group as '(unknown)'."""
     if hit_year is None:
         return ""
     return "pre1995" if hit_year < ERA_SPLIT else "post1995"
@@ -1051,7 +1101,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_clocks -v`
-Expected: PASS, 8 tests
+Expected: PASS, 12 tests
 
 - [ ] **Step 5: Commit**
 
