@@ -80,6 +80,18 @@ class TestValidateRow(unittest.TestCase):
         errors = schema.validate_row(valid_row(a5_first_hit_src=""))
         self.assertTrue(any("a5_first_hit_src" in e for e in errors))
 
+    def test_bare_http_string_is_not_a_source(self):
+        # "http" satisfied the old startswith check while citing nothing.
+        errors = schema.validate_row(valid_row(a5_first_hit_src="http"))
+        self.assertTrue(any("a5_first_hit_src" in e for e in errors))
+
+    def test_malformed_url_rejected(self):
+        for bad in ("httpIforgot", "https:/typo", "ftp://example.org/x",
+                    "https://nodot"):
+            errors = schema.validate_row(valid_row(a5_first_hit_src=bad))
+            self.assertTrue(any("a5_first_hit_src" in e for e in errors),
+                            "should reject %r" % bad)
+
     def test_conf_none_requires_unknown_date(self):
         errors = schema.validate_row(valid_row(a3_first_domain_job_conf="none"))
         self.assertTrue(any("requires a3_first_domain_job_date='unknown'" in e

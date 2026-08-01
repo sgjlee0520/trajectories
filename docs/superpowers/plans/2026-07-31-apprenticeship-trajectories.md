@@ -302,6 +302,18 @@ class TestValidateRow(unittest.TestCase):
         errors = schema.validate_row(valid_row(a5_first_hit_src=""))
         self.assertTrue(any("a5_first_hit_src" in e for e in errors))
 
+    def test_bare_http_string_is_not_a_source(self):
+        # "http" satisfied the old startswith check while citing nothing.
+        errors = schema.validate_row(valid_row(a5_first_hit_src="http"))
+        self.assertTrue(any("a5_first_hit_src" in e for e in errors))
+
+    def test_malformed_url_rejected(self):
+        for bad in ("httpIforgot", "https:/typo", "ftp://example.org/x",
+                    "https://nodot"):
+            errors = schema.validate_row(valid_row(a5_first_hit_src=bad))
+            self.assertTrue(any("a5_first_hit_src" in e for e in errors),
+                            "should reject %r" % bad)
+
     def test_conf_none_requires_unknown_date(self):
         errors = schema.validate_row(valid_row(a3_first_domain_job_conf="none"))
         self.assertTrue(any("requires a3_first_domain_job_date='unknown'" in e
@@ -411,6 +423,7 @@ the median.
 """
 
 import csv
+import re
 import sys
 
 BUCKET_SHARES = {
@@ -478,6 +491,11 @@ TRAILING = [
 
 CONFIDENCE = {"high", "medium", "low", "none"}
 
+# A source must look like a real URL: scheme, ://, and a dotted host. The
+# permissive check this replaces accepted the bare string "http", which
+# would let an uncited anchor pass as fully sourced.
+URL_PATTERN = re.compile(r"^https?://[^\s/]+\.[^\s]")
+
 MIN_BIRTH_YEAR = 1850
 MAX_BIRTH_YEAR = 2010
 
@@ -538,7 +556,7 @@ def validate_row(row):
             if parse_year(date) is None:
                 errors.append("%s_date must be a 4-digit year, got %r"
                               % (anchor, date))
-            if not src.startswith("http"):
+            if not URL_PATTERN.match(src):
                 errors.append("%s_src must be a URL when %s_conf=%s, got %r"
                               % (anchor, anchor, conf, src))
 
@@ -612,7 +630,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_schema -v`
-Expected: PASS, 22 tests
+Expected: PASS, 24 tests
 
 - [ ] **Step 5: Commit**
 

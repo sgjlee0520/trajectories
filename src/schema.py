@@ -8,6 +8,7 @@ the median.
 """
 
 import csv
+import re
 import sys
 
 BUCKET_SHARES = {
@@ -75,6 +76,11 @@ TRAILING = [
 
 CONFIDENCE = {"high", "medium", "low", "none"}
 
+# A source must look like a real URL: scheme, ://, and a dotted host. The
+# permissive check this replaces accepted the bare string "http", which
+# would let an uncited anchor pass as fully sourced.
+URL_PATTERN = re.compile(r"^https?://[^\s/]+\.[^\s]")
+
 MIN_BIRTH_YEAR = 1850
 MAX_BIRTH_YEAR = 2010
 
@@ -135,7 +141,7 @@ def validate_row(row):
             if parse_year(date) is None:
                 errors.append("%s_date must be a 4-digit year, got %r"
                               % (anchor, date))
-            if not src.startswith("http"):
+            if not URL_PATTERN.match(src):
                 errors.append("%s_src must be a URL when %s_conf=%s, got %r"
                               % (anchor, anchor, conf, src))
 
