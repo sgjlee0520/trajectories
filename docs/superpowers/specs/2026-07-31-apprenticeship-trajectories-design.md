@@ -120,20 +120,45 @@ Each anchor stored as three columns: `<anchor>_date`, `<anchor>_src`, `<anchor>_
 
 ### Trailing columns
 
-`hit_entity`, `hit_criterion`, `excluded` (bool), `exclusion_reason`, `notes`
+`hit_entity`, `hit_criterion`, `hit_basis`, `excluded` (bool), `exclusion_reason`, `notes`
 
 ### `a5_first_hit` threshold definition
 
-The **earliest** date on which the person's own venture or work crossed **any** of:
+**$10M annual revenue is the primary criterion.** Non-commercial buckets get one fixed
+equivalent each, specified here rather than chosen per person, so that no coder ever decides
+what counts as a hit while looking at a specific career.
 
-- $10M+ annual revenue
-- IPO
-- Acquisition above $50M
-- A top-tier field prize (Nobel, Turing, Fields, Pulitzer, Academy Award)
-- 1M+ users, customers, or audience for something they created
+#### Commercial buckets
 
-Record which criterion fired in `hit_criterion`. Where multiple criteria are met, take the
-earliest date and record that criterion.
+Software & internet, hardware & deep tech, consumer/retail/industrial, healthcare & biotech,
+trade/import/logistics:
+
+| Rank | Criterion | Code | `hit_basis` |
+|---|---|---|---|
+| 1 | First year the person's own venture reached **$10M annual revenue** | `rev10` | `primary` |
+| 2 | *Only if revenue is never publicly documented:* earliest of IPO or acquisition above $50M | `ipo` / `acq50` | `fallback` |
+
+The fallback exists because private-company revenue is frequently unpublished, and without it
+a large share of otherwise well-documented commercial careers would code as `unknown` and
+drop out of every median. Rows using it are tagged `fallback` so revenue-strict medians
+remain computable.
+
+#### Non-commercial buckets
+
+| Bucket | Equivalent | Code | `hit_basis` |
+|---|---|---|---|
+| Science & research | Top-tier prize: Nobel, Turing, Fields, or Breakthrough | `prize` | `equivalent` |
+| Media & creators | 1M+ audience for their own work | `aud1m` | `equivalent` |
+| Investors & finance | First fund closed above $100M | `fund100` | `equivalent` |
+
+#### Resolution
+
+Record the code in `hit_criterion` and the tier in `hit_basis`. Where multiple criteria are
+met, take the **earliest** date and record the criterion that fired at that date.
+
+**The pooled median mixes definitions.** This is a known and accepted cost of keeping the
+full frame; §8 requires the revenue-strict median to be reported alongside it so the size of
+the effect is always visible.
 
 ### Date precision
 
@@ -175,10 +200,16 @@ There is **no fixed target N.** The sample grows until the median stabilizes.
 ### Stopping rule (pre-registered, fixed before wave 1)
 
 After each wave, compute the median and a 95% bootstrap confidence interval for the primary
-clock (`education_end -> first_hit`). Stop when **both** hold:
+clock (`education_end -> first_hit`), on the **revenue-strict subset**
+(`hit_basis = primary`). Stop when **both** hold:
 
 1. The median moved **< 0.5 years** across two consecutive waves, **and**
 2. The bootstrap CI half-width is **<= 1.0 year**
+
+The rule tracks the revenue-strict median rather than the pooled one because §8 designates
+revenue-strict as the headline number, and a rule that fires on pooled stability could stop
+while the headline is still noisy. The pooled median stabilizes earlier and is reported
+throughout, but does not control the stop.
 
 ### Hard floor
 
@@ -194,16 +225,23 @@ specifically so that the stop is honest.
 Median standard error scales as approximately `1.25 * sigma / sqrt(n)`. Assuming
 `sigma ~ 6 years`:
 
-| N | CI half-width |
+| Revenue-strict n | CI half-width |
 |---|---|
 | 30 | ±2.7 yr |
 | 100 | ±1.5 yr |
-| 200 | ±1.0 yr — rule expected to fire |
+| 200 | ±1.0 yr — rule fires |
 | 400 | ±0.7 yr |
 | 800 | ±0.5 yr |
 
-Expect the rule to fire around **N = 150–250**. This is a forecast, not a target; the
-bootstrap reports the truth regardless of whether sigma comes in above or below 6.
+Because the rule is evaluated on the revenue-strict subset, **total roster N is roughly
+double the n in this table.** Commercial buckets are 68% of the frame, and some share of
+those will code as `fallback` rather than `primary`, so `primary` rows are expected to be
+roughly half of all rows. Expect the rule to fire at a **total N around 350–500**, reaching
+a revenue-strict n near 200.
+
+This is a forecast, not a target; the bootstrap reports the truth regardless of whether sigma
+comes in above or below 6, and the realized `primary` share is measured from the pilot
+onward rather than assumed.
 
 ## 7. Pilot
 
@@ -240,6 +278,15 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
 - **Sensitivity run:** medians computed on `conf = high` rows only, printed side by side
   with medians on all included rows. Where these diverge, the report states so rather than
   presenting the more attractive figure.
+- **Definition-strictness run (required).** Three medians printed together:
+  1. `hit_basis = primary` only — the revenue-strict median, $10M revenue and nothing else
+  2. all commercial rows — `primary` + `fallback`
+  3. pooled — all included rows across every bucket
+
+  Because the pooled median mixes revenue, prizes, audience, and fund size, this run is what
+  keeps that mixing honest. If the revenue-strict median and the pooled median diverge
+  materially, the revenue-strict figure is the one reported as the headline number and the
+  divergence is stated explicitly.
 - **Per-slice N and CI printed next to every sliced median.** Per-bucket medians stabilize
   far later than the pooled median — each bucket needs roughly its own 30 rows before its
   median means anything, making reliable field-level comparison an N≈400 proposition. The
@@ -274,3 +321,12 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
    applied in post without re-researching anyone.
 4. **List bias is inherited, not removed.** The quotas and cross-cuts bound it and make it
    visible; they do not eliminate it.
+5. **The pooled median mixes definitions.** A Nobel, a 1M-person audience, a $100M fund, and
+   $10M of revenue are not the same event, and pooling them produces a number whose units are
+   "reaching the top of your field, whatever that means here." This is deliberate — it keeps
+   research careers in the sample — but it is why §8 designates the revenue-strict median as
+   the headline and requires all three strictness levels to be reported together.
+6. **Revenue disclosure is uneven.** Public and acquired companies document revenue far
+   better than private ones, so the `primary` subset skews toward companies that exited. The
+   `hit_basis` tag makes this measurable: comparing `primary` against `fallback` medians
+   shows how much the exit-visibility effect moves the number.
