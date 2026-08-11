@@ -61,6 +61,36 @@ class TestParseYear(unittest.TestCase):
         self.assertIsNone(schema.parse_year(""))
 
 
+class TestParseSpan(unittest.TestCase):
+    def test_single_year_becomes_a_degenerate_span(self):
+        self.assertEqual(schema.parse_span("1994"), (1994, 1994))
+
+    def test_bounded_span(self):
+        self.assertEqual(schema.parse_span("1960-1961"), (1960, 1961))
+
+    def test_unknown_is_empty(self):
+        self.assertEqual(schema.parse_span("unknown"), (None, None))
+
+    def test_blank_is_empty(self):
+        self.assertEqual(schema.parse_span(""), (None, None))
+
+    def test_reversed_span_rejected(self):
+        self.assertEqual(schema.parse_span("1961-1960"), (None, None))
+
+    def test_overwide_span_rejected(self):
+        # A range this wide carries almost no information and is far more
+        # likely a typo than a real bound.
+        self.assertEqual(schema.parse_span("1960-1990"), (None, None))
+
+    def test_span_at_the_width_limit_accepted(self):
+        self.assertEqual(schema.parse_span("1960-1970"), (1960, 1970))
+
+    def test_garbage_rejected(self):
+        for bad in ("mid-90s", "199-1995", "1960-", "-1960", "1960-61"):
+            self.assertEqual(schema.parse_span(bad), (None, None),
+                             "should reject %r" % bad)
+
+
 class TestValidateRow(unittest.TestCase):
     def test_valid_row_has_no_errors(self):
         self.assertEqual(schema.validate_row(valid_row()), [])
@@ -175,6 +205,44 @@ class TestValidateRow(unittest.TestCase):
             a1_birth_src="",
         )
         self.assertEqual(schema.validate_row(row), [])
+
+    def test_bounded_hit_date_accepted(self):
+        row = valid_row(a5_first_hit_date="1960-1961",
+                        a2_education_end_date="1954",
+                        a4_first_venture_date="1957",
+                        a1_birth_date="1929")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_bounded_date_still_needs_a_source(self):
+        errors = schema.validate_row(
+            valid_row(a5_first_hit_date="1960-1961", a5_first_hit_src=""))
+        self.assertTrue(any("a5_first_hit_src" in e for e in errors))
+
+    def test_overwide_bounded_date_rejected(self):
+        errors = schema.validate_row(valid_row(a5_first_hit_date="1960-1990"))
+        self.assertTrue(any("a5_first_hit_date" in e for e in errors))
+
+    def test_ordering_uses_the_low_end_of_a_bounded_hit(self):
+        # education in 1962 is after the earliest possible hit in 1960.
+        errors = schema.validate_row(
+            valid_row(a5_first_hit_date="1960-1961",
+                      a2_education_end_date="1962"))
+        self.assertTrue(any("is after a5_first_hit" in e for e in errors))
+
+    def test_rank1_allowed_for_investors(self):
+        row = valid_row(bucket="investors_finance", hit_criterion="rank1",
+                        hit_basis="equivalent")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_fund100_still_allowed_for_investors(self):
+        row = valid_row(bucket="investors_finance", hit_criterion="fund100",
+                        hit_basis="equivalent")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_rank1_rejected_for_commercial_bucket(self):
+        errors = schema.validate_row(
+            valid_row(hit_criterion="rank1", hit_basis="equivalent"))
+        self.assertTrue(any("not allowed for bucket" in e for e in errors))
 
 
 if __name__ == "__main__":

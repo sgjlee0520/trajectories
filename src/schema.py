@@ -35,7 +35,9 @@ COMMERCIAL_CRITERIA = {"rev10", "ipo", "acq50"}
 BUCKET_CRITERIA = {
     "science_research": {"prize"},
     "media_creators": {"aud1m"},
-    "investors_finance": {"fund100"},
+    # Fund managers use fund100; analysts and other non-fund finance careers
+    # use rank1, because fund100 dates an analyst's career decades late.
+    "investors_finance": {"fund100", "rank1"},
 }
 
 CRITERION_BASIS = {
@@ -45,6 +47,7 @@ CRITERION_BASIS = {
     "prize": "equivalent",
     "aud1m": "equivalent",
     "fund100": "equivalent",
+    "rank1": "equivalent",
 }
 
 ANCHORS = [
@@ -83,6 +86,7 @@ URL_PATTERN = re.compile(r"^https?://[^\s/]+\.[^\s]")
 
 MIN_BIRTH_YEAR = 1850
 MAX_BIRTH_YEAR = 2010
+MAX_SPAN_YEARS = 10
 
 
 def columns():
@@ -100,6 +104,32 @@ def parse_year(value):
     if len(text) == 4 and text.isdigit():
         return int(text)
     return None
+
+
+def parse_span(value):
+    """Parse an anchor date into (lo, hi) years.
+
+    A single year yields a degenerate span. 'YYYY-YYYY' yields a real one,
+    for the case where sources bracket an event without pinning it — the
+    alternative is dating the row by a later, citable event that is years
+    wrong, which is what the pilot found in three of ten rows.
+
+    Returns (None, None) for unknown, blank, or malformed input, including a
+    reversed or implausibly wide range.
+    """
+    text = (value or "").strip()
+    single = parse_year(text)
+    if single is not None:
+        return (single, single)
+    parts = text.split("-")
+    if len(parts) != 2:
+        return (None, None)
+    lo, hi = parse_year(parts[0]), parse_year(parts[1])
+    if lo is None or hi is None:
+        return (None, None)
+    if lo > hi or hi - lo > MAX_SPAN_YEARS:
+        return (None, None)
+    return (lo, hi)
 
 
 def allowed_criteria(bucket):
@@ -138,16 +168,17 @@ def validate_row(row):
                 errors.append("%s_conf=none requires an empty %s_src"
                               % (anchor, anchor))
         else:
-            if parse_year(date) is None:
-                errors.append("%s_date must be a 4-digit year, got %r"
-                              % (anchor, date))
+            if parse_span(date)[0] is None:
+                errors.append("%s_date must be a 4-digit year or a "
+                              "'YYYY-YYYY' span at most %d years wide, got %r"
+                              % (anchor, MAX_SPAN_YEARS, date))
             if not URL_PATTERN.match(src):
                 errors.append("%s_src must be a URL when %s_conf=%s, got %r"
                               % (anchor, anchor, conf, src))
 
     # An unknown birth year is permitted — it costs the two clocks that need
     # it, not the whole row. An implausible one is a data error.
-    birth = parse_year(row["a1_birth_date"])
+    birth = parse_span(row["a1_birth_date"])[0]
     if birth is not None and not (MIN_BIRTH_YEAR <= birth <= MAX_BIRTH_YEAR):
         errors.append("a1_birth_date must be a year in [%d, %d], got %r"
                       % (MIN_BIRTH_YEAR, MAX_BIRTH_YEAR,
@@ -158,7 +189,7 @@ def validate_row(row):
         errors.append("excluded must be 'true' or 'false', got %r"
                       % row["excluded"])
 
-    hit = parse_year(row["a5_first_hit_date"])
+    hit = parse_span(row["a5_first_hit_date"])[0]
     if hit is None:
         if excluded != "true":
             errors.append("a5_first_hit unknown requires excluded=true")
@@ -178,7 +209,7 @@ def validate_row(row):
                              row["hit_basis"]))
 
         for earlier in ("a2_education_end", "a4_first_venture"):
-            value = parse_year(row[earlier + "_date"])
+            value = parse_span(row[earlier + "_date"])[0]
             if value is not None and value > hit:
                 errors.append("%s (%d) is after a5_first_hit (%d)"
                               % (earlier, value, hit))
