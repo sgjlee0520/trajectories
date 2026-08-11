@@ -21,7 +21,13 @@ CLOCK_COLUMNS = [
     "clock_age18",
     "clock_venture",
     "age_at_first_hit",
+    "clock_education_min",
+    "clock_education_max",
+    "bounded",
+    "conf_min",
 ]
+
+CONF_ORDER = ["none", "low", "medium", "high"]
 
 ERA_SPLIT = 1995
 
@@ -42,12 +48,38 @@ def _gap(later, earlier):
     return later - earlier
 
 
+def midpoint(span):
+    """Centre of an anchor span, or None when the anchor is unknown."""
+    lo, hi = span
+    if lo is None:
+        return None
+    return (lo + hi) / 2.0
+
+
+def weakest_conf(*confs):
+    """The least confident of several anchor confidences."""
+    return min(confs, key=lambda c: CONF_ORDER.index(c)
+               if c in CONF_ORDER else 0)
+
+
 def compute_clocks(row):
-    """Derive every clock for one anchors.csv row."""
-    hit = schema.parse_year(row["a5_first_hit_date"])
-    birth = schema.parse_year(row["a1_birth_date"])
-    education = schema.parse_year(row["a2_education_end_date"])
-    venture = schema.parse_year(row["a4_first_venture_date"])
+    """Derive every clock for one anchors.csv row.
+
+    A bounded anchor contributes its midpoint to the headline clock and its
+    endpoints to the envelope, so the uncertainty stays visible downstream
+    rather than being flattened into a false point estimate.
+    """
+    hit = schema.parse_span(row["a5_first_hit_date"])
+    birth = schema.parse_span(row["a1_birth_date"])
+    education = schema.parse_span(row["a2_education_end_date"])
+    venture = schema.parse_span(row["a4_first_venture_date"])
+
+    hit_mid = midpoint(hit)
+    birth_mid = midpoint(birth)
+    education_mid = midpoint(education)
+
+    bounded = any(span[0] is not None and span[0] != span[1]
+                  for span in (hit, education))
 
     return {
         "person_id": row["person_id"],
@@ -55,11 +87,17 @@ def compute_clocks(row):
         "hit_basis": row["hit_basis"],
         "country_primary": row["country_primary"],
         "gender": row["gender"],
-        "era": era_of(hit),
-        "clock_education": _gap(hit, education),
-        "clock_age18": _gap(hit, birth + 18 if birth is not None else None),
-        "clock_venture": _gap(hit, venture),
-        "age_at_first_hit": _gap(hit, birth),
+        "era": era_of(hit[0]),
+        "clock_education": _gap(hit_mid, education_mid),
+        "clock_age18": _gap(hit_mid,
+                            birth_mid + 18 if birth_mid is not None else None),
+        "clock_venture": _gap(hit_mid, midpoint(venture)),
+        "age_at_first_hit": _gap(hit_mid, birth_mid),
+        "clock_education_min": _gap(hit[0], education[1]),
+        "clock_education_max": _gap(hit[1], education[0]),
+        "bounded": "true" if bounded else "false",
+        "conf_min": weakest_conf(row["a2_education_end_conf"].strip(),
+                                 row["a5_first_hit_conf"].strip()),
     }
 
 
@@ -76,12 +114,13 @@ def write_clocks(clock_rows, path):
 def load_clocks(path):
     """Read clocks.csv back, restoring None for empty cells."""
     numeric = ("clock_education", "clock_age18", "clock_venture",
-               "age_at_first_hit")
+               "age_at_first_hit", "clock_education_min",
+               "clock_education_max")
     rows = []
     with open(path, newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
             for key in numeric:
-                row[key] = int(row[key]) if row[key].strip() else None
+                row[key] = float(row[key]) if row[key].strip() else None
             rows.append(row)
     return rows
 
