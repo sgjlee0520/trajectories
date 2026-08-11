@@ -33,9 +33,12 @@ Must report 0 errors before proceeding.
 
 ## 6. Audit
 
-Pick the rows to re-check:
+Pick the rows to re-check — this wave's person_ids are the last 25 rows
+appended to `data/anchors.csv`:
 
-    python3 -c "from src import stats; print(stats.audit_sample(IDS_FROM_THIS_WAVE))"
+    python3 -c "import csv; from src import stats; \
+      ids = [r['person_id'] for r in csv.DictReader(open('data/anchors.csv'))][-25:]; \
+      print(stats.audit_sample(ids))"
 
 Re-research those people **blind** — the second pass must not see the first
 pass's answers. Record both `a5_first_hit` years in `data/audit.csv` with
@@ -43,10 +46,15 @@ columns `person_id,first_pass,second_pass`.
 
 Then compute disagreement:
 
-    python3 -c "from src import stats; print(stats.audit_disagreement(PAIRS))"
+    python3 -c "from src import stats; \
+      print(stats.audit_disagreement(stats.read_audit_pairs('data/audit.csv')))"
 
 **If disagreement > 0.10, the entire wave is void and re-runs.** Delete the
-wave's rows from `data/anchors.csv` and return to step 3.
+wave's rows from `data/anchors.csv`, and remove that wave's names from
+`data/roster.csv`. Those names must NOT be reused — a name whose dates two
+researchers could not reproduce is exactly the kind of poorly-documented case
+that would bias the sample if forced in. Draw fresh names for the same
+bucket allocation, then return to step 3.
 
 ## 7. Recompute
 
@@ -56,22 +64,14 @@ wave's rows from `data/anchors.csv` and return to step 3.
 
 ## 8. Log the median and check the rule
 
-Append the revenue-strict median to `analysis/wave_medians.txt`, then:
-
-    python3 -c "from src import stats, clocks; \
-      rows = clocks.load_clocks('analysis/clocks.csv'); \
-      v = stats.revenue_strict_values(rows); \
-      lo, med, hi = stats.bootstrap_median_ci(v); \
-      hist = [float(l) for l in open('analysis/wave_medians.txt') \
-              if not l.startswith('#')]; \
-      print(stats.check_stopping_rule(hist, len(v), stats.half_width(lo, hi)))"
+    python3 -m src.stats analysis/clocks.csv --history analysis/wave_medians.txt
 
 **Do not look at the median before total revenue-strict n reaches 30.** The
 N floor exists to prevent optional stopping; reading the number early defeats
-it even if the printed rule still says False.
+it even if the printed verdict still says False.
 
-If `stop` is True, the collection is finished. If False, the reason states
-what is still missing. Return to step 1.
+If the printed verdict is `STOP: True`, the collection is finished. If
+`STOP: False`, the reason states what is still missing. Return to step 1.
 
 ## Expected duration
 

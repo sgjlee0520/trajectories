@@ -6,6 +6,7 @@ waves where noise happened to be small, which produces a median that appears
 more precise than it is.
 """
 
+import csv
 import random
 import statistics
 import sys
@@ -108,24 +109,112 @@ def revenue_strict_values(clock_rows, clock="clock_education"):
             if r["hit_basis"] == "primary" and r[clock] is not None]
 
 
+def read_history(path):
+    """Wave medians logged so far, oldest first.
+
+    Blank lines and comments are skipped rather than crashing: this file is
+    machine-appended but human-readable, and a stray blank line must not take
+    down the stopping-rule check.
+    """
+    history = []
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            text = line.strip()
+            if text and not text.startswith("#"):
+                history.append(float(text))
+    return history
+
+
+def append_history(path, median, n):
+    """Log one wave's median. Refuses to double-append the same sample.
+
+    Re-running the wave check must not add a second identical line: two equal
+    adjacent entries make the drift between them exactly zero, which would
+    satisfy the stopping rule's stability test with fabricated evidence.
+    """
+    previous_n = None
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            if line.startswith("# last-n:"):
+                previous_n = int(line.split(":", 1)[1].strip())
+    if previous_n == n:
+        return False
+    with open(path, "a", encoding="utf-8") as handle:
+        handle.write("%.1f\n" % median)
+        handle.write("# last-n: %d\n" % n)
+    return True
+
+
+def _audit_year(value):
+    """A blank/whitespace cell or the literal 'unknown' is None, else int."""
+    text = (value or "").strip()
+    if not text or text == "unknown":
+        return None
+    return int(text)
+
+
+def read_audit_pairs(path):
+    """Read data/audit.csv into (first_pass, second_pass) year pairs.
+
+    Columns: person_id, first_pass, second_pass. An empty cell or the
+    literal 'unknown' becomes None, matching the anchors convention that an
+    absent date is never guessed.
+    """
+    pairs = []
+    with open(path, newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            pairs.append((_audit_year(row["first_pass"]),
+                          _audit_year(row["second_pass"])))
+    return pairs
+
+
 def main(argv):
-    """Report the revenue-strict median and CI for a clocks.csv."""
-    if len(argv) != 2:
-        print("usage: python3 -m src.stats <clocks.csv>")
+    """Report the revenue-strict median and CI for a clocks.csv.
+
+    Two forms:
+      python3 -m src.stats <clocks.csv>
+      python3 -m src.stats <clocks.csv> --history <history.txt>
+
+    The --history form additionally appends the median to the history file
+    (refusing to double-log a re-run of the same sample) and evaluates the
+    pre-registered stopping rule against the logged history.
+    """
+    usage = "usage: python3 -m src.stats <clocks.csv> [--history <history.txt>]"
+    history_path = None
+    if len(argv) == 2:
+        clocks_path = argv[1]
+    elif len(argv) == 4 and argv[2] == "--history":
+        clocks_path = argv[1]
+        history_path = argv[3]
+    else:
+        print(usage)
         return 2
-    rows = clocks.load_clocks(argv[1])
+
+    rows = clocks.load_clocks(clocks_path)
     values = revenue_strict_values(rows)
     if len(values) < 2:
         print("only %d revenue-strict rows; nothing to report" % len(values))
         return 0
     lo, med, hi = bootstrap_median_ci(values)
-    print("revenue-strict n = %d" % len(values))
+    n = len(values)
+    print("revenue-strict n = %d" % n)
     print("median clock_education = %.1f yr" % med)
     print("95%% CI = [%.1f, %.1f], half-width %.2f yr"
           % (lo, hi, half_width(lo, hi)))
-    if len(values) < N_FLOOR:
+    if n < N_FLOOR:
         print("below N floor of %d - median not to be interpreted yet"
               % N_FLOOR)
+
+    if history_path is not None:
+        appended = append_history(history_path, med, n)
+        history = read_history(history_path)
+        if appended:
+            print("appended to history (%d waves logged)" % len(history))
+        else:
+            print("already logged for n=%d, history unchanged" % n)
+        verdict = check_stopping_rule(history, n, half_width(lo, hi))
+        print("STOP: %s - %s" % (verdict["stop"], verdict["reason"]))
+
     return 0
 
 

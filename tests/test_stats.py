@@ -1,3 +1,5 @@
+import os
+import tempfile
 import unittest
 
 from src import stats
@@ -144,6 +146,95 @@ class TestAudit(unittest.TestCase):
 
     def test_empty_pairs_is_zero(self):
         self.assertEqual(stats.audit_disagreement([]), 0.0)
+
+
+class TestHistory(unittest.TestCase):
+    def make_file(self, content=""):
+        handle, path = tempfile.mkstemp(suffix=".txt")
+        os.close(handle)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        return path
+
+    def test_read_history_skips_comments_and_blanks(self):
+        path = self.make_file(
+            "# header comment\n"
+            "10.1\n"
+            "\n"
+            "   \n"
+            "10.3\n"
+            "# last-n: 50\n"
+        )
+        try:
+            self.assertEqual(stats.read_history(path), [10.1, 10.3])
+        finally:
+            os.remove(path)
+
+    def test_read_history_all_comments_is_empty(self):
+        path = self.make_file("# just a header\n# last-n: 25\n")
+        try:
+            self.assertEqual(stats.read_history(path), [])
+        finally:
+            os.remove(path)
+
+    def test_append_history_writes_and_returns_true_on_fresh_file(self):
+        path = self.make_file("")
+        try:
+            result = stats.append_history(path, 10.3, 25)
+            self.assertTrue(result)
+            self.assertEqual(stats.read_history(path), [10.3])
+        finally:
+            os.remove(path)
+
+    def test_append_history_same_n_twice_is_a_noop(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            with open(path, encoding="utf-8") as f:
+                before = f.read()
+            result = stats.append_history(path, 99.9, 25)
+            with open(path, encoding="utf-8") as f:
+                after = f.read()
+            self.assertFalse(result)
+            self.assertEqual(before, after)
+        finally:
+            os.remove(path)
+
+    def test_append_history_different_n_appends(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            result = stats.append_history(path, 10.5, 50)
+            self.assertTrue(result)
+            self.assertEqual(stats.read_history(path), [10.3, 10.5])
+        finally:
+            os.remove(path)
+
+    def test_round_trip_two_waves_no_marker_pollution(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            stats.append_history(path, 10.5, 50)
+            self.assertEqual(stats.read_history(path), [10.3, 10.5])
+        finally:
+            os.remove(path)
+
+
+class TestReadAuditPairs(unittest.TestCase):
+    def test_converts_blank_and_unknown_to_none(self):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("person_id,first_pass,second_pass\n")
+                f.write("p001,1997,1998\n")
+                f.write("p002,2001,unknown\n")
+                f.write("p003,,2005\n")
+            self.assertEqual(
+                stats.read_audit_pairs(path),
+                [(1997, 1998), (2001, None), (None, 2005)])
+        finally:
+            os.remove(path)
 
 
 if __name__ == "__main__":

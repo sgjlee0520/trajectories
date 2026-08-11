@@ -1127,12 +1127,17 @@ git commit -m "Add clock computation from stored anchors"
   - `audit_sample(person_ids, fraction=0.15, seed=0)` -> sorted list of ids
   - `audit_disagreement(pairs)` -> float in [0, 1]
   - `revenue_strict_values(clock_rows, clock="clock_education")` -> list of int
+  - `read_history(path)` -> list of float, oldest first
+  - `append_history(path, median, n)` -> bool, True if appended
+  - `read_audit_pairs(path)` -> list of `(first_pass, second_pass)` int/None pairs
 
 - [ ] **Step 1: Write the failing test**
 
 Create `tests/test_stats.py`:
 
 ```python
+import os
+import tempfile
 import unittest
 
 from src import stats
@@ -1281,6 +1286,95 @@ class TestAudit(unittest.TestCase):
         self.assertEqual(stats.audit_disagreement([]), 0.0)
 
 
+class TestHistory(unittest.TestCase):
+    def make_file(self, content=""):
+        handle, path = tempfile.mkstemp(suffix=".txt")
+        os.close(handle)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        return path
+
+    def test_read_history_skips_comments_and_blanks(self):
+        path = self.make_file(
+            "# header comment\n"
+            "10.1\n"
+            "\n"
+            "   \n"
+            "10.3\n"
+            "# last-n: 50\n"
+        )
+        try:
+            self.assertEqual(stats.read_history(path), [10.1, 10.3])
+        finally:
+            os.remove(path)
+
+    def test_read_history_all_comments_is_empty(self):
+        path = self.make_file("# just a header\n# last-n: 25\n")
+        try:
+            self.assertEqual(stats.read_history(path), [])
+        finally:
+            os.remove(path)
+
+    def test_append_history_writes_and_returns_true_on_fresh_file(self):
+        path = self.make_file("")
+        try:
+            result = stats.append_history(path, 10.3, 25)
+            self.assertTrue(result)
+            self.assertEqual(stats.read_history(path), [10.3])
+        finally:
+            os.remove(path)
+
+    def test_append_history_same_n_twice_is_a_noop(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            with open(path, encoding="utf-8") as f:
+                before = f.read()
+            result = stats.append_history(path, 99.9, 25)
+            with open(path, encoding="utf-8") as f:
+                after = f.read()
+            self.assertFalse(result)
+            self.assertEqual(before, after)
+        finally:
+            os.remove(path)
+
+    def test_append_history_different_n_appends(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            result = stats.append_history(path, 10.5, 50)
+            self.assertTrue(result)
+            self.assertEqual(stats.read_history(path), [10.3, 10.5])
+        finally:
+            os.remove(path)
+
+    def test_round_trip_two_waves_no_marker_pollution(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            stats.append_history(path, 10.5, 50)
+            self.assertEqual(stats.read_history(path), [10.3, 10.5])
+        finally:
+            os.remove(path)
+
+
+class TestReadAuditPairs(unittest.TestCase):
+    def test_converts_blank_and_unknown_to_none(self):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("person_id,first_pass,second_pass\n")
+                f.write("p001,1997,1998\n")
+                f.write("p002,2001,unknown\n")
+                f.write("p003,,2005\n")
+            self.assertEqual(
+                stats.read_audit_pairs(path),
+                [(1997, 1998), (2001, None), (None, 2005)])
+        finally:
+            os.remove(path)
+
+
 if __name__ == "__main__":
     unittest.main()
 ```
@@ -1303,6 +1397,7 @@ waves where noise happened to be small, which produces a median that appears
 more precise than it is.
 """
 
+import csv
 import random
 import statistics
 import sys
@@ -1405,24 +1500,112 @@ def revenue_strict_values(clock_rows, clock="clock_education"):
             if r["hit_basis"] == "primary" and r[clock] is not None]
 
 
+def read_history(path):
+    """Wave medians logged so far, oldest first.
+
+    Blank lines and comments are skipped rather than crashing: this file is
+    machine-appended but human-readable, and a stray blank line must not take
+    down the stopping-rule check.
+    """
+    history = []
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            text = line.strip()
+            if text and not text.startswith("#"):
+                history.append(float(text))
+    return history
+
+
+def append_history(path, median, n):
+    """Log one wave's median. Refuses to double-append the same sample.
+
+    Re-running the wave check must not add a second identical line: two equal
+    adjacent entries make the drift between them exactly zero, which would
+    satisfy the stopping rule's stability test with fabricated evidence.
+    """
+    previous_n = None
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            if line.startswith("# last-n:"):
+                previous_n = int(line.split(":", 1)[1].strip())
+    if previous_n == n:
+        return False
+    with open(path, "a", encoding="utf-8") as handle:
+        handle.write("%.1f\n" % median)
+        handle.write("# last-n: %d\n" % n)
+    return True
+
+
+def _audit_year(value):
+    """A blank/whitespace cell or the literal 'unknown' is None, else int."""
+    text = (value or "").strip()
+    if not text or text == "unknown":
+        return None
+    return int(text)
+
+
+def read_audit_pairs(path):
+    """Read data/audit.csv into (first_pass, second_pass) year pairs.
+
+    Columns: person_id, first_pass, second_pass. An empty cell or the
+    literal 'unknown' becomes None, matching the anchors convention that an
+    absent date is never guessed.
+    """
+    pairs = []
+    with open(path, newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            pairs.append((_audit_year(row["first_pass"]),
+                          _audit_year(row["second_pass"])))
+    return pairs
+
+
 def main(argv):
-    """Report the revenue-strict median and CI for a clocks.csv."""
-    if len(argv) != 2:
-        print("usage: python3 -m src.stats <clocks.csv>")
+    """Report the revenue-strict median and CI for a clocks.csv.
+
+    Two forms:
+      python3 -m src.stats <clocks.csv>
+      python3 -m src.stats <clocks.csv> --history <history.txt>
+
+    The --history form additionally appends the median to the history file
+    (refusing to double-log a re-run of the same sample) and evaluates the
+    pre-registered stopping rule against the logged history.
+    """
+    usage = "usage: python3 -m src.stats <clocks.csv> [--history <history.txt>]"
+    history_path = None
+    if len(argv) == 2:
+        clocks_path = argv[1]
+    elif len(argv) == 4 and argv[2] == "--history":
+        clocks_path = argv[1]
+        history_path = argv[3]
+    else:
+        print(usage)
         return 2
-    rows = clocks.load_clocks(argv[1])
+
+    rows = clocks.load_clocks(clocks_path)
     values = revenue_strict_values(rows)
     if len(values) < 2:
         print("only %d revenue-strict rows; nothing to report" % len(values))
         return 0
     lo, med, hi = bootstrap_median_ci(values)
-    print("revenue-strict n = %d" % len(values))
+    n = len(values)
+    print("revenue-strict n = %d" % n)
     print("median clock_education = %.1f yr" % med)
     print("95%% CI = [%.1f, %.1f], half-width %.2f yr"
           % (lo, hi, half_width(lo, hi)))
-    if len(values) < N_FLOOR:
+    if n < N_FLOOR:
         print("below N floor of %d - median not to be interpreted yet"
               % N_FLOOR)
+
+    if history_path is not None:
+        appended = append_history(history_path, med, n)
+        history = read_history(history_path)
+        if appended:
+            print("appended to history (%d waves logged)" % len(history))
+        else:
+            print("already logged for n=%d, history unchanged" % n)
+        verdict = check_stopping_rule(history, n, half_width(lo, hi))
+        print("STOP: %s - %s" % (verdict["stop"], verdict["reason"]))
+
     return 0
 
 
@@ -1433,7 +1616,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_stats -v`
-Expected: PASS, 25 tests
+Expected: PASS, 32 tests
 
 - [ ] **Step 5: Commit**
 
@@ -1784,7 +1967,7 @@ Expected: PASS, 12 tests
 - [ ] **Step 5: Run the whole suite**
 
 Run: `python3 -m unittest discover -s tests -t . -v`
-Expected: PASS, 81 tests total
+Expected: PASS, 88 tests total
 
 - [ ] **Step 6: Commit**
 
@@ -1939,9 +2122,12 @@ Must report 0 errors before proceeding.
 
 ## 6. Audit
 
-Pick the rows to re-check:
+Pick the rows to re-check — this wave's person_ids are the last 25 rows
+appended to `data/anchors.csv`:
 
-    python3 -c "from src import stats; print(stats.audit_sample(IDS_FROM_THIS_WAVE))"
+    python3 -c "import csv; from src import stats; \
+      ids = [r['person_id'] for r in csv.DictReader(open('data/anchors.csv'))][-25:]; \
+      print(stats.audit_sample(ids))"
 
 Re-research those people **blind** — the second pass must not see the first
 pass's answers. Record both `a5_first_hit` years in `data/audit.csv` with
@@ -1949,10 +2135,15 @@ columns `person_id,first_pass,second_pass`.
 
 Then compute disagreement:
 
-    python3 -c "from src import stats; print(stats.audit_disagreement(PAIRS))"
+    python3 -c "from src import stats; \
+      print(stats.audit_disagreement(stats.read_audit_pairs('data/audit.csv')))"
 
 **If disagreement > 0.10, the entire wave is void and re-runs.** Delete the
-wave's rows from `data/anchors.csv` and return to step 3.
+wave's rows from `data/anchors.csv`, and remove that wave's names from
+`data/roster.csv`. Those names must NOT be reused — a name whose dates two
+researchers could not reproduce is exactly the kind of poorly-documented case
+that would bias the sample if forced in. Draw fresh names for the same
+bucket allocation, then return to step 3.
 
 ## 7. Recompute
 
@@ -1962,22 +2153,14 @@ wave's rows from `data/anchors.csv` and return to step 3.
 
 ## 8. Log the median and check the rule
 
-Append the revenue-strict median to `analysis/wave_medians.txt`, then:
-
-    python3 -c "from src import stats, clocks; \
-      rows = clocks.load_clocks('analysis/clocks.csv'); \
-      v = stats.revenue_strict_values(rows); \
-      lo, med, hi = stats.bootstrap_median_ci(v); \
-      hist = [float(l) for l in open('analysis/wave_medians.txt') \
-              if not l.startswith('#')]; \
-      print(stats.check_stopping_rule(hist, len(v), stats.half_width(lo, hi)))"
+    python3 -m src.stats analysis/clocks.csv --history analysis/wave_medians.txt
 
 **Do not look at the median before total revenue-strict n reaches 30.** The
 N floor exists to prevent optional stopping; reading the number early defeats
-it even if the printed rule still says False.
+it even if the printed verdict still says False.
 
-If `stop` is True, the collection is finished. If False, the reason states
-what is still missing. Return to step 1.
+If the printed verdict is `STOP: True`, the collection is finished. If
+`STOP: False`, the reason states what is still missing. Return to step 1.
 
 ## Expected duration
 
@@ -1988,7 +2171,7 @@ Expect it to fire at a total N around 350-500.
 - [ ] **Step 3: Verify the full suite still passes**
 
 Run: `python3 -m unittest discover -s tests -t . -v`
-Expected: PASS, 67 tests
+Expected: PASS, 88 tests
 
 - [ ] **Step 4: Commit**
 
