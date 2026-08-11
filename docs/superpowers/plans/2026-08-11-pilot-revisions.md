@@ -455,12 +455,25 @@ Then add to the existing `TestValidateRow` class:
         errors = schema.validate_row(valid_row(a5_first_hit_date="1960-1990"))
         self.assertTrue(any("a5_first_hit_date" in e for e in errors))
 
-    def test_ordering_uses_the_low_end_of_a_bounded_hit(self):
-        # education in 1962 is after the earliest possible hit in 1960.
+    def test_ordering_flags_a_certain_violation(self):
+        # 1962 is after even the latest possible hit, so this is unambiguous.
         errors = schema.validate_row(
             valid_row(a5_first_hit_date="1960-1961",
                       a2_education_end_date="1962"))
-        self.assertTrue(any("is after a5_first_hit" in e for e in errors))
+        self.assertTrue(any("is after" in e for e in errors))
+
+    def test_ordering_permits_an_ambiguous_overlap(self):
+        # Education ending 1961 is fine if the hit was itself in 1961. The
+        # validator must not reject a row that may well be correct.
+        row = valid_row(a5_first_hit_date="1960-1961",
+                        a2_education_end_date="1961",
+                        a4_first_venture_date="1960",
+                        a1_birth_date="1929")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_birth_span_bounded_at_both_ends(self):
+        errors = schema.validate_row(valid_row(a1_birth_date="2008-2012"))
+        self.assertTrue(any("a1_birth_date" in e for e in errors))
 
     def test_rank1_allowed_for_investors(self):
         row = valid_row(bucket="investors_finance", hit_criterion="rank1",
@@ -555,22 +568,24 @@ Replace the sourced-date branch condition:
                               % (anchor, anchor, conf, src))
 ```
 
-Replace the birth plausibility check so it reads the low end of a span:
+Replace the birth plausibility check so it bounds both ends of the span:
 
 ```python
     # An unknown birth year is permitted — it costs the two clocks that need
     # it, not the whole row. An implausible one is a data error.
-    birth = parse_span(row["a1_birth_date"])[0]
-    if birth is not None and not (MIN_BIRTH_YEAR <= birth <= MAX_BIRTH_YEAR):
+    birth_lo, birth_hi = parse_span(row["a1_birth_date"])
+    if birth_lo is not None and not (MIN_BIRTH_YEAR <= birth_lo
+                                     and birth_hi <= MAX_BIRTH_YEAR):
         errors.append("a1_birth_date must be a year in [%d, %d], got %r"
                       % (MIN_BIRTH_YEAR, MAX_BIRTH_YEAR,
                          row["a1_birth_date"]))
 ```
 
-Replace the hit resolution and ordering check. Ordering compares against the **low** end of the hit span, so a violation is flagged only when it is unambiguous:
+Replace the hit resolution and ordering check. An ordering violation is certain only when the **earliest possible** earlier-anchor date is after the **latest possible** hit date — comparing against the low end of the hit span would flag rows that may well be correct (a bounded hit of `1960-1961` and an education end of `1961` is not a violation, since the hit could genuinely be 1961), and a validator that rejects correct bounded data teaches researchers to edit dates until the tool goes quiet:
 
 ```python
-    hit = parse_span(row["a5_first_hit_date"])[0]
+    hit_lo, hit_hi = parse_span(row["a5_first_hit_date"])
+    hit = hit_lo
     if hit is None:
         if excluded != "true":
             errors.append("a5_first_hit unknown requires excluded=true")
@@ -589,17 +604,22 @@ Replace the hit resolution and ordering check. Ordering compares against the **l
                           % (criterion, CRITERION_BASIS[criterion],
                              row["hit_basis"]))
 
+        # Flag only certain violations: the earliest possible earlier-anchor
+        # date must fall after the latest possible hit. A validator that
+        # rejects a correct bounded row teaches researchers to edit dates
+        # until the tool goes quiet, which is the one habit this project
+        # cannot afford.
         for earlier in ("a2_education_end", "a4_first_venture"):
             value = parse_span(row[earlier + "_date"])[0]
-            if value is not None and value > hit:
-                errors.append("%s (%d) is after a5_first_hit (%d)"
-                              % (earlier, value, hit))
+            if value is not None and value > hit_hi:
+                errors.append("%s (%d) is after the latest possible "
+                              "a5_first_hit (%d)" % (earlier, value, hit_hi))
 ```
 
 - [ ] **Step 6: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_schema -v`
-Expected: PASS. Report the real count; the additions above are 15 new tests against a prior 24.
+Expected: PASS. Report the real count; the additions above are 17 new tests against a prior 24.
 
 - [ ] **Step 7: Commit**
 

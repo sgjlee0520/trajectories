@@ -185,11 +185,11 @@ class TestValidateRow(unittest.TestCase):
 
     def test_education_after_hit_rejected(self):
         errors = schema.validate_row(valid_row(a2_education_end_date="2001"))
-        self.assertTrue(any("is after a5_first_hit" in e for e in errors))
+        self.assertTrue(any("is after" in e for e in errors))
 
     def test_venture_after_hit_rejected(self):
         errors = schema.validate_row(valid_row(a4_first_venture_date="1999"))
-        self.assertTrue(any("is after a5_first_hit" in e for e in errors))
+        self.assertTrue(any("is after" in e for e in errors))
 
     def test_implausible_birth_year_rejected(self):
         errors = schema.validate_row(valid_row(a1_birth_date="1700"))
@@ -222,12 +222,25 @@ class TestValidateRow(unittest.TestCase):
         errors = schema.validate_row(valid_row(a5_first_hit_date="1960-1990"))
         self.assertTrue(any("a5_first_hit_date" in e for e in errors))
 
-    def test_ordering_uses_the_low_end_of_a_bounded_hit(self):
-        # education in 1962 is after the earliest possible hit in 1960.
+    def test_ordering_flags_a_certain_violation(self):
+        # 1962 is after even the latest possible hit, so this is unambiguous.
         errors = schema.validate_row(
             valid_row(a5_first_hit_date="1960-1961",
                       a2_education_end_date="1962"))
-        self.assertTrue(any("is after a5_first_hit" in e for e in errors))
+        self.assertTrue(any("is after" in e for e in errors))
+
+    def test_ordering_permits_an_ambiguous_overlap(self):
+        # Education ending 1961 is fine if the hit was itself in 1961. The
+        # validator must not reject a row that may well be correct.
+        row = valid_row(a5_first_hit_date="1960-1961",
+                        a2_education_end_date="1961",
+                        a4_first_venture_date="1960",
+                        a1_birth_date="1929")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_birth_span_bounded_at_both_ends(self):
+        errors = schema.validate_row(valid_row(a1_birth_date="2008-2012"))
+        self.assertTrue(any("a1_birth_date" in e for e in errors))
 
     def test_rank1_allowed_for_investors(self):
         row = valid_row(bucket="investors_finance", hit_criterion="rank1",

@@ -178,8 +178,9 @@ def validate_row(row):
 
     # An unknown birth year is permitted — it costs the two clocks that need
     # it, not the whole row. An implausible one is a data error.
-    birth = parse_span(row["a1_birth_date"])[0]
-    if birth is not None and not (MIN_BIRTH_YEAR <= birth <= MAX_BIRTH_YEAR):
+    birth_lo, birth_hi = parse_span(row["a1_birth_date"])
+    if birth_lo is not None and not (MIN_BIRTH_YEAR <= birth_lo
+                                     and birth_hi <= MAX_BIRTH_YEAR):
         errors.append("a1_birth_date must be a year in [%d, %d], got %r"
                       % (MIN_BIRTH_YEAR, MAX_BIRTH_YEAR,
                          row["a1_birth_date"]))
@@ -189,7 +190,8 @@ def validate_row(row):
         errors.append("excluded must be 'true' or 'false', got %r"
                       % row["excluded"])
 
-    hit = parse_span(row["a5_first_hit_date"])[0]
+    hit_lo, hit_hi = parse_span(row["a5_first_hit_date"])
+    hit = hit_lo
     if hit is None:
         if excluded != "true":
             errors.append("a5_first_hit unknown requires excluded=true")
@@ -208,11 +210,16 @@ def validate_row(row):
                           % (criterion, CRITERION_BASIS[criterion],
                              row["hit_basis"]))
 
+        # Flag only certain violations: the earliest possible earlier-anchor
+        # date must fall after the latest possible hit. A validator that
+        # rejects a correct bounded row teaches researchers to edit dates
+        # until the tool goes quiet, which is the one habit this project
+        # cannot afford.
         for earlier in ("a2_education_end", "a4_first_venture"):
             value = parse_span(row[earlier + "_date"])[0]
-            if value is not None and value > hit:
-                errors.append("%s (%d) is after a5_first_hit (%d)"
-                              % (earlier, value, hit))
+            if value is not None and value > hit_hi:
+                errors.append("%s (%d) is after the latest possible "
+                              "a5_first_hit (%d)" % (earlier, value, hit_hi))
 
     return errors
 
