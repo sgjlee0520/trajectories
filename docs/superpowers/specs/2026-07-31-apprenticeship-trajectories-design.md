@@ -159,6 +159,17 @@ pinned exactly, record a bounded `rev10` date instead — see Bounded dates belo
 even be bounded, the row is `excluded = true` with reason `crossing_undatable`. Dating such a
 row by a later IPO is forbidden: it produces a confidently sourced answer that is years wrong.
 
+**What "known" means here.** A qualitative claim in a source — that the venture
+was already large, profitable, or industry-leading by a stated year — is enough
+to establish that an earlier crossing occurred, even with no dollar figure
+attached. Only the *year* needs pinning or bounding, not the crossing itself.
+So a company that first disclosed revenue at IPO has a known earlier crossing
+whenever any source describes it as substantial beforehand, and the fallback is
+barred. Use the fallback only when no source suggests the venture reached
+meaningful scale before the IPO or acquisition — which, for a company large
+enough to list, is rare. Expect exclusion or a bounded date to be the normal
+outcome, and the fallback to be the exception.
+
 #### Non-commercial buckets
 
 | Bucket | Equivalent | Code | `hit_basis` |
@@ -178,12 +189,15 @@ decades late.
 #### Bounded dates
 
 When sources establish that an event happened within a range but not which year, record the
-anchor as `YYYY-YYYY` — low year first, at most 10 years wide, with a source for the bound.
+anchor as `YYYY-YYYY` — low year first, at most 10 years wide (arithmetic difference, so
+1960-1970 is the widest permitted range), with a source for the bound.
 Clocks use the midpoint; the report prints a sensitivity run with bounded rows excluded so the
 uncertainty stays visible.
 
-A bounded date is a real measurement, not a guess. `1960-1961` says two sources bracket the
-event. It is not licence to widen a range until it contains a year you like.
+A bounded date is a real measurement, not a guess. `1960-1961` says the sources place the
+event in those two years — whether that is two sources bracketing it from either side, or one
+source stating the range directly. It is not licence to widen a range until it contains a year
+you like.
 
 #### Resolution
 
@@ -197,7 +211,8 @@ the effect is always visible.
 ### Date precision
 
 **Year precision throughout**, with bounded dates permitted where sources
-bracket an event without pinning it (`YYYY-YYYY`, at most 10 years wide). The
+bracket an event without pinning it (`YYYY-YYYY`, at most 10 years wide
+(arithmetic difference, so 1960-1970 is the widest permitted range)). The
 output is a median measured in years; month-level precision is false precision
 that costs real research time for no gain.
 
@@ -315,7 +330,7 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
   with medians on all included rows. Where these diverge, the report states so rather than
   presenting the more attractive figure.
 - **Definition-strictness run (required).** Three medians printed together:
-  1. `hit_basis = primary` only — the revenue-strict median, $10M revenue and nothing else
+  1. `hit_basis = primary` only — the revenue-strict median, $10M constant-dollar revenue and nothing else
   2. all commercial rows — `primary` + `fallback`
   3. pooled — all included rows across every bucket
 
@@ -358,7 +373,7 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
 4. **List bias is inherited, not removed.** The quotas and cross-cuts bound it and make it
    visible; they do not eliminate it.
 5. **The pooled median mixes definitions.** A Nobel, a 1M-person audience, a $100M fund, and
-   $10M of revenue are not the same event, and pooling them produces a number whose units are
+   $10M constant-dollar revenue are not the same event, and pooling them produces a number whose units are
    "reaching the top of your field, whatever that means here." This is deliberate — it keeps
    research careers in the sample — but it is why §8 designates the revenue-strict median as
    the headline and requires all three strictness levels to be reported together.

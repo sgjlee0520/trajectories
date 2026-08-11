@@ -84,6 +84,17 @@ compare against that year's nominal threshold.
    later IPO is forbidden: it produces a confidently sourced answer that is years
    wrong.
 
+**What "known" means here.** A qualitative claim in a source — that the venture
+was already large, profitable, or industry-leading by a stated year — is enough
+to establish that an earlier crossing occurred, even with no dollar figure
+attached. Only the *year* needs pinning or bounding, not the crossing itself.
+So a company that first disclosed revenue at IPO has a known earlier crossing
+whenever any source describes it as substantial beforehand, and the fallback is
+barred. Use the fallback only when no source suggests the venture reached
+meaningful scale before the IPO or acquisition — which, for a company large
+enough to list, is rare. Expect exclusion or a bounded date to be the normal
+outcome, and the fallback to be the exception.
+
 ### Non-commercial buckets
 
 - `science_research` → `prize` (Nobel, Turing, Fields, or Breakthrough). Basis
@@ -109,10 +120,12 @@ compare against that year's nominal threshold.
 ### Bounded dates
 
 When sources establish that an event happened within a range but not which year,
-record the anchor as `YYYY-YYYY` — low year first, at most 10 years wide, with a
+record the anchor as `YYYY-YYYY` — low year first, at most 10 years wide (arithmetic
+difference, so 1960-1970 is the widest permitted range), with a
 source for the bound. Clocks use the midpoint; the report prints a sensitivity
 run with bounded rows excluded so the uncertainty stays visible.
 
-A bounded date is a real measurement, not a guess. `1960-1961` says two sources
-bracket the event. It is not licence to widen a range until it contains a year
-you like.
+A bounded date is a real measurement, not a guess. `1960-1961` says the sources
+place the event in those two years — whether that is two sources bracketing it
+from either side, or one source stating the range directly. It is not licence
+to widen a range until it contains a year you like.
