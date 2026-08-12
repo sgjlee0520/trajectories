@@ -228,3 +228,68 @@ class TestRank1VentureClock(unittest.TestCase):
     def test_other_criteria_keep_the_venture_clock(self):
         row = valid_row()
         self.assertIsNotNone(clocks.compute_clocks(row)["clock_venture"])
+
+
+class TestHitClampedToEarlierAnchor(unittest.TestCase):
+    """A bounded hit cannot start before an anchor it must follow.
+
+    The schema's ordering rule already asserts the hit is not before the
+    education end, so the part of the bracket below that anchor is not a
+    possible hit year. Averaging over it understates every clock, always in
+    the same direction.
+    """
+
+    def bracket_row(self, **overrides):
+        # Hit bracketed 1995-2005, education ends 2003: the hit can only be
+        # 2003-2005, so the midpoint is 2004 and the clock is 1.
+        row = valid_row(a2_education_end_date="2003",
+                        a5_first_hit_date="1995-2005")
+        row.update(overrides)
+        return row
+
+    def test_midpoint_uses_only_the_possible_part_of_the_bracket(self):
+        result = clocks.compute_clocks(self.bracket_row())
+        self.assertEqual(result["clock_education"], 1.0)
+
+    def test_envelope_is_clamped_too(self):
+        result = clocks.compute_clocks(self.bracket_row())
+        self.assertEqual(result["clock_education_min"], 0)
+        self.assertEqual(result["clock_education_max"], 2)
+
+    def test_venture_clock_clamped_by_the_venture_anchor(self):
+        row = self.bracket_row(a4_first_venture_date="2003")
+        self.assertEqual(clocks.compute_clocks(row)["clock_venture"], 1.0)
+
+    def test_clamp_past_the_end_of_the_bracket_gives_none(self):
+        # The certain violation schema.validate_row rejects: a negative
+        # number here would be worse than no number.
+        row = valid_row(a2_education_end_date="2006",
+                        a5_first_hit_date="2000-2005")
+        result = clocks.compute_clocks(row)
+        self.assertIsNone(result["clock_education"])
+        self.assertIsNone(result["clock_education_min"])
+        self.assertIsNone(result["clock_education_max"])
+
+    def test_no_clock_is_ever_negative(self):
+        # clock_age18 is excluded on purpose: a hit before 18 is a real
+        # outlier, not a data error, and its clock is legitimately negative.
+        keys = ("clock_education", "clock_venture",
+                "clock_education_min", "clock_education_max")
+        cases = [
+            self.bracket_row(),
+            valid_row(a2_education_end_date="1996-2000",
+                      a5_first_hit_date="1997"),
+            valid_row(a4_first_venture_date="1994-2000",
+                      a5_first_hit_date="1996-1999"),
+            valid_row(a2_education_end_date="1997",
+                      a4_first_venture_date="1997",
+                      a5_first_hit_date="1997"),
+        ]
+        for row in cases:
+            result = clocks.compute_clocks(row)
+            for key in keys:
+                value = result[key]
+                if value is not None:
+                    self.assertGreaterEqual(value, 0,
+                                            "%s went negative: %r"
+                                            % (key, result))

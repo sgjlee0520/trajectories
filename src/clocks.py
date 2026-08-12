@@ -43,6 +43,25 @@ def era_of(hit_year):
     return "pre1995" if hit_year < ERA_SPLIT else "post1995"
 
 
+def clamp_hit(hit, earlier):
+    """Narrow a hit span to the part that can actually follow `earlier`.
+
+    A bracketed hit is not as wide as it looks: the ordering rule says the
+    hit is no earlier than the anchor before it, so the years below that
+    anchor are not possible hit years. Averaging over them understates every
+    clock by up to half the bracket width, always in the same direction.
+
+    Returns (None, None) when nothing is left -- the certain ordering
+    violation schema.validate_row already rejects. No number is better than
+    a negative one.
+    """
+    lo, hi = hit
+    if lo is None or earlier[1] is None:
+        return hit
+    lo = max(lo, earlier[1])
+    return (None, None) if lo > hi else (lo, hi)
+
+
 def _gap(later, earlier):
     """Years between two anchors, or None when either is unknown."""
     if later is None or earlier is None:
@@ -76,6 +95,9 @@ def compute_clocks(row):
     education = schema.parse_span(row["a2_education_end_date"])
     venture = schema.parse_span(row["a4_first_venture_date"])
 
+    after_education = clamp_hit(hit, education)
+    after_venture = clamp_hit(hit, venture)
+
     hit_mid = midpoint(hit)
     birth_mid = midpoint(birth)
     education_mid = midpoint(education)
@@ -90,17 +112,18 @@ def compute_clocks(row):
         "country_primary": row["country_primary"],
         "gender": row["gender"],
         "era": era_of(hit[0]),
-        "clock_education": _gap(hit_mid, education_mid),
+        "clock_education": _gap(midpoint(after_education), education_mid),
         "clock_age18": _gap(hit_mid,
                             birth_mid + 18 if birth_mid is not None else None),
         # rank1 dates a recognition, not a venture: the ranked work and the
         # ranking are usually the same event, so a venture clock of 0.0 would
         # be a category error rather than a short gap.
         "clock_venture": (None if row["hit_criterion"].strip() == "rank1"
-                          else _gap(hit_mid, midpoint(venture))),
+                          else _gap(midpoint(after_venture),
+                                    midpoint(venture))),
         "age_at_first_hit": _gap(hit_mid, birth_mid),
-        "clock_education_min": _gap(hit[0], education[1]),
-        "clock_education_max": _gap(hit[1], education[0]),
+        "clock_education_min": _gap(after_education[0], education[1]),
+        "clock_education_max": _gap(after_education[1], education[0]),
         "bounded": "true" if bounded else "false",
         "conf_min": weakest_conf(row["a2_education_end_conf"].strip(),
                                  row["a5_first_hit_conf"].strip()),
