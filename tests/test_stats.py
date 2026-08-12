@@ -1,4 +1,6 @@
 import os
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -141,6 +143,43 @@ class TestAudit(unittest.TestCase):
         ids = ["p%03d" % i for i in range(50)]
         self.assertEqual(stats.audit_sample(ids, seed=7),
                          stats.audit_sample(ids, seed=7))
+
+    def test_different_waves_audit_different_positions(self):
+        """The audit must not hit the same slots in the roster forever.
+
+        With a constant seed, sample() returns the same indices for every
+        population of the same size, and the runbook has researchers append
+        names in bucket-allocation order -- so the same three buckets got
+        audited every wave and the rest never once.
+        """
+        waves = [["p%03d" % i for i in range(start, start + 25)]
+                 for start in (0, 25, 50)]
+        chosen = {self.positions(wave) for wave in waves}
+        self.assertEqual(len(chosen), 3)
+
+    def positions(self, ids):
+        ordered = sorted(ids)
+        return tuple(ordered.index(i) for i in stats.audit_sample(ids))
+
+    def test_same_ids_select_the_same_rows(self):
+        ids = ["p%03d" % i for i in range(25)]
+        self.assertEqual(stats.audit_sample(ids), stats.audit_sample(ids))
+
+    def test_selection_survives_a_fresh_interpreter(self):
+        """Reproducibility is the whole reason the seed exists.
+
+        The builtin hash() is salted per process, so a seed derived from it
+        would pick different rows on every run.
+        """
+        code = ("from src import stats;"
+                "print(stats.audit_sample(['p%03d' % i for i in range(25)]))")
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        runs = []
+        for hash_seed in ("0", "12345"):
+            env = dict(os.environ, PYTHONHASHSEED=hash_seed)
+            runs.append(subprocess.check_output(
+                [sys.executable, "-c", code], cwd=root, env=env))
+        self.assertEqual(runs[0], runs[1])
 
     def test_agreement_within_one_year_is_not_disagreement(self):
         pairs = [(1997, 1997), (2001, 2002), (1985, 1984)]

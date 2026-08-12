@@ -10,6 +10,7 @@ import csv
 import random
 import statistics
 import sys
+import zlib
 
 from src import clocks
 
@@ -75,12 +76,24 @@ def check_stopping_rule(median_history, n, ci_half_width,
                       "%.2f yr at n=%d" % (previous, last, ci_half_width, n)}
 
 
-def audit_sample(person_ids, fraction=AUDIT_FRACTION, seed=0):
-    """Pick the wave rows to re-research blind. At least one, always."""
+def audit_sample(person_ids, fraction=AUDIT_FRACTION, seed=None):
+    """Pick the wave rows to re-research blind. At least one, always.
+
+    The seed defaults to a digest of the ids themselves. A constant seed
+    draws the same *positions* out of every wave of the same size, and the
+    runbook has researchers append names in bucket-allocation order, so the
+    same few buckets would be audited every wave and the rest never.
+
+    crc32, not the builtin hash(): string hashing is salted per process, and
+    an audit selection that changes between runs cannot be reproduced by
+    whoever checks the work. Pass `seed` to pin it.
+    """
     ordered = sorted(person_ids)
     if not ordered:
         return []
     k = max(1, int(round(len(ordered) * fraction)))
+    if seed is None:
+        seed = zlib.crc32("|".join(ordered).encode("utf-8"))
     return sorted(random.Random(seed).sample(ordered, k))
 
 
