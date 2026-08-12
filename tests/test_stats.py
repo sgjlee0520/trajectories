@@ -83,13 +83,26 @@ class TestStoppingRule(unittest.TestCase):
 
 class TestRevenueStrictValues(unittest.TestCase):
     def rows(self):
+        def row(basis, clock, excluded="false"):
+            return {"hit_basis": basis, "clock_education": clock,
+                    "excluded": excluded}
         return [
-            {"hit_basis": "primary", "clock_education": 11},
-            {"hit_basis": "primary", "clock_education": 9},
-            {"hit_basis": "fallback", "clock_education": 40},
-            {"hit_basis": "equivalent", "clock_education": 50},
-            {"hit_basis": "primary", "clock_education": None},
+            row("primary", 11),
+            row("primary", 9),
+            row("fallback", 40),
+            row("equivalent", 50),
+            row("primary", None),
         ]
+
+    def test_drops_excluded_rows_even_when_dated(self):
+        """An excluded row with its dates intact must not reach the median.
+
+        Excluded rows used to fall out only because an undatable hit left the
+        clock None. A row excluded for any other reason would have counted.
+        """
+        rows = self.rows() + [{"hit_basis": "primary", "clock_education": 99,
+                               "excluded": "true"}]
+        self.assertEqual(stats.revenue_strict_values(rows), [11, 9])
 
     def test_keeps_only_primary_basis(self):
         self.assertEqual(stats.revenue_strict_values(self.rows()), [11, 9])
@@ -104,12 +117,13 @@ class TestRevenueStrictValues(unittest.TestCase):
 
     def test_honours_the_clock_argument(self):
         rows = [{"hit_basis": "primary", "clock_venture": 3,
-                 "clock_education": 11}]
+                 "clock_education": 11, "excluded": "false"}]
         self.assertEqual(
             stats.revenue_strict_values(rows, clock="clock_venture"), [3])
 
     def test_empty_when_no_primary_rows(self):
-        rows = [{"hit_basis": "fallback", "clock_education": 7}]
+        rows = [{"hit_basis": "fallback", "clock_education": 7,
+                 "excluded": "false"}]
         self.assertEqual(stats.revenue_strict_values(rows), [])
 
 

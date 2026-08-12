@@ -105,7 +105,7 @@ def audit_disagreement(pairs):
 
 def revenue_strict_values(clock_rows, clock="clock_education"):
     """The subset the stopping rule tracks: hit_basis == 'primary'."""
-    return [r[clock] for r in clock_rows
+    return [r[clock] for r in clocks.included(clock_rows)
             if r["hit_basis"] == "primary" and r[clock] is not None]
 
 

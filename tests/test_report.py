@@ -4,7 +4,8 @@ from src import report
 
 
 def clock_row(person_id, bucket, basis, education, country="US",
-              era="post1995", gender="f", bounded="false", conf_min="high"):
+              era="post1995", gender="f", bounded="false", conf_min="high",
+              excluded="false", exclusion_reason=""):
     return {
         "person_id": person_id,
         "bucket": bucket,
@@ -20,6 +21,8 @@ def clock_row(person_id, bucket, basis, education, country="US",
         "clock_education_max": education,
         "bounded": bounded,
         "conf_min": conf_min,
+        "excluded": excluded,
+        "exclusion_reason": exclusion_reason,
     }
 
 
@@ -264,3 +267,66 @@ class TestNewReportSections(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestExclusionAudit(unittest.TestCase):
+    def rows(self):
+        rows = [clock_row("k%02d" % i, "software_internet", "primary", 8,
+                          country="US") for i in range(5)]
+        rows += [clock_row("x%02d" % i, "software_internet", "", None,
+                           country="JP", gender="F", excluded="true",
+                           exclusion_reason="crossing_undatable")
+                 for i in range(2)]
+        return rows
+
+    def test_counts_the_discard_pile(self):
+        audit = report.exclusion_audit(self.rows())
+        self.assertEqual(audit["n_total"], 7)
+        self.assertEqual(audit["n_excluded"], 2)
+        self.assertAlmostEqual(audit["rate"], 2 / 7.0)
+
+    def test_groups_by_reason(self):
+        audit = report.exclusion_audit(self.rows())
+        self.assertEqual(audit["reasons"], {"crossing_undatable": 2})
+
+    def test_exposes_an_uneven_exclusion_rate(self):
+        """The whole point: US 0%, non-US 100%, visible side by side."""
+        cuts = {c["name"]: c for c in report.exclusion_audit(self.rows())
+                ["cross_cuts"]}
+        self.assertEqual(cuts["US"]["excluded"], 0)
+        self.assertEqual(cuts["US"]["rate"], 0.0)
+        self.assertEqual(cuts["non-US"]["excluded"], 2)
+        self.assertEqual(cuts["non-US"]["rate"], 1.0)
+
+    def test_rate_is_none_for_an_empty_cross_cut(self):
+        cuts = {c["name"]: c for c in report.exclusion_audit(self.rows())
+                ["cross_cuts"]}
+        self.assertIsNone(cuts["men"]["rate"])
+
+    def test_excluded_rows_reach_no_statistic(self):
+        """An excluded row with a full clock must not move any median."""
+        rows = [clock_row("k%02d" % i, "software_internet", "primary", 8)
+                for i in range(5)]
+        rows.append(clock_row("bad", "software_internet", "primary", 99,
+                              excluded="true"))
+        text = report.build_report(rows)
+        self.assertIn("1 of 6 rows excluded", text)
+        self.assertNotIn("99.0", text)
+
+
+class TestExclusionAuditSection(unittest.TestCase):
+    def test_section_renders_rates(self):
+        rows = [clock_row("k%02d" % i, "software_internet", "primary", 8)
+                for i in range(5)]
+        rows.append(clock_row("x", "software_internet", "", None,
+                              country="JP", excluded="true",
+                              exclusion_reason="crossing_undatable"))
+        text = report.build_report(rows)
+        self.assertIn("## Exclusion audit", text)
+        self.assertIn("crossing_undatable", text)
+        self.assertIn("| non-US | 0 | 1 | 100.0% |", text)
+
+    def test_says_so_when_nothing_was_excluded(self):
+        text = report.build_report(sample_rows())
+        self.assertIn("No rows excluded of", text)
+        self.assertNotIn("exclusion rate", text)

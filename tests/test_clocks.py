@@ -215,3 +215,16 @@ class TestBoundedClocks(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestRank1VentureClock(unittest.TestCase):
+    def test_rank1_has_no_venture_clock(self):
+        """A ranking is not a venture; 0.0 would read as a short gap."""
+        row = valid_row()
+        row["hit_criterion"] = "rank1"
+        row["a4_first_venture_date"] = row["a5_first_hit_date"]
+        self.assertIsNone(clocks.compute_clocks(row)["clock_venture"])
+
+    def test_other_criteria_keep_the_venture_clock(self):
+        row = valid_row()
+        self.assertIsNotNone(clocks.compute_clocks(row)["clock_venture"])

@@ -129,3 +129,12 @@ A bounded date is a real measurement, not a guess. `1960-1961` says the sources
 place the event in those two years — whether that is two sources bracketing it
 from either side, or one source stating the range directly. It is not licence
 to widen a range until it contains a year you like.
+
+**The founding year is a valid lower bound.** A company cannot earn revenue
+before it exists, so the sourced founding (or first-production) year of the hit
+entity brackets a crossing from below without inferring anything. Where the
+earliest published figure is already above threshold, bound the crossing from
+the entity's founding to that figure's year rather than excluding the row.
+This only helps where the entity was young at the crossing: if the bracket
+exceeds the ten-year span limit, or the hit entity is a going concern the
+person inherited, the row is still `crossing_undatable`.

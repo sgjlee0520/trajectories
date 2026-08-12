@@ -87,6 +87,46 @@ def bounded_runs(clock_rows):
     }
 
 
+def exclusion_audit(all_rows):
+    """Who got thrown away, and whether that was even-handed.
+
+    Excluded rows appear in no median, CI, or slice, so a bias in *what gets
+    excluded* is invisible in every other table by construction. The frame
+    carries quotas on geography, gender, and era; this checks the discard pile
+    against the same cross-cuts.
+
+    Era is deliberately absent. Era derives from the hit year, and an excluded
+    row's hit year is usually unknown -- that is typically why it was
+    excluded -- so sorting the discard pile by era would mean inferring it.
+    """
+    excluded = [r for r in all_rows if r["excluded"] == "true"]
+    kept = clocks.included(all_rows)
+
+    reasons = {}
+    for row in excluded:
+        reason = row["exclusion_reason"] or "(none given)"
+        reasons[reason] = reasons.get(reason, 0) + 1
+
+    def split(name, predicate):
+        inc = sum(1 for r in kept if predicate(r))
+        exc = sum(1 for r in excluded if predicate(r))
+        total = inc + exc
+        return {"name": name, "included": inc, "excluded": exc,
+                "rate": (exc / float(total)) if total else None}
+
+    cross = [split("US", lambda r: r["country_primary"] == "US"),
+             split("non-US", lambda r: r["country_primary"] != "US"),
+             split("women", lambda r: r["gender"] == "F"),
+             split("men", lambda r: r["gender"] == "M")]
+    cross += [split("bucket: " + b, lambda r, b=b: r["bucket"] == b)
+              for b in sorted({r["bucket"] for r in all_rows})]
+
+    return {"n_total": len(all_rows), "n_excluded": len(excluded),
+            "rate": (len(excluded) / float(len(all_rows))
+                     if all_rows else None),
+            "reasons": reasons, "cross_cuts": cross}
+
+
 def slice_by(clock_rows, key, clock=PRIMARY_CLOCK):
     """Group rows by a slice key and summarise each group."""
     groups = {}
@@ -114,8 +154,13 @@ def _fmt(summary):
     return text
 
 
-def build_report(clock_rows):
-    """Render analysis.md."""
+def build_report(all_rows):
+    """Render analysis.md.
+
+    Takes every row, including excluded ones, and filters once here. The
+    exclusion audit needs the discard pile; nothing else may see it.
+    """
+    clock_rows = clocks.included(all_rows)
     lines = ["# Apprenticeship Trajectories — Analysis", ""]
 
     lines.append("## Survivorship caveat")
@@ -125,6 +170,36 @@ def build_report(clock_rows):
                  "winners** and say nothing about the probability of becoming "
                  "one.")
     lines.append("")
+
+    audit = exclusion_audit(all_rows)
+    lines.append("## Exclusion audit")
+    lines.append("")
+    if not audit["n_excluded"]:
+        lines.append("No rows excluded of %d." % audit["n_total"])
+        lines.append("")
+    else:
+        lines.append("**%d of %d rows excluded (%.1f%%).** Excluded rows appear "
+                     "in no other table on this page, so a bias in what gets "
+                     "excluded is only visible here."
+                     % (audit["n_excluded"], audit["n_total"],
+                        100.0 * audit["rate"]))
+        lines.append("")
+        lines.append("| Reason | n |")
+        lines.append("|---|---|")
+        for reason, count in sorted(audit["reasons"].items()):
+            lines.append("| %s | %d |" % (reason, count))
+        lines.append("")
+        lines.append("| Cross-cut | included | excluded | exclusion rate |")
+        lines.append("|---|---|---|---|")
+        for cut in audit["cross_cuts"]:
+            rate = "-" if cut["rate"] is None else "%.1f%%" % (100.0 * cut["rate"])
+            lines.append("| %s | %d | %d | %s |"
+                         % (cut["name"], cut["included"], cut["excluded"], rate))
+        lines.append("")
+        lines.append("Era is not audited here: it derives from the hit year, "
+                     "which an excluded row usually lacks. Judging a discarded "
+                     "row's era is a human call, not something to infer.")
+        lines.append("")
 
     runs = strictness_runs(clock_rows)
     lines.append("## Definition strictness (primary clock: education → hit)")

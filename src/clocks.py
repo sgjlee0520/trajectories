@@ -25,6 +25,8 @@ CLOCK_COLUMNS = [
     "clock_education_max",
     "bounded",
     "conf_min",
+    "excluded",
+    "exclusion_reason",
 ]
 
 CONF_ORDER = ["none", "low", "medium", "high"]
@@ -91,14 +93,31 @@ def compute_clocks(row):
         "clock_education": _gap(hit_mid, education_mid),
         "clock_age18": _gap(hit_mid,
                             birth_mid + 18 if birth_mid is not None else None),
-        "clock_venture": _gap(hit_mid, midpoint(venture)),
+        # rank1 dates a recognition, not a venture: the ranked work and the
+        # ranking are usually the same event, so a venture clock of 0.0 would
+        # be a category error rather than a short gap.
+        "clock_venture": (None if row["hit_criterion"].strip() == "rank1"
+                          else _gap(hit_mid, midpoint(venture))),
         "age_at_first_hit": _gap(hit_mid, birth_mid),
         "clock_education_min": _gap(hit[0], education[1]),
         "clock_education_max": _gap(hit[1], education[0]),
         "bounded": "true" if bounded else "false",
         "conf_min": weakest_conf(row["a2_education_end_conf"].strip(),
                                  row["a5_first_hit_conf"].strip()),
+        "excluded": row["excluded"].strip().lower(),
+        "exclusion_reason": row["exclusion_reason"].strip(),
     }
+
+
+def included(clock_rows):
+    """Rows that belong in a statistic.
+
+    Every median, CI, and slice must route through this. Excluded rows used to
+    fall out only because an undatable hit left their clocks None -- an
+    accident, not a rule. A row excluded for any other reason, with its dates
+    intact, would otherwise enter every figure in the report.
+    """
+    return [r for r in clock_rows if r["excluded"] != "true"]
 
 
 def write_clocks(clock_rows, path):
