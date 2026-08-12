@@ -154,11 +154,18 @@ def _fmt(summary):
     return text
 
 
-def build_report(all_rows):
+def build_report(all_rows, n_floor=stats.N_FLOOR):
     """Render analysis.md.
 
     Takes every row, including excluded ones, and filters once here. The
     exclusion audit needs the discard pile; nothing else may see it.
+
+    Below `n_floor` revenue-strict rows every median is withheld, not merely
+    flagged. Optional stopping is the named threat in the spec: a researcher
+    who watches the median move for several waves and stops when it looks
+    settled preferentially stops where noise happened to be small. A number
+    printed with a warning beside it has still been seen. Tests that need the
+    tables pass `n_floor=0`.
     """
     clock_rows = clocks.included(all_rows)
     lines = ["# Apprenticeship Trajectories — Analysis", ""]
@@ -200,6 +207,30 @@ def build_report(all_rows):
                      "which an excluded row usually lacks. Judging a discarded "
                      "row's era is a human call, not something to infer.")
         lines.append("")
+
+    strict_n = len(stats.revenue_strict_values(clock_rows))
+    if strict_n < n_floor:
+        lines.append("## Medians withheld")
+        lines.append("")
+        lines.append("**Revenue-strict n = %d of the %d-row floor.** Every "
+                     "median, CI, and slice is withheld until the floor is "
+                     "reached, per the pre-registered stopping rule."
+                     % (strict_n, n_floor))
+        lines.append("")
+        lines.append("This is deliberate rather than a missing feature. "
+                     "Watching the median across waves and stopping when it "
+                     "looks settled stops preferentially on waves where noise "
+                     "was small, which produces a figure that appears more "
+                     "precise than it is. Seeing the number early is the "
+                     "failure, so the number is not printed.")
+        lines.append("")
+        lines.append("| Progress | n |")
+        lines.append("|---|---|")
+        lines.append("| revenue-strict rows | %d |" % strict_n)
+        lines.append("| included rows | %d |" % len(clock_rows))
+        lines.append("| floor | %d |" % n_floor)
+        lines.append("")
+        return "\n".join(lines) + "\n"
 
     runs = strictness_runs(clock_rows)
     lines.append("## Definition strictness (primary clock: education → hit)")

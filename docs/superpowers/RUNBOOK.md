@@ -71,8 +71,10 @@ tool prints n, the floor, and the stopping-rule verdict, and nothing else.
 The N floor exists to prevent optional stopping, and a number that has been
 seen cannot be unseen.
 
-`analysis/analysis.md` still renders every median in full, so do not open it
-as a way around the floor.
+`analysis/analysis.md` withholds them on the same rule, so there is no way
+around the floor short of editing the code. It still prints the exclusion
+audit every wave — exclusions are a data-quality signal, not a result, and
+that table is the only place a bias in what gets discarded is visible.
 
 If the printed verdict is `STOP: True`, the collection is finished. If
 `STOP: False`, the reason states what is still missing. Return to step 1.

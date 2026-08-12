@@ -28,86 +28,15 @@ This sample is conditioned on the outcome. Everyone in it succeeded. These media
 
 Era is not audited here: it derives from the hit year, which an excluded row usually lacks. Judging a discarded row's era is a human call, not something to infer.
 
-## Definition strictness (primary clock: education → hit)
+## Medians withheld
 
-| Level | Median |
+**Revenue-strict n = 4 of the 30-row floor.** Every median, CI, and slice is withheld until the floor is reached, per the pre-registered stopping rule.
+
+This is deliberate rather than a missing feature. Watching the median across waves and stopping when it looks settled stops preferentially on waves where noise was small, which produces a figure that appears more precise than it is. Seeing the number early is the failure, so the number is not printed.
+
+| Progress | n |
 |---|---|
-| Revenue-strict ($10M revenue only) | 7.5 yr (95% CI 5.5-10.0), n=4 — **too small to read as a finding** |
-| All commercial (+ IPO/acquisition fallback) | 7.0 yr (95% CI 5.5-10.0), n=5 — **too small to read as a finding** |
-| Pooled (all buckets, mixed definitions) | 8.0 yr (95% CI 6.0-10.0), n=8 — **too small to read as a finding** |
+| revenue-strict rows | 4 |
+| included rows | 8 |
+| floor | 30 |
 
-Revenue-strict is the headline number. It differs from the pooled median by **0.5 years**.
-
-## Confidence sensitivity (pooled, primary clock)
-
-| Rows | Median |
-|---|---|
-| high-confidence rows only | 10.0 yr (95% CI 6.0-39.0), n=3 — **too small to read as a finding** |
-| all included rows | 8.0 yr (95% CI 6.0-10.0), n=8 — **too small to read as a finding** |
-
-Both rows pool every bucket and hit basis, so this run qualifies the pooled median, not the revenue-strict headline.
-
-5 of 8 rows fall below high confidence.
-
-**These diverge by 2.0 years.** The dataset is too soft to read the pooled median as a point estimate.
-
-## Bounded-date sensitivity (pooled, primary clock)
-
-| Treatment | Median |
-|---|---|
-| bounded rows dropped | 8.0 yr (95% CI 7.0-10.0), n=7 — **too small to read as a finding** |
-| all rows, span midpoints | 8.0 yr (95% CI 6.0-10.0), n=8 — **too small to read as a finding** |
-| all rows, earliest possible | 8.0 yr (95% CI 6.0-10.0), n=8 — **too small to read as a finding** |
-| all rows, latest possible | 8.0 yr (95% CI 6.0-10.0), n=8 — **too small to read as a finding** |
-
-A bounded date records that sources bracket an event without pinning it. 1 of 8 rows carry one, and every figure here is pooled across buckets and hit bases, so this run qualifies the pooled median, not the revenue-strict headline.
-
-The envelope rows show the full range the data permits; the midpoint row is the pooled median.
-
-## All clocks, pooled
-
-| Clock | Median |
-|---|---|
-| `clock_education` | 8.0 yr (95% CI 6.0-10.0), n=8 — **too small to read as a finding** |
-| `clock_age18` | 14.2 yr (95% CI 11.0-19.0), n=8 — **too small to read as a finding** |
-| `clock_venture` | 3.0 yr (95% CI 2.0-9.0), n=7 — **too small to read as a finding** |
-| `age_at_first_hit` | 32.2 yr (95% CI 29.0-37.0), n=8 — **too small to read as a finding** |
-
-## By field (primary clock)
-
-| Field | Median |
-|---|---|
-| consumer_retail_industrial | n=1, too few to summarise — **too small to read as a finding** |
-| hardware_deeptech | n=1, too few to summarise — **too small to read as a finding** |
-| investors_finance | n=1, too few to summarise — **too small to read as a finding** |
-| media_creators | n=1, too few to summarise — **too small to read as a finding** |
-| science_research | n=1, too few to summarise — **too small to read as a finding** |
-| software_internet | 7.0 yr (95% CI 6.0-10.0), n=3 — **too small to read as a finding** |
-
-Per-slice medians need roughly 30 rows each before they mean anything. Slices below that are flagged above.
-
-## By era (primary clock)
-
-| Era | Median |
-|---|---|
-| post1995 | 8.0 yr (95% CI 7.0-10.0), n=7 — **too small to read as a finding** |
-| pre1995 | n=1, too few to summarise — **too small to read as a finding** |
-
-Per-slice medians need roughly 30 rows each before they mean anything. Slices below that are flagged above.
-
-## By country (primary clock)
-
-| Country | Median |
-|---|---|
-| CN | n=1, too few to summarise — **too small to read as a finding** |
-| KR | n=1, too few to summarise — **too small to read as a finding** |
-| SE | n=1, too few to summarise — **too small to read as a finding** |
-| US | 8.0 yr (95% CI 5.5-39.0), n=5 — **too small to read as a finding** |
-
-Per-slice medians need roughly 30 rows each before they mean anything. Slices below that are flagged above.
-
-## Stopping rule
-
-Revenue-strict n = 4, CI half-width 2.25 yr (threshold 1.00).
-
-Wave-over-wave median history is tracked in `analysis/wave_medians.txt`; the rule needs three wave medians before it can fire.
