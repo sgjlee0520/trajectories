@@ -5,6 +5,12 @@ literal string 'unknown' with confidence 'none' and no source. There is no
 third state. A plausible-looking guessed date is the failure mode this whole
 project exists to prevent, because it is invisible in the output and moves
 the median.
+
+Two plausibility bands back up the ordering rules: one on the birth year
+itself, and one on the age at first hit. Ordering catches a birth after the
+hit; only the age band catches a transposed digit that still orders
+correctly. Both are deliberately wide, because rejecting a real outlier
+teaches researchers to edit dates until the tool goes quiet.
 """
 
 import csv
@@ -87,6 +93,20 @@ URL_PATTERN = re.compile(r"^https?://[^\s/]+\.[^\s]")
 MIN_BIRTH_YEAR = 1850
 MAX_BIRTH_YEAR = 2010
 MAX_SPAN_YEARS = 10
+
+# Plausibility band on the age at first hit. Ordering alone cannot catch a
+# transposed birth year -- 1996 typed for 1969 against a 2004 hit orders
+# fine and yields an age of 8 -- and both age_at_first_hit and clock_age18
+# are rendered medians, so one such row moves a published number.
+#
+# The band is set wide on purpose: it must catch typing errors and never a
+# real outlier. 10 sits below any documented first hit (a child creator
+# passing a million-strong audience at 12 still validates) while still
+# catching decade-scale transpositions, and 100 sits above the oldest
+# plausible first prize or first disclosed revenue. The oldest row in
+# data/anchors.csv is Kariko at 66; the youngest is Ek at 26.
+MIN_AGE_AT_FIRST_HIT = 10
+MAX_AGE_AT_FIRST_HIT = 100
 
 
 def columns():
@@ -215,11 +235,24 @@ def validate_row(row):
         # rejects a correct bounded row teaches researchers to edit dates
         # until the tool goes quiet, which is the one habit this project
         # cannot afford.
-        for earlier in ("a2_education_end", "a4_first_venture"):
+        for earlier in ("a1_birth", "a2_education_end",
+                        "a4_first_venture"):
             value = parse_span(row[earlier + "_date"])[0]
             if value is not None and value > hit_hi:
                 errors.append("%s (%d) is after the latest possible "
                               "a5_first_hit (%d)" % (earlier, value, hit_hi))
+
+        # Same certain-violation rule: flag only when every reading of the
+        # two spans is implausible.
+        if birth_lo is not None:
+            youngest = hit_hi - birth_lo
+            oldest = hit_lo - birth_hi
+            if (youngest < MIN_AGE_AT_FIRST_HIT
+                    or oldest > MAX_AGE_AT_FIRST_HIT):
+                errors.append("age at a5_first_hit must be in [%d, %d], got "
+                              "%d to %d"
+                              % (MIN_AGE_AT_FIRST_HIT, MAX_AGE_AT_FIRST_HIT,
+                                 oldest, youngest))
 
     return errors
 

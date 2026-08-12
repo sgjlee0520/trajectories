@@ -242,6 +242,59 @@ class TestValidateRow(unittest.TestCase):
         errors = schema.validate_row(valid_row(a1_birth_date="2008-2012"))
         self.assertTrue(any("a1_birth_date" in e for e in errors))
 
+    def test_birth_after_hit_rejected(self):
+        # Nothing used to catch this: the row validated clean and produced
+        # a negative age and a negative clock_age18, both of them medians.
+        errors = schema.validate_row(valid_row(a1_birth_date="2005",
+                                               a5_first_hit_date="2000"))
+        self.assertTrue(any("a1_birth" in e and "is after" in e
+                            for e in errors))
+
+    def test_transposed_birth_year_caught_by_the_age_band(self):
+        # 1996 typed for 1969 against a 2004 hit passes ordering and yields
+        # an age of 8.
+        errors = schema.validate_row(valid_row(a1_birth_date="1996",
+                                               a2_education_end_date="2003",
+                                               a4_first_venture_date="2003",
+                                               a5_first_hit_date="2004"))
+        self.assertTrue(any("age at a5_first_hit" in e for e in errors))
+
+    def test_implausibly_old_at_hit_rejected(self):
+        errors = schema.validate_row(valid_row(a1_birth_date="1880",
+                                               a5_first_hit_date="1997"))
+        self.assertTrue(any("age at a5_first_hit" in e for e in errors))
+
+    def test_a_sixty_six_year_old_first_hit_is_fine(self):
+        # Karikó in data/anchors.csv is the oldest real row. The band exists
+        # to catch typing errors, never to reject an outlier.
+        row = valid_row(a1_birth_date="1955", a2_education_end_date="1982",
+                        a4_first_venture_date="2006",
+                        a5_first_hit_date="2021", a6_scale_hit_date="2023")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_teenage_hit_is_permitted(self):
+        # A creator with a million-strong audience at 15 is a real outlier,
+        # not a data-entry error.
+        row = valid_row(a1_birth_date="1982", a2_education_end_date="1997",
+                        a3_first_domain_job_date="1996",
+                        a4_first_venture_date="1996",
+                        a5_first_hit_date="1997")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_age_band_only_flags_certain_violations(self):
+        # Widest possible age here is 2005 - 1990 = 15: still plausible, so
+        # a bounded row must not be rejected on its narrowest reading.
+        row = valid_row(a1_birth_date="1990", a2_education_end_date="2003",
+                        a3_first_domain_job_date="2003",
+                        a4_first_venture_date="2004",
+                        a5_first_hit_date="2000-2005")
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_unknown_birth_skips_the_age_band(self):
+        row = valid_row(a1_birth_conf="none", a1_birth_date="unknown",
+                        a1_birth_src="")
+        self.assertEqual(schema.validate_row(row), [])
+
     def test_rank1_allowed_for_investors(self):
         row = valid_row(bucket="investors_finance", hit_criterion="rank1",
                         hit_basis="equivalent")
