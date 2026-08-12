@@ -37,6 +37,38 @@ def sample_rows():
     return rows
 
 
+def conf_rows(high=8, weak=20):
+    """Five high-confidence rows and five weaker ones, medians apart."""
+    return ([clock_row("h%02d" % i, "software_internet", "primary", high)
+             for i in range(5)]
+            + [clock_row("m%02d" % i, "software_internet", "primary", weak,
+                         conf_min="medium") for i in range(5)])
+
+
+def bounded_rows():
+    """Three unbounded rows plus two bounded ones that straddle the median.
+
+    Medians: unbounded 9.0, midpoints 10.0, earliest 8.0, latest 12.0 — four
+    distinct numbers, so a table cell wired to the wrong run shows it.
+    """
+    rows = [clock_row("u%02d" % i, "software_internet", "primary", clock)
+            for i, clock in enumerate((8, 9, 12))]
+    for i in range(2):
+        row = clock_row("b%02d" % i, "software_internet", "primary", 10,
+                        bounded="true")
+        row["clock_education_min"] = 2
+        row["clock_education_max"] = 18
+        rows.append(row)
+    return rows
+
+
+def table_row(text, label):
+    """The one rendered table line starting with `label`."""
+    matches = [l for l in text.splitlines() if l.startswith("| " + label + " |")]
+    assert len(matches) == 1, (label, matches)
+    return matches[0]
+
+
 class TestSummarise(unittest.TestCase):
     def test_reports_n_and_median(self):
         result = report.summarise([10, 12, 14])
@@ -131,10 +163,7 @@ class TestBuildReport(unittest.TestCase):
 
 class TestConfidenceRuns(unittest.TestCase):
     def rows(self):
-        return ([clock_row("h%02d" % i, "software_internet", "primary", 8)
-                 for i in range(5)]
-                + [clock_row("m%02d" % i, "software_internet", "primary", 20,
-                             conf_min="medium") for i in range(5)])
+        return conf_rows()
 
     def test_high_only_excludes_weaker_rows(self):
         runs = report.confidence_runs(self.rows())
@@ -153,30 +182,28 @@ class TestConfidenceRuns(unittest.TestCase):
 
 class TestBoundedRuns(unittest.TestCase):
     def rows(self):
-        rows = [clock_row("u%02d" % i, "software_internet", "primary", 10)
-                for i in range(4)]
-        for i in range(2):
-            row = clock_row("b%02d" % i, "software_internet", "primary", 6.5,
-                            bounded="true")
-            row["clock_education_min"] = 6
-            row["clock_education_max"] = 7
-            rows.append(row)
-        return rows
+        return bounded_rows()
 
     def test_unbounded_only_drops_bounded_rows(self):
         runs = report.bounded_runs(self.rows())
-        self.assertEqual(runs["unbounded_only"]["n"], 4)
+        self.assertEqual(runs["unbounded_only"]["n"], 3)
+        self.assertEqual(runs["unbounded_only"]["median"], 9.0)
 
     def test_midpoint_all_keeps_everything(self):
         runs = report.bounded_runs(self.rows())
-        self.assertEqual(runs["midpoint_all"]["n"], 6)
+        self.assertEqual(runs["midpoint_all"]["n"], 5)
+        self.assertEqual(runs["midpoint_all"]["median"], 10.0)
 
     def test_envelope_brackets_the_midpoint(self):
+        # The bounded rows straddle the midpoint median, so a run that
+        # ignored the envelope columns — or swapped them — cannot pass.
         runs = report.bounded_runs(self.rows())
-        self.assertLessEqual(runs["envelope_min"]["median"],
-                             runs["midpoint_all"]["median"])
-        self.assertGreaterEqual(runs["envelope_max"]["median"],
-                                runs["midpoint_all"]["median"])
+        self.assertEqual(runs["envelope_min"]["median"], 8.0)
+        self.assertEqual(runs["envelope_max"]["median"], 12.0)
+        self.assertLess(runs["envelope_min"]["median"],
+                        runs["midpoint_all"]["median"])
+        self.assertGreater(runs["envelope_max"]["median"],
+                           runs["midpoint_all"]["median"])
 
 
 class TestNewReportSections(unittest.TestCase):
@@ -188,6 +215,51 @@ class TestNewReportSections(unittest.TestCase):
     def test_report_contains_bounded_section(self):
         text = report.build_report(sample_rows())
         self.assertIn("Bounded-date sensitivity", text)
+
+    def test_confidence_cells_carry_their_own_medians(self):
+        text = report.build_report(conf_rows())
+        self.assertIn("| 8.0 yr",
+                      table_row(text, "high-confidence rows only"))
+        self.assertIn("| 14.0 yr", table_row(text, "all included rows"))
+
+    def test_bounded_cells_carry_four_distinct_medians(self):
+        text = report.build_report(bounded_rows())
+        self.assertIn("| 9.0 yr", table_row(text, "bounded rows dropped"))
+        self.assertIn("| 10.0 yr",
+                      table_row(text, "all rows, span midpoints"))
+        self.assertIn("| 8.0 yr",
+                      table_row(text, "all rows, earliest possible"))
+        self.assertIn("| 12.0 yr",
+                      table_row(text, "all rows, latest possible"))
+
+    def test_sensitivity_sections_name_the_pooled_median(self):
+        # Both runs pool every bucket and hit basis; the headline defined
+        # above them does not, so neither may claim to qualify it.
+        text = report.build_report(sample_rows())
+        self.assertEqual(text.count("not the revenue-strict headline"), 2)
+
+    def test_divergence_warns_about_the_pooled_median(self):
+        text = report.build_report(conf_rows())
+        self.assertIn("**These diverge by 6.0 years.**", text)
+        self.assertIn("read the pooled median as a point estimate", text)
+
+    def test_divergence_below_threshold_reports_agreement(self):
+        text = report.build_report(conf_rows(10, 11.8))
+        self.assertIn("These agree within 0.9 years.", text)
+        self.assertNotIn("These diverge", text)
+
+    def test_all_high_confidence_says_nothing_was_varied(self):
+        text = report.build_report(sample_rows())
+        self.assertIn("0 of 23 rows fall below high confidence.", text)
+        self.assertIn("Nothing was varied", text)
+        self.assertNotIn("These agree within", text)
+        self.assertNotIn("These diverge", text)
+
+    def test_no_bounded_rows_says_nothing_was_varied(self):
+        text = report.build_report(sample_rows())
+        self.assertIn("0 of 23 rows carry one", text)
+        self.assertIn("nothing was varied", text)
+        self.assertNotIn("full range the data permits", text)
 
 
 if __name__ == "__main__":

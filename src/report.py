@@ -52,16 +52,20 @@ def strictness_runs(clock_rows, clock=PRIMARY_CLOCK):
     }
 
 
-def confidence_runs(clock_rows, clock=PRIMARY_CLOCK):
+def confidence_runs(clock_rows):
     """Spec 8's sensitivity run: high-confidence rows against all rows.
 
-    Where these diverge, the dataset is soft enough that the headline should
-    not be read as a point estimate.
+    `conf_min` is derived from the education and hit anchors only, so this
+    takes no clock argument — filtering a birth-derived clock on education
+    confidence would be a lie.
+
+    Where these diverge, the dataset is soft enough that the pooled median
+    should not be read as a point estimate.
     """
     high = [r for r in clock_rows if r["conf_min"] == "high"]
     return {
-        "high_only": summarise(_values(high, clock)),
-        "all_rows": summarise(_values(clock_rows, clock)),
+        "high_only": summarise(_values(high, PRIMARY_CLOCK)),
+        "all_rows": summarise(_values(clock_rows, PRIMARY_CLOCK)),
     }
 
 
@@ -71,6 +75,9 @@ def bounded_runs(clock_rows):
     Only the primary clock carries an envelope, so this takes no clock
     argument — a parameter that accepted one value would be a lie.
     """
+    # Fails open: any value other than "true" is treated as unbounded, so an
+    # unexpected cell would quietly drop the row into the unbounded run.
+    # clocks.py only ever writes "true"/"false".
     unbounded = [r for r in clock_rows if r["bounded"] != "true"]
     return {
         "unbounded_only": summarise(_values(unbounded, PRIMARY_CLOCK)),
@@ -141,19 +148,32 @@ def build_report(clock_rows):
         lines.append("")
 
     conf = confidence_runs(clock_rows)
-    lines.append("## Confidence sensitivity (primary clock)")
+    weak = [r for r in clock_rows if r["conf_min"] != "high"]
+    lines.append("## Confidence sensitivity (pooled, primary clock)")
     lines.append("")
     lines.append("| Rows | Median |")
     lines.append("|---|---|")
     lines.append("| high-confidence rows only | %s |" % _fmt(conf["high_only"]))
     lines.append("| all included rows | %s |" % _fmt(conf["all_rows"]))
     lines.append("")
+    lines.append("Both rows pool every bucket and hit basis, so this run "
+                 "qualifies the pooled median, not the revenue-strict "
+                 "headline.")
+    lines.append("")
+    lines.append("%d of %d rows fall below high confidence."
+                 % (len(weak), len(clock_rows)))
+    lines.append("")
     high_med = conf["high_only"]["median"]
     all_med = conf["all_rows"]["median"]
-    if high_med is not None and all_med is not None:
+    if not weak:
+        lines.append("Nothing was varied: the two rows above are the same "
+                     "rows twice, so their agreement is arithmetic, not "
+                     "evidence.")
+        lines.append("")
+    elif high_med is not None and all_med is not None:
         if abs(high_med - all_med) >= 1.0:
             lines.append("**These diverge by %.1f years.** The dataset is too "
-                         "soft to read the headline as a point estimate."
+                         "soft to read the pooled median as a point estimate."
                          % abs(high_med - all_med))
         else:
             lines.append("These agree within %.1f years."
@@ -161,7 +181,8 @@ def build_report(clock_rows):
         lines.append("")
 
     env = bounded_runs(clock_rows)
-    lines.append("## Bounded-date sensitivity (primary clock)")
+    bounded_n = len([r for r in clock_rows if r["bounded"] == "true"])
+    lines.append("## Bounded-date sensitivity (pooled, primary clock)")
     lines.append("")
     lines.append("| Treatment | Median |")
     lines.append("|---|---|")
@@ -175,8 +196,18 @@ def build_report(clock_rows):
                  % _fmt(env["envelope_max"]))
     lines.append("")
     lines.append("A bounded date records that sources bracket an event without "
-                 "pinning it. The envelope rows show the full range the data "
-                 "permits; the midpoint row is what the headline uses.")
+                 "pinning it. %d of %d rows carry one, and every figure here "
+                 "is pooled across buckets and hit bases, so this run "
+                 "qualifies the pooled median, not the revenue-strict "
+                 "headline." % (bounded_n, len(clock_rows)))
+    lines.append("")
+    if bounded_n:
+        lines.append("The envelope rows show the full range the data permits; "
+                     "the midpoint row is the pooled median.")
+    else:
+        lines.append("With no bounded row, nothing was varied: all four "
+                     "figures are the same rows treated the same way, not a "
+                     "range the data permits.")
     lines.append("")
 
     lines.append("## All clocks, pooled")
