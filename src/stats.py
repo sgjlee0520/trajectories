@@ -208,6 +208,10 @@ def read_audit_pairs(path):
 def main(argv):
     """Report the revenue-strict median and CI for a clocks.csv.
 
+    Below `N_FLOOR` the median and CI are withheld and only n is printed:
+    the stopping rule cannot fire there anyway, and a number that has been
+    seen cannot be unseen.
+
     Two forms:
       python3 -m src.stats <clocks.csv>
       python3 -m src.stats <clocks.csv> --history <history.txt>
@@ -235,12 +239,15 @@ def main(argv):
     lo, med, hi = bootstrap_median_ci(values)
     n = len(values)
     print("revenue-strict n = %d" % n)
-    print("median clock_education = %.1f yr" % med)
-    print("95%% CI = [%.1f, %.1f], half-width %.2f yr"
-          % (lo, hi, half_width(lo, hi)))
     if n < N_FLOOR:
-        print("below N floor of %d - median not to be interpreted yet"
-              % N_FLOOR)
+        # Printing the number with a warning under it is still printing the
+        # number, and a median read early is a median that can be stopped
+        # on. The floor is the whole defence against optional stopping.
+        print("below the N floor of %d - median and CI withheld" % N_FLOOR)
+    else:
+        print("median clock_education = %.1f yr" % med)
+        print("95%% CI = [%.1f, %.1f], half-width %.2f yr"
+              % (lo, hi, half_width(lo, hi)))
 
     if history_path is not None:
         appended = append_history(history_path, med, n)

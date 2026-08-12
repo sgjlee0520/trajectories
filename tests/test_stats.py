@@ -1,9 +1,12 @@
+import contextlib
+import io
 import os
 import subprocess
 import sys
 import tempfile
 import unittest
 
+from src import clocks
 from src import stats
 
 
@@ -336,6 +339,55 @@ class TestBoundedAuditYears(unittest.TestCase):
         path = self.audit_file("p04,mid-90s,1960\n")
         with self.assertRaises(ValueError):
             stats.read_audit_pairs(path)
+
+
+class TestMainWithholdsTheMedianBelowTheFloor(unittest.TestCase):
+    """Optional stopping is the named threat in the spec.
+
+    The runbook tells researchers not to look at the median before the N
+    floor, and the tool then printed it anyway with a warning underneath.
+    """
+
+    def clocks_file(self, n):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        self.addCleanup(os.remove, path)
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            f.write(",".join(clocks.CLOCK_COLUMNS) + "\n")
+            for i in range(n):
+                f.write("p%03d,software_internet,primary,US,f,post1995,"
+                        "%d,,,,,,false,high,false,\n" % (i, 8 + i % 5))
+        return path
+
+    def run_main(self, *argv):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = stats.main(["src.stats"] + list(argv))
+        return code, out.getvalue()
+
+    def test_below_the_floor_only_n_is_printed(self):
+        code, out = self.run_main(self.clocks_file(stats.N_FLOOR - 1))
+        self.assertEqual(code, 0)
+        self.assertIn("revenue-strict n = %d" % (stats.N_FLOOR - 1), out)
+        self.assertIn("withheld", out)
+        self.assertNotIn("median clock_education", out)
+        self.assertNotIn("95%", out)
+
+    def test_at_the_floor_the_median_is_reported(self):
+        code, out = self.run_main(self.clocks_file(stats.N_FLOOR))
+        self.assertEqual(code, 0)
+        self.assertIn("median clock_education", out)
+        self.assertIn("95%", out)
+
+    def test_the_stopping_rule_still_runs_below_the_floor(self):
+        handle, history = tempfile.mkstemp(suffix=".txt")
+        os.close(handle)
+        self.addCleanup(os.remove, history)
+        code, out = self.run_main(self.clocks_file(stats.N_FLOOR - 1),
+                                  "--history", history)
+        self.assertEqual(code, 0)
+        self.assertIn("STOP: False", out)
+        self.assertNotIn("median clock_education", out)
 
 
 if __name__ == "__main__":

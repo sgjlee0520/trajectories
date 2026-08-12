@@ -66,9 +66,13 @@ bucket allocation, then return to step 3.
 
     python3 -m src.stats analysis/clocks.csv --history analysis/wave_medians.txt
 
-**Do not look at the median before total revenue-strict n reaches 30.** The
-N floor exists to prevent optional stopping; reading the number early defeats
-it even if the printed verdict still says False.
+Below a total revenue-strict n of 30 the median and CI are withheld: the
+tool prints n, the floor, and the stopping-rule verdict, and nothing else.
+The N floor exists to prevent optional stopping, and a number that has been
+seen cannot be unseen.
+
+`analysis/analysis.md` still renders every median in full, so do not open it
+as a way around the floor.
 
 If the printed verdict is `STOP: True`, the collection is finished. If
 `STOP: False`, the reason states what is still missing. Return to step 1.
