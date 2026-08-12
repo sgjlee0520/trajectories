@@ -17,7 +17,7 @@ first. `frame.md` is frozen and must not be edited after wave 1.
 ## Compute clocks and build the report
 
     python3 -m src.clocks data/anchors.csv analysis/clocks.csv
-    python3 -m src.report data/anchors.csv analysis/clocks.csv analysis/analysis.md
+    python3 -m src.report analysis/clocks.csv analysis/analysis.md
 
 ## Check the stopping rule
 
