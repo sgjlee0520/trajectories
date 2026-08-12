@@ -17,6 +17,27 @@ class TestEra(unittest.TestCase):
     def test_unknown_hit_year_gives_empty_era(self):
         self.assertEqual(clocks.era_of(None), "")
 
+    def test_midpoint_on_the_split_is_post1995(self):
+        self.assertEqual(clocks.era_of(1995.0), "post1995")
+
+    def test_bracketed_hit_is_filed_by_its_midpoint(self):
+        # 1994-1996 has a 1995.0 midpoint, which is what the clock uses.
+        # Filing the row as pre1995 put it in a slice its own clock denies.
+        row = valid_row(a5_first_hit_date="1994-1996")
+        self.assertEqual(clocks.compute_clocks(row)["era"], "post1995")
+
+
+class TestIncluded(unittest.TestCase):
+    def test_excluded_flag_is_read_leniently(self):
+        """clocks.csv is a plain file a human may edit.
+
+        Matching on the exact string "true" fails open: 'True' or ' true '
+        would put an excluded row into every median.
+        """
+        rows = [{"excluded": "True"}, {"excluded": " true "},
+                {"excluded": "TRUE"}, {"excluded": "false"}]
+        self.assertEqual(clocks.included(rows), [rows[-1]])
+
 
 class TestComputeClocks(unittest.TestCase):
     def test_bezos_shaped_row(self):

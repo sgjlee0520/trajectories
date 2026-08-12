@@ -37,7 +37,10 @@ ERA_SPLIT = 1995
 def era_of(hit_year):
     """Era label for slicing: 'pre1995', 'post1995', or '' when the hit
     year is unknown. The empty label is deliberate — such rows contribute
-    to no median, and Task 6 renders the group as '(unknown)'."""
+    to no median, and Task 6 renders the group as '(unknown)'.
+
+    Takes the same midpoint the clocks take: filing a 1994-1996 hit as
+    pre1995 would put the row in a slice its own clock denies."""
     if hit_year is None:
         return ""
     return "pre1995" if hit_year < ERA_SPLIT else "post1995"
@@ -111,7 +114,7 @@ def compute_clocks(row):
         "hit_basis": row["hit_basis"],
         "country_primary": row["country_primary"],
         "gender": row["gender"],
-        "era": era_of(hit[0]),
+        "era": era_of(hit_mid),
         "clock_education": _gap(midpoint(after_education), education_mid),
         "clock_age18": _gap(hit_mid,
                             birth_mid + 18 if birth_mid is not None else None),
@@ -140,7 +143,8 @@ def included(clock_rows):
     accident, not a rule. A row excluded for any other reason, with its dates
     intact, would otherwise enter every figure in the report.
     """
-    return [r for r in clock_rows if r["excluded"] != "true"]
+    return [r for r in clock_rows
+            if r["excluded"].strip().lower() != "true"]
 
 
 def write_clocks(clock_rows, path):

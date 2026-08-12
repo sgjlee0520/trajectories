@@ -1,3 +1,5 @@
+import contextlib
+import io
 import unittest
 
 from src import allocate
@@ -59,6 +61,35 @@ class TestAllocateWave(unittest.TestCase):
             self.assertLessEqual(abs(cumulative[bucket] - expected), 1.0,
                                  "%s drifted: %d vs %.1f"
                                  % (bucket, cumulative[bucket], expected))
+
+
+class TestMainRejectsUnknownBuckets(unittest.TestCase):
+    """A dropped bucket name over-allocates that bucket for good.
+
+    main() used to store whatever it was given, so a typo simply vanished:
+    the bucket's cumulative count read as zero, the wave over-allocated it,
+    and nothing said so.
+    """
+
+    def run_main(self, *args):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = allocate.main(["src.allocate"] + list(args))
+        return code, out.getvalue()
+
+    def test_misspelled_bucket_is_rejected(self):
+        code, out = self.run_main("25", "sofware_internet=12")
+        self.assertEqual(code, 2)
+        self.assertIn("sofware_internet", out)
+
+    def test_malformed_pair_is_rejected(self):
+        code, _ = self.run_main("25", "software_internet")
+        self.assertEqual(code, 2)
+
+    def test_known_buckets_still_allocate(self):
+        code, out = self.run_main("25", "software_internet=12")
+        self.assertEqual(code, 0)
+        self.assertIn("software_internet", out)
 
 
 if __name__ == "__main__":

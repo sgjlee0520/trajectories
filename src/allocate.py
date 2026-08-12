@@ -62,7 +62,14 @@ def main(argv):
     wave_size = int(argv[1])
     cumulative = {}
     for pair in argv[2:]:
-        bucket, count = pair.split("=")
+        # A silently dropped bucket reads as a cumulative count of zero, so
+        # a typo over-allocates that bucket and every wave after it.
+        bucket, _, count = pair.partition("=")
+        if bucket not in schema.BUCKET_SHARES or not count.isdigit():
+            print("expected bucket=count, got %r" % pair)
+            print("known buckets: %s"
+                  % ", ".join(sorted(schema.BUCKET_SHARES)))
+            return 2
         cumulative[bucket] = int(count)
     for bucket, count in sorted(allocate_wave(cumulative, wave_size).items()):
         print("%-30s %d" % (bucket, count))
