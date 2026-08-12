@@ -13,6 +13,7 @@ import sys
 import zlib
 
 from src import clocks
+from src import schema
 
 N_FLOOR = 30
 MAX_DRIFT = 0.5
@@ -100,9 +101,12 @@ def audit_sample(person_ids, fraction=AUDIT_FRACTION, seed=None):
 def audit_disagreement(pairs):
     """Fraction of audited rows where the two passes disagree.
 
-    `pairs` is [(first_pass_year, second_pass_year)], either may be None.
-    Disagreement means more than one year apart, or one pass finding a date
-    where the other found nothing.
+    `pairs` is [(first_pass, second_pass)]. Each entry is a year, a (lo, hi)
+    span for a bounded date, or None. Disagreement means the two readings
+    are more than one year apart, or one pass found a date where the other
+    found nothing. Two spans that overlap agree: they are two honest
+    brackets around the same event, and forcing a researcher to collapse a
+    bracket to one year to satisfy this check would void good waves.
     """
     if not pairs:
         return 0.0
@@ -111,9 +115,21 @@ def audit_disagreement(pairs):
         if first is None or second is None:
             if first is not second:
                 bad += 1
-        elif abs(first - second) > 1:
+            continue
+        first_lo, first_hi = _span(first)
+        second_lo, second_hi = _span(second)
+        # Zero once the spans touch; the one-year tolerance still applies to
+        # two point dates.
+        if max(first_lo - second_hi, second_lo - first_hi, 0) > 1:
             bad += 1
     return bad / float(len(pairs))
+
+
+def _span(value):
+    """A year or a (lo, hi) span, as a (lo, hi) span."""
+    if isinstance(value, tuple):
+        return value
+    return (value, value)
 
 
 def revenue_strict_values(clock_rows, clock="clock_education"):
@@ -159,11 +175,19 @@ def append_history(path, median, n):
 
 
 def _audit_year(value):
-    """A blank/whitespace cell or the literal 'unknown' is None, else int."""
+    """A blank cell or 'unknown' is None; a 'YYYY-YYYY' cell is a span.
+
+    A bounded second pass is a real answer, not a formatting mistake: the
+    anchors file already stores hit dates that way.
+    """
     text = (value or "").strip()
     if not text or text == "unknown":
         return None
-    return int(text)
+    lo, hi = schema.parse_span(text)
+    if lo is None:
+        raise ValueError("audit year must be a 4-digit year or a "
+                         "'YYYY-YYYY' span, got %r" % value)
+    return lo if lo == hi else (lo, hi)
 
 
 def read_audit_pairs(path):

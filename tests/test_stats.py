@@ -290,5 +290,53 @@ class TestReadAuditPairs(unittest.TestCase):
             os.remove(path)
 
 
+class TestBoundedAuditYears(unittest.TestCase):
+    """data/anchors.csv already carries 'YYYY-YYYY' hit dates.
+
+    int() on one raises, so a bounded row drawn into the audit sample took
+    down the runbook one-liner -- and the natural workaround, writing a
+    single year into audit.csv, collapses the bound and usually reads as a
+    disagreement, voiding a good wave.
+    """
+
+    def audit_file(self, body):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("person_id,first_pass,second_pass\n")
+            f.write(body)
+        self.addCleanup(os.remove, path)
+        return path
+
+    def test_reads_a_bounded_year(self):
+        path = self.audit_file("p04,1959-1960,1960\n")
+        self.assertEqual(stats.read_audit_pairs(path), [((1959, 1960), 1960)])
+
+    def test_a_year_inside_the_span_agrees(self):
+        self.assertEqual(stats.audit_disagreement([((1959, 1960), 1960)]),
+                         0.0)
+
+    def test_overlapping_spans_agree(self):
+        pairs = [((1959, 1962), (1961, 1965))]
+        self.assertEqual(stats.audit_disagreement(pairs), 0.0)
+
+    def test_disjoint_spans_disagree(self):
+        pairs = [((1959, 1960), (1950, 1953))]
+        self.assertEqual(stats.audit_disagreement(pairs), 1.0)
+
+    def test_span_against_a_distant_year_disagrees(self):
+        self.assertEqual(stats.audit_disagreement([((1959, 1960), 1970)]),
+                         1.0)
+
+    def test_unknown_against_a_span_still_disagrees(self):
+        self.assertEqual(stats.audit_disagreement([((1959, 1960), None)]),
+                         1.0)
+
+    def test_malformed_cell_is_a_loud_error(self):
+        path = self.audit_file("p04,mid-90s,1960\n")
+        with self.assertRaises(ValueError):
+            stats.read_audit_pairs(path)
+
+
 if __name__ == "__main__":
     unittest.main()
