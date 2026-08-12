@@ -52,6 +52,34 @@ def strictness_runs(clock_rows, clock=PRIMARY_CLOCK):
     }
 
 
+def confidence_runs(clock_rows, clock=PRIMARY_CLOCK):
+    """Spec 8's sensitivity run: high-confidence rows against all rows.
+
+    Where these diverge, the dataset is soft enough that the headline should
+    not be read as a point estimate.
+    """
+    high = [r for r in clock_rows if r["conf_min"] == "high"]
+    return {
+        "high_only": summarise(_values(high, clock)),
+        "all_rows": summarise(_values(clock_rows, clock)),
+    }
+
+
+def bounded_runs(clock_rows):
+    """How much the answer depends on rows whose hit year is a range.
+
+    Only the primary clock carries an envelope, so this takes no clock
+    argument — a parameter that accepted one value would be a lie.
+    """
+    unbounded = [r for r in clock_rows if r["bounded"] != "true"]
+    return {
+        "unbounded_only": summarise(_values(unbounded, PRIMARY_CLOCK)),
+        "midpoint_all": summarise(_values(clock_rows, PRIMARY_CLOCK)),
+        "envelope_min": summarise(_values(clock_rows, "clock_education_min")),
+        "envelope_max": summarise(_values(clock_rows, "clock_education_max")),
+    }
+
+
 def slice_by(clock_rows, key, clock=PRIMARY_CLOCK):
     """Group rows by a slice key and summarise each group."""
     groups = {}
@@ -111,6 +139,45 @@ def build_report(clock_rows):
                      "the pooled median by **%.1f years**."
                      % abs(strict - pooled))
         lines.append("")
+
+    conf = confidence_runs(clock_rows)
+    lines.append("## Confidence sensitivity (primary clock)")
+    lines.append("")
+    lines.append("| Rows | Median |")
+    lines.append("|---|---|")
+    lines.append("| high-confidence rows only | %s |" % _fmt(conf["high_only"]))
+    lines.append("| all included rows | %s |" % _fmt(conf["all_rows"]))
+    lines.append("")
+    high_med = conf["high_only"]["median"]
+    all_med = conf["all_rows"]["median"]
+    if high_med is not None and all_med is not None:
+        if abs(high_med - all_med) >= 1.0:
+            lines.append("**These diverge by %.1f years.** The dataset is too "
+                         "soft to read the headline as a point estimate."
+                         % abs(high_med - all_med))
+        else:
+            lines.append("These agree within %.1f years."
+                         % abs(high_med - all_med))
+        lines.append("")
+
+    env = bounded_runs(clock_rows)
+    lines.append("## Bounded-date sensitivity (primary clock)")
+    lines.append("")
+    lines.append("| Treatment | Median |")
+    lines.append("|---|---|")
+    lines.append("| bounded rows dropped | %s |"
+                 % _fmt(env["unbounded_only"]))
+    lines.append("| all rows, span midpoints | %s |"
+                 % _fmt(env["midpoint_all"]))
+    lines.append("| all rows, earliest possible | %s |"
+                 % _fmt(env["envelope_min"]))
+    lines.append("| all rows, latest possible | %s |"
+                 % _fmt(env["envelope_max"]))
+    lines.append("")
+    lines.append("A bounded date records that sources bracket an event without "
+                 "pinning it. The envelope rows show the full range the data "
+                 "permits; the midpoint row is what the headline uses.")
+    lines.append("")
 
     lines.append("## All clocks, pooled")
     lines.append("")
