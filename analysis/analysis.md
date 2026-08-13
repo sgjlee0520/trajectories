@@ -20,37 +20,39 @@ Eleven known biases, their directions, and what mitigates each are catalogued in
 
 ## Exclusion audit
 
-**1 of 10 rows excluded (10.0%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.
+**9 of 35 rows excluded (25.7%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.
 
 | Reason | n |
 |---|---|
-| crossing_undatable | 1 |
+| crossing_undatable | 7 |
+| roster_unverified | 2 |
 
 | Cross-cut | included | excluded | exclusion rate |
 |---|---|---|---|
-| US | 5 | 0 | 0.0% |
-| non-US | 4 | 1 | 20.0% |
-| women | 4 | 0 | 0.0% |
-| men | 5 | 1 | 16.7% |
-| bucket: consumer_retail_industrial | 1 | 1 | 50.0% |
-| bucket: hardware_deeptech | 1 | 0 | 0.0% |
-| bucket: investors_finance | 1 | 0 | 0.0% |
-| bucket: media_creators | 1 | 0 | 0.0% |
-| bucket: science_research | 1 | 0 | 0.0% |
-| bucket: software_internet | 3 | 0 | 0.0% |
-| bucket: trade_import_logistics | 1 | 0 | 0.0% |
+| US | 8 | 4 | 33.3% |
+| non-US | 18 | 5 | 21.7% |
+| women | 11 | 5 | 31.2% |
+| men | 15 | 4 | 21.1% |
+| bucket: consumer_retail_industrial | 3 | 2 | 40.0% |
+| bucket: hardware_deeptech | 5 | 0 | 0.0% |
+| bucket: healthcare_biotech | 1 | 3 | 75.0% |
+| bucket: investors_finance | 2 | 1 | 33.3% |
+| bucket: media_creators | 2 | 1 | 33.3% |
+| bucket: science_research | 4 | 0 | 0.0% |
+| bucket: software_internet | 7 | 2 | 22.2% |
+| bucket: trade_import_logistics | 2 | 0 | 0.0% |
 
 Era is not audited here: it derives from the hit year, which an excluded row usually lacks. Judging a discarded row's era is a human call, not something to infer.
 
 ## Medians withheld
 
-**Revenue-strict n = 4 of the 30-row floor.** Every median, CI, and slice is withheld until the floor is reached, per the pre-registered stopping rule.
+**Revenue-strict n = 13 of the 30-row floor.** Every median, CI, and slice is withheld until the floor is reached, per the pre-registered stopping rule.
 
 This is deliberate rather than a missing feature. Watching the median across waves and stopping when it looks settled stops preferentially on waves where noise was small, which produces a figure that appears more precise than it is. Seeing the number early is the failure, so the number is not printed.
 
 | Progress | n |
 |---|---|
-| revenue-strict rows | 4 |
-| included rows | 9 |
+| revenue-strict rows | 13 |
+| included rows | 26 |
 | floor | 30 |
 
