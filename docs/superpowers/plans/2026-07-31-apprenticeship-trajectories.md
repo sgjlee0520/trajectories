@@ -302,6 +302,18 @@ class TestValidateRow(unittest.TestCase):
         errors = schema.validate_row(valid_row(a5_first_hit_src=""))
         self.assertTrue(any("a5_first_hit_src" in e for e in errors))
 
+    def test_bare_http_string_is_not_a_source(self):
+        # "http" satisfied the old startswith check while citing nothing.
+        errors = schema.validate_row(valid_row(a5_first_hit_src="http"))
+        self.assertTrue(any("a5_first_hit_src" in e for e in errors))
+
+    def test_malformed_url_rejected(self):
+        for bad in ("httpIforgot", "https:/typo", "ftp://example.org/x",
+                    "https://nodot"):
+            errors = schema.validate_row(valid_row(a5_first_hit_src=bad))
+            self.assertTrue(any("a5_first_hit_src" in e for e in errors),
+                            "should reject %r" % bad)
+
     def test_conf_none_requires_unknown_date(self):
         errors = schema.validate_row(valid_row(a3_first_domain_job_conf="none"))
         self.assertTrue(any("requires a3_first_domain_job_date='unknown'" in e
@@ -411,6 +423,7 @@ the median.
 """
 
 import csv
+import re
 import sys
 
 BUCKET_SHARES = {
@@ -478,6 +491,11 @@ TRAILING = [
 
 CONFIDENCE = {"high", "medium", "low", "none"}
 
+# A source must look like a real URL: scheme, ://, and a dotted host. The
+# permissive check this replaces accepted the bare string "http", which
+# would let an uncited anchor pass as fully sourced.
+URL_PATTERN = re.compile(r"^https?://[^\s/]+\.[^\s]")
+
 MIN_BIRTH_YEAR = 1850
 MAX_BIRTH_YEAR = 2010
 
@@ -538,7 +556,7 @@ def validate_row(row):
             if parse_year(date) is None:
                 errors.append("%s_date must be a 4-digit year, got %r"
                               % (anchor, date))
-            if not src.startswith("http"):
+            if not URL_PATTERN.match(src):
                 errors.append("%s_src must be a URL when %s_conf=%s, got %r"
                               % (anchor, anchor, conf, src))
 
@@ -612,7 +630,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_schema -v`
-Expected: PASS, 22 tests
+Expected: PASS, 24 tests
 
 - [ ] **Step 5: Commit**
 
@@ -817,7 +835,7 @@ git commit -m "Add largest-remainder wave allocation"
 - Produces:
   - `CLOCK_COLUMNS` — list of str, the clocks.csv header
   - `compute_clocks(row)` -> dict with keys `person_id`, `bucket`, `hit_basis`, `country_primary`, `gender`, `era`, `clock_education`, `clock_age18`, `clock_venture`, `age_at_first_hit`. Clock values are int or `None`.
-  - `era_of(hit_year)` -> `"pre1995"` or `"post1995"`
+  - `era_of(hit_year)` -> `"pre1995"`, `"post1995"`, or `""` when the hit year is unknown
   - `write_clocks(clock_rows, path)` -> None
 
 - [ ] **Step 1: Write the failing test**
@@ -840,6 +858,9 @@ class TestEra(unittest.TestCase):
 
     def test_1995_is_post1995(self):
         self.assertEqual(clocks.era_of(1995), "post1995")
+
+    def test_unknown_hit_year_gives_empty_era(self):
+        self.assertEqual(clocks.era_of(None), "")
 
 
 class TestComputeClocks(unittest.TestCase):
@@ -866,6 +887,20 @@ class TestComputeClocks(unittest.TestCase):
         )
         result = clocks.compute_clocks(row)
         self.assertIsNone(result["clock_education"])
+        self.assertEqual(result["clock_venture"], 3)
+
+    def test_unknown_birth_nulls_only_the_birth_derived_clocks(self):
+        # birth + 18 is arithmetic on a possibly-None value. If the guard is
+        # ever refactored away, this is the test that catches it.
+        row = valid_row(
+            a1_birth_conf="none",
+            a1_birth_date="unknown",
+            a1_birth_src="",
+        )
+        result = clocks.compute_clocks(row)
+        self.assertIsNone(result["clock_age18"])
+        self.assertIsNone(result["age_at_first_hit"])
+        self.assertEqual(result["clock_education"], 11)
         self.assertEqual(result["clock_venture"], 3)
 
     def test_excluded_row_yields_all_none_clocks(self):
@@ -915,6 +950,37 @@ class TestWriteClocks(unittest.TestCase):
         finally:
             os.remove(path)
 
+    def test_load_clocks_roundtrips_none(self):
+        row = valid_row(
+            a4_first_venture_conf="none",
+            a4_first_venture_date="unknown",
+            a4_first_venture_src="",
+        )
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            clocks.write_clocks([clocks.compute_clocks(row)], path)
+            loaded = clocks.load_clocks(path)
+            self.assertEqual(len(loaded), 1)
+            self.assertIsNone(loaded[0]["clock_venture"])
+            self.assertEqual(loaded[0]["clock_education"], 11)
+        finally:
+            os.remove(path)
+
+    def test_load_clocks_treats_whitespace_cell_as_unknown(self):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            with open(path, "w", newline="", encoding="utf-8") as f:
+                f.write(",".join(clocks.CLOCK_COLUMNS) + "\n")
+                f.write("p001,software_internet,primary,US,f,post1995,"
+                        "11,15,   ,33\n")
+            loaded = clocks.load_clocks(path)
+            self.assertIsNone(loaded[0]["clock_venture"])
+            self.assertEqual(loaded[0]["clock_age18"], 15)
+        finally:
+            os.remove(path)
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -959,7 +1025,9 @@ ERA_SPLIT = 1995
 
 
 def era_of(hit_year):
-    """Era label used for slicing. None when the hit year is unknown."""
+    """Era label for slicing: 'pre1995', 'post1995', or '' when the hit
+    year is unknown. The empty label is deliberate — such rows contribute
+    to no median, and Task 6 renders the group as '(unknown)'."""
     if hit_year is None:
         return ""
     return "pre1995" if hit_year < ERA_SPLIT else "post1995"
@@ -1033,7 +1101,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_clocks -v`
-Expected: PASS, 8 tests
+Expected: PASS, 12 tests
 
 - [ ] **Step 5: Commit**
 
@@ -1058,12 +1126,18 @@ git commit -m "Add clock computation from stored anchors"
   - `check_stopping_rule(median_history, n, ci_half_width, ...)` -> dict with keys `stop` (bool) and `reason` (str)
   - `audit_sample(person_ids, fraction=0.15, seed=0)` -> sorted list of ids
   - `audit_disagreement(pairs)` -> float in [0, 1]
+  - `revenue_strict_values(clock_rows, clock="clock_education")` -> list of int
+  - `read_history(path)` -> list of float, oldest first
+  - `append_history(path, median, n)` -> bool, True if appended
+  - `read_audit_pairs(path)` -> list of `(first_pass, second_pass)` int/None pairs
 
 - [ ] **Step 1: Write the failing test**
 
 Create `tests/test_stats.py`:
 
 ```python
+import os
+import tempfile
 import unittest
 
 from src import stats
@@ -1131,6 +1205,51 @@ class TestStoppingRule(unittest.TestCase):
                                            ci_half_width=0.9)
         self.assertTrue(result["stop"])
 
+    def test_drift_exactly_at_threshold_blocks(self):
+        # Spec: drift must be strictly under 0.5 yr, so 0.5 does not qualify.
+        result = stats.check_stopping_rule([10.0, 10.5, 11.0], n=100,
+                                           ci_half_width=0.5)
+        self.assertFalse(result["stop"])
+        self.assertIn("drift", result["reason"])
+
+    def test_half_width_exactly_at_threshold_passes(self):
+        # Spec: CI half-width of exactly 1.0 yr satisfies the rule.
+        result = stats.check_stopping_rule([11.8, 12.0, 12.2], n=210,
+                                           ci_half_width=1.0)
+        self.assertTrue(result["stop"])
+
+
+class TestRevenueStrictValues(unittest.TestCase):
+    def rows(self):
+        return [
+            {"hit_basis": "primary", "clock_education": 11},
+            {"hit_basis": "primary", "clock_education": 9},
+            {"hit_basis": "fallback", "clock_education": 40},
+            {"hit_basis": "equivalent", "clock_education": 50},
+            {"hit_basis": "primary", "clock_education": None},
+        ]
+
+    def test_keeps_only_primary_basis(self):
+        self.assertEqual(stats.revenue_strict_values(self.rows()), [11, 9])
+
+    def test_excludes_fallback_and_equivalent(self):
+        values = stats.revenue_strict_values(self.rows())
+        self.assertNotIn(40, values)
+        self.assertNotIn(50, values)
+
+    def test_drops_none_clock_values(self):
+        self.assertNotIn(None, stats.revenue_strict_values(self.rows()))
+
+    def test_honours_the_clock_argument(self):
+        rows = [{"hit_basis": "primary", "clock_venture": 3,
+                 "clock_education": 11}]
+        self.assertEqual(
+            stats.revenue_strict_values(rows, clock="clock_venture"), [3])
+
+    def test_empty_when_no_primary_rows(self):
+        rows = [{"hit_basis": "fallback", "clock_education": 7}]
+        self.assertEqual(stats.revenue_strict_values(rows), [])
+
 
 class TestAudit(unittest.TestCase):
     def test_samples_fifteen_percent(self):
@@ -1167,6 +1286,95 @@ class TestAudit(unittest.TestCase):
         self.assertEqual(stats.audit_disagreement([]), 0.0)
 
 
+class TestHistory(unittest.TestCase):
+    def make_file(self, content=""):
+        handle, path = tempfile.mkstemp(suffix=".txt")
+        os.close(handle)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        return path
+
+    def test_read_history_skips_comments_and_blanks(self):
+        path = self.make_file(
+            "# header comment\n"
+            "10.1\n"
+            "\n"
+            "   \n"
+            "10.3\n"
+            "# last-n: 50\n"
+        )
+        try:
+            self.assertEqual(stats.read_history(path), [10.1, 10.3])
+        finally:
+            os.remove(path)
+
+    def test_read_history_all_comments_is_empty(self):
+        path = self.make_file("# just a header\n# last-n: 25\n")
+        try:
+            self.assertEqual(stats.read_history(path), [])
+        finally:
+            os.remove(path)
+
+    def test_append_history_writes_and_returns_true_on_fresh_file(self):
+        path = self.make_file("")
+        try:
+            result = stats.append_history(path, 10.3, 25)
+            self.assertTrue(result)
+            self.assertEqual(stats.read_history(path), [10.3])
+        finally:
+            os.remove(path)
+
+    def test_append_history_same_n_twice_is_a_noop(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            with open(path, encoding="utf-8") as f:
+                before = f.read()
+            result = stats.append_history(path, 99.9, 25)
+            with open(path, encoding="utf-8") as f:
+                after = f.read()
+            self.assertFalse(result)
+            self.assertEqual(before, after)
+        finally:
+            os.remove(path)
+
+    def test_append_history_different_n_appends(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            result = stats.append_history(path, 10.5, 50)
+            self.assertTrue(result)
+            self.assertEqual(stats.read_history(path), [10.3, 10.5])
+        finally:
+            os.remove(path)
+
+    def test_round_trip_two_waves_no_marker_pollution(self):
+        path = self.make_file("")
+        try:
+            stats.append_history(path, 10.3, 25)
+            stats.append_history(path, 10.5, 50)
+            self.assertEqual(stats.read_history(path), [10.3, 10.5])
+        finally:
+            os.remove(path)
+
+
+class TestReadAuditPairs(unittest.TestCase):
+    def test_converts_blank_and_unknown_to_none(self):
+        handle, path = tempfile.mkstemp(suffix=".csv")
+        os.close(handle)
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("person_id,first_pass,second_pass\n")
+                f.write("p001,1997,1998\n")
+                f.write("p002,2001,unknown\n")
+                f.write("p003,,2005\n")
+            self.assertEqual(
+                stats.read_audit_pairs(path),
+                [(1997, 1998), (2001, None), (None, 2005)])
+        finally:
+            os.remove(path)
+
+
 if __name__ == "__main__":
     unittest.main()
 ```
@@ -1189,6 +1397,7 @@ waves where noise happened to be small, which produces a median that appears
 more precise than it is.
 """
 
+import csv
 import random
 import statistics
 import sys
@@ -1291,24 +1500,112 @@ def revenue_strict_values(clock_rows, clock="clock_education"):
             if r["hit_basis"] == "primary" and r[clock] is not None]
 
 
+def read_history(path):
+    """Wave medians logged so far, oldest first.
+
+    Blank lines and comments are skipped rather than crashing: this file is
+    machine-appended but human-readable, and a stray blank line must not take
+    down the stopping-rule check.
+    """
+    history = []
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            text = line.strip()
+            if text and not text.startswith("#"):
+                history.append(float(text))
+    return history
+
+
+def append_history(path, median, n):
+    """Log one wave's median. Refuses to double-append the same sample.
+
+    Re-running the wave check must not add a second identical line: two equal
+    adjacent entries make the drift between them exactly zero, which would
+    satisfy the stopping rule's stability test with fabricated evidence.
+    """
+    previous_n = None
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            if line.startswith("# last-n:"):
+                previous_n = int(line.split(":", 1)[1].strip())
+    if previous_n == n:
+        return False
+    with open(path, "a", encoding="utf-8") as handle:
+        handle.write("%.1f\n" % median)
+        handle.write("# last-n: %d\n" % n)
+    return True
+
+
+def _audit_year(value):
+    """A blank/whitespace cell or the literal 'unknown' is None, else int."""
+    text = (value or "").strip()
+    if not text or text == "unknown":
+        return None
+    return int(text)
+
+
+def read_audit_pairs(path):
+    """Read data/audit.csv into (first_pass, second_pass) year pairs.
+
+    Columns: person_id, first_pass, second_pass. An empty cell or the
+    literal 'unknown' becomes None, matching the anchors convention that an
+    absent date is never guessed.
+    """
+    pairs = []
+    with open(path, newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            pairs.append((_audit_year(row["first_pass"]),
+                          _audit_year(row["second_pass"])))
+    return pairs
+
+
 def main(argv):
-    """Report the revenue-strict median and CI for a clocks.csv."""
-    if len(argv) != 2:
-        print("usage: python3 -m src.stats <clocks.csv>")
+    """Report the revenue-strict median and CI for a clocks.csv.
+
+    Two forms:
+      python3 -m src.stats <clocks.csv>
+      python3 -m src.stats <clocks.csv> --history <history.txt>
+
+    The --history form additionally appends the median to the history file
+    (refusing to double-log a re-run of the same sample) and evaluates the
+    pre-registered stopping rule against the logged history.
+    """
+    usage = "usage: python3 -m src.stats <clocks.csv> [--history <history.txt>]"
+    history_path = None
+    if len(argv) == 2:
+        clocks_path = argv[1]
+    elif len(argv) == 4 and argv[2] == "--history":
+        clocks_path = argv[1]
+        history_path = argv[3]
+    else:
+        print(usage)
         return 2
-    rows = clocks.load_clocks(argv[1])
+
+    rows = clocks.load_clocks(clocks_path)
     values = revenue_strict_values(rows)
     if len(values) < 2:
         print("only %d revenue-strict rows; nothing to report" % len(values))
         return 0
     lo, med, hi = bootstrap_median_ci(values)
-    print("revenue-strict n = %d" % len(values))
+    n = len(values)
+    print("revenue-strict n = %d" % n)
     print("median clock_education = %.1f yr" % med)
     print("95%% CI = [%.1f, %.1f], half-width %.2f yr"
           % (lo, hi, half_width(lo, hi)))
-    if len(values) < N_FLOOR:
+    if n < N_FLOOR:
         print("below N floor of %d - median not to be interpreted yet"
               % N_FLOOR)
+
+    if history_path is not None:
+        appended = append_history(history_path, med, n)
+        history = read_history(history_path)
+        if appended:
+            print("appended to history (%d waves logged)" % len(history))
+        else:
+            print("already logged for n=%d, history unchanged" % n)
+        verdict = check_stopping_rule(history, n, half_width(lo, hi))
+        print("STOP: %s - %s" % (verdict["stop"], verdict["reason"]))
+
     return 0
 
 
@@ -1319,7 +1616,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_stats -v`
-Expected: PASS, 18 tests
+Expected: PASS, 32 tests
 
 - [ ] **Step 5: Commit**
 
@@ -1409,11 +1706,15 @@ class TestStrictnessRuns(unittest.TestCase):
         self.assertEqual(runs["pooled"]["n"], 23)
 
     def test_revenue_strict_excludes_fallback(self):
+        # Two primary rows so a median exists; the fallback row's 50 would
+        # drag it far off if the filter leaked.
         rows = [clock_row("a", "software_internet", "primary", 5),
-                clock_row("b", "software_internet", "fallback", 50)]
+                clock_row("b", "software_internet", "primary", 7),
+                clock_row("c", "software_internet", "fallback", 50)]
         runs = report.strictness_runs(rows, "clock_education")
-        self.assertEqual(runs["revenue_strict"]["n"], 1)
-        self.assertEqual(runs["revenue_strict"]["median"], 5)
+        self.assertEqual(runs["revenue_strict"]["n"], 2)
+        self.assertEqual(runs["revenue_strict"]["median"], 6)
+        self.assertEqual(runs["all_commercial"]["n"], 3)
 
 
 class TestSliceBy(unittest.TestCase):
@@ -1438,14 +1739,38 @@ class TestBuildReport(unittest.TestCase):
         self.assertIn("All commercial", text)
         self.assertIn("Pooled", text)
 
-    def test_small_slices_are_flagged(self):
-        text = report.build_report(sample_rows())
-        # science_research has n=5, far below the 30 needed to mean anything.
-        self.assertIn("too small to read", text)
+    def test_flag_is_attached_to_the_undersized_row_only(self):
+        rows = [clock_row("big%02d" % i, "software_internet", "primary",
+                          8 + (i % 7)) for i in range(35)]
+        rows += [clock_row("s%02d" % i, "science_research", "equivalent",
+                           18 + (i % 4)) for i in range(5)]
+        text = report.build_report(rows)
+        small = [l for l in text.splitlines()
+                 if l.startswith("| science_research")]
+        large = [l for l in text.splitlines()
+                 if l.startswith("| software_internet")]
+        self.assertEqual(len(small), 1)
+        self.assertEqual(len(large), 1)
+        self.assertIn("too small to read", small[0])
+        self.assertNotIn("too small to read", large[0])
 
-    def test_reports_stopping_rule_verdict(self):
+    def test_single_row_slice_is_flagged(self):
+        # n=1 has no median at all, which makes it the most misreadable
+        # slice, not an exempt one.
+        rows = [clock_row("a", "software_internet", "primary", 5),
+                clock_row("b", "science_research", "equivalent", 20)]
+        text = report.build_report(rows)
+        line = [l for l in text.splitlines()
+                if l.startswith("| science_research")][0]
+        self.assertIn("n=1", line)
+        self.assertIn("too small to read", line)
+
+    def test_reports_stopping_rule_numbers(self):
         text = report.build_report(sample_rows())
         self.assertIn("Stopping rule", text)
+        # 12 of the 23 sample rows are hit_basis == "primary".
+        self.assertIn("Revenue-strict n = 12", text)
+        self.assertIn("threshold 1.00", text)
 
 
 if __name__ == "__main__":
@@ -1526,11 +1851,18 @@ def slice_by(clock_rows, key, clock=PRIMARY_CLOCK):
 
 
 def _fmt(summary):
-    """One table cell: median, CI, and n — or a reason there is none."""
+    """One table cell: median, CI, and n — or a reason there is none.
+
+    The undersized flag applies to every slice below MIN_SLICE_N, including
+    those too small to have a median at all. A one-person slice is the most
+    misreadable of all, not the least.
+    """
     if summary["median"] is None:
-        return "n=%d, too few to summarise" % summary["n"]
-    text = "%.1f yr (95%% CI %.1f-%.1f), n=%d" % (
-        summary["median"], summary["ci_lo"], summary["ci_hi"], summary["n"])
+        text = "n=%d, too few to summarise" % summary["n"]
+    else:
+        text = "%.1f yr (95%% CI %.1f-%.1f), n=%d" % (
+            summary["median"], summary["ci_lo"], summary["ci_hi"],
+            summary["n"])
     if summary["n"] < MIN_SLICE_N:
         text += " — **too small to read as a finding**"
     return text
@@ -1630,12 +1962,12 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_report -v`
-Expected: PASS, 11 tests
+Expected: PASS, 12 tests
 
 - [ ] **Step 5: Run the whole suite**
 
 Run: `python3 -m unittest discover -s tests -t . -v`
-Expected: PASS, 67 tests total
+Expected: PASS, 88 tests total
 
 - [ ] **Step 6: Commit**
 
@@ -1790,9 +2122,12 @@ Must report 0 errors before proceeding.
 
 ## 6. Audit
 
-Pick the rows to re-check:
+Pick the rows to re-check — this wave's person_ids are the last 25 rows
+appended to `data/anchors.csv`:
 
-    python3 -c "from src import stats; print(stats.audit_sample(IDS_FROM_THIS_WAVE))"
+    python3 -c "import csv; from src import stats; \
+      ids = [r['person_id'] for r in csv.DictReader(open('data/anchors.csv'))][-25:]; \
+      print(stats.audit_sample(ids))"
 
 Re-research those people **blind** — the second pass must not see the first
 pass's answers. Record both `a5_first_hit` years in `data/audit.csv` with
@@ -1800,10 +2135,15 @@ columns `person_id,first_pass,second_pass`.
 
 Then compute disagreement:
 
-    python3 -c "from src import stats; print(stats.audit_disagreement(PAIRS))"
+    python3 -c "from src import stats; \
+      print(stats.audit_disagreement(stats.read_audit_pairs('data/audit.csv')))"
 
 **If disagreement > 0.10, the entire wave is void and re-runs.** Delete the
-wave's rows from `data/anchors.csv` and return to step 3.
+wave's rows from `data/anchors.csv`, and remove that wave's names from
+`data/roster.csv`. Those names must NOT be reused — a name whose dates two
+researchers could not reproduce is exactly the kind of poorly-documented case
+that would bias the sample if forced in. Draw fresh names for the same
+bucket allocation, then return to step 3.
 
 ## 7. Recompute
 
@@ -1813,22 +2153,14 @@ wave's rows from `data/anchors.csv` and return to step 3.
 
 ## 8. Log the median and check the rule
 
-Append the revenue-strict median to `analysis/wave_medians.txt`, then:
-
-    python3 -c "from src import stats, clocks; \
-      rows = clocks.load_clocks('analysis/clocks.csv'); \
-      v = stats.revenue_strict_values(rows); \
-      lo, med, hi = stats.bootstrap_median_ci(v); \
-      hist = [float(l) for l in open('analysis/wave_medians.txt') \
-              if not l.startswith('#')]; \
-      print(stats.check_stopping_rule(hist, len(v), stats.half_width(lo, hi)))"
+    python3 -m src.stats analysis/clocks.csv --history analysis/wave_medians.txt
 
 **Do not look at the median before total revenue-strict n reaches 30.** The
 N floor exists to prevent optional stopping; reading the number early defeats
-it even if the printed rule still says False.
+it even if the printed verdict still says False.
 
-If `stop` is True, the collection is finished. If False, the reason states
-what is still missing. Return to step 1.
+If the printed verdict is `STOP: True`, the collection is finished. If
+`STOP: False`, the reason states what is still missing. Return to step 1.
 
 ## Expected duration
 
@@ -1839,7 +2171,7 @@ Expect it to fire at a total N around 350-500.
 - [ ] **Step 3: Verify the full suite still passes**
 
 Run: `python3 -m unittest discover -s tests -t . -v`
-Expected: PASS, 67 tests
+Expected: PASS, 88 tests
 
 - [ ] **Step 4: Commit**
 

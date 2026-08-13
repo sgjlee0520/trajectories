@@ -1,0 +1,11 @@
+person_id,name,bucket,source_list,country_primary,gender,why_selected
+p01,Sara Blakely,consumer_retail_industrial,Forbes World's Billionaires (self-made),US,F,"Shape 1 career-switcher: seven years selling fax machines at Danka, then founded a shapewear company with no prior apparel employment. Stresses a3_first_domain_job."
+p02,Katalin Kariko,science_research,Nobel Prizes (Physiology or Medicine),US,F,"Shape 2 research scientist: tests the prize equivalent, and an unusually long education-to-hit clock (40 years)."
+p03,Tadashi Yanai,consumer_retail_industrial,Forbes World's Billionaires (self-made),JP,M,"Shape 3 non-US operator: Japanese-language sources, plus an inherited family firm that stresses 'the person's own venture'."
+p04,Gordon Moore,hardware_deeptech,Forbes 400 (self-made score 6-10),US,M,"Shape 4 pre-1980 hit: tests whether a 1950s-70s career can be sourced, and whether an earlier venture's revenue crossing can be dated at all."
+p05,Bong Joon-ho,media_creators,Academy Awards,KR,M,Shape 5 media creator: tests the aud1m equivalent on an artistic work rather than a company.
+p06,Mary Meeker,investors_finance,Midas List,US,F,Shape 6 investor: tests fund100 on someone who was famous for 20 years before closing a fund of her own.
+p07,Kevin Systrom,software_internet,Fortune 40 Under 40,US,M,Shape 7 private company with undisclosed revenue: tests the acq50 fallback path.
+p08,Robin Li,software_internet,Hurun Rich List (China),CN,M,"Shape 8 documented $10M revenue: chosen because Baidu's SEC F-1 audits revenue for 2002-2004, which should have made the rev10 primary path trivial."
+p09,Daniel Ek,software_internet,Forbes World's Billionaires (self-made),SE,M,"Shape 9 university dropout: left KTH after eight weeks, so a2_education_end has no tertiary credential."
+p10,Zhang Yin,trade_import_logistics,Hurun Rich List (China),CN,F,"Shape 10 thinnest bucket: scrap-paper import/export operator, pre-internet career, largely Chinese-language sourcing."

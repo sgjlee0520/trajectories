@@ -124,9 +124,24 @@ Each anchor stored as three columns: `<anchor>_date`, `<anchor>_src`, `<anchor>_
 
 ### `a5_first_hit` threshold definition
 
-**$10M annual revenue is the primary criterion.** Non-commercial buckets get one fixed
-equivalent each, specified here rather than chosen per person, so that no coder ever decides
-what counts as a hit while looking at a specific career.
+**$10M annual revenue, in constant 2026 US dollars, is the primary criterion.**
+Non-commercial buckets get one fixed equivalent each, specified here rather than chosen per
+person, so that no coder ever decides what counts as a hit while looking at a specific
+career.
+
+#### The threshold is in constant 2026 dollars
+
+`rev10` means **$10M in constant 2026 US dollars**, not $10M nominal. A nominal threshold
+would demand that a 1960 founder build a business roughly eleven times larger in real terms
+than a 2020 founder to trigger the same "first hit", which inflates every pre-1995
+apprenticeship — and the frame requires at least 25% of those.
+
+Look up the nominal threshold for a revenue year with:
+
+    python3 -m src.cpi 1960
+
+For non-USD accounts, convert at the **spot rate for the revenue year**, then compare against
+that year's nominal threshold.
 
 #### Commercial buckets
 
@@ -135,21 +150,54 @@ trade/import/logistics:
 
 | Rank | Criterion | Code | `hit_basis` |
 |---|---|---|---|
-| 1 | First year the person's own venture reached **$10M annual revenue** | `rev10` | `primary` |
-| 2 | *Only if revenue is never publicly documented:* earliest of IPO or acquisition above $50M | `ipo` / `acq50` | `fallback` |
+| 1 | First year the person's own venture reached the constant-dollar **$10M threshold** | `rev10` | `primary` |
+| 2 | Earliest of IPO or acquisition above $50M constant 2026 dollars | `ipo` / `acq50` | `fallback` |
 
-The fallback exists because private-company revenue is frequently unpublished, and without it
-a large share of otherwise well-documented commercial careers would code as `unknown` and
-drop out of every median. Rows using it are tagged `fallback` so revenue-strict medians
-remain computable.
+The fallback is **permitted only when no earlier crossing is known to have occurred.** If
+sources establish that the venture passed the threshold in an earlier year that cannot be
+pinned exactly, record a bounded `rev10` date instead — see Bounded dates below. If it cannot
+even be bounded, the row is `excluded = true` with reason `crossing_undatable`. Dating such a
+row by a later IPO is forbidden: it produces a confidently sourced answer that is years wrong.
+
+**What "known" means here.** A qualitative claim in a source — that the venture
+was already large, profitable, or industry-leading by a stated year — is enough
+to establish that an earlier crossing occurred, even with no dollar figure
+attached. Only the *year* needs pinning or bounding, not the crossing itself.
+So a company that first disclosed revenue at IPO has a known earlier crossing
+whenever any source describes it as substantial beforehand, and the fallback is
+barred. Use the fallback only when no source suggests the venture reached
+meaningful scale before the IPO or acquisition — which, for a company large
+enough to list, is rare. Expect exclusion or a bounded date to be the normal
+outcome, and the fallback to be the exception.
 
 #### Non-commercial buckets
 
 | Bucket | Equivalent | Code | `hit_basis` |
 |---|---|---|---|
-| Science & research | Top-tier prize: Nobel, Turing, Fields, or Breakthrough | `prize` | `equivalent` |
+| Science & research | Top-tier prize: Nobel, Turing, Fields, or Breakthrough. **Record the announcement year**, not the prize's official designated year, because the announcement is when recognition actually landed — Karikó's Breakthrough Prize is officially the 2022 prize but was announced 9 September 2021, so the anchor is 2021. | `prize` | `equivalent` |
 | Media & creators | 1M+ audience for their own work | `aud1m` | `equivalent` |
-| Investors & finance | First fund closed above $100M | `fund100` | `equivalent` |
+| Investors & finance — fund managers | First fund closed above $100M constant 2026 dollars where the person was a named general partner | `fund100` | `equivalent` |
+| Investors & finance — analysts, economists, and other non-fund finance careers | First year the person topped a recognized industry ranking, such as the Institutional Investor All-America Research Team | `rank1` | `equivalent` |
+
+`investors_finance` uses **two criteria, chosen by career type**: `fund100` for fund managers,
+`rank1` for everyone else. `fund100` alone mis-dates analysts badly: Mary Meeker was among the
+most influential people in technology investing roughly 23 years before Bond Capital's 2019
+debut fund. Where no recognized ranking exists for a person, the anchor is `unknown` and the
+row is excluded — that is honest, and better than dating a career by an event that came
+decades late.
+
+#### Bounded dates
+
+When sources establish that an event happened within a range but not which year, record the
+anchor as `YYYY-YYYY` — low year first, at most 10 years wide (arithmetic difference, so
+1960-1970 is the widest permitted range), with a source for the bound.
+Clocks use the midpoint; the report prints a sensitivity run with bounded rows excluded so the
+uncertainty stays visible.
+
+A bounded date is a real measurement, not a guess. `1960-1961` says the sources place the
+event in those two years — whether that is two sources bracketing it from either side, or one
+source stating the range directly. It is not licence to widen a range until it contains a year
+you like.
 
 #### Resolution
 
@@ -162,8 +210,11 @@ the effect is always visible.
 
 ### Date precision
 
-**Year precision throughout.** The output is a median measured in years; month-level
-precision is false precision that costs real research time for no gain.
+**Year precision throughout**, with bounded dates permitted where sources
+bracket an event without pinning it (`YYYY-YYYY`, at most 10 years wide
+(arithmetic difference, so 1960-1970 is the widest permitted range)). The
+output is a median measured in years; month-level precision is false precision
+that costs real research time for no gain.
 
 ## 5. Verification standard — cite-or-flag
 
@@ -279,7 +330,7 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
   with medians on all included rows. Where these diverge, the report states so rather than
   presenting the more attractive figure.
 - **Definition-strictness run (required).** Three medians printed together:
-  1. `hit_basis = primary` only — the revenue-strict median, $10M revenue and nothing else
+  1. `hit_basis = primary` only — the revenue-strict median, $10M constant-dollar revenue and nothing else
   2. all commercial rows — `primary` + `fallback`
   3. pooled — all included rows across every bucket
 
@@ -322,7 +373,7 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
 4. **List bias is inherited, not removed.** The quotas and cross-cuts bound it and make it
    visible; they do not eliminate it.
 5. **The pooled median mixes definitions.** A Nobel, a 1M-person audience, a $100M fund, and
-   $10M of revenue are not the same event, and pooling them produces a number whose units are
+   $10M constant-dollar revenue are not the same event, and pooling them produces a number whose units are
    "reaching the top of your field, whatever that means here." This is deliberate — it keeps
    research careers in the sample — but it is why §8 designates the revenue-strict median as
    the headline and requires all three strictness levels to be reported together.
@@ -330,3 +381,14 @@ The pilot is about schema survival, not sample size, and is unaffected by the op
    better than private ones, so the `primary` subset skews toward companies that exited. The
    `hit_basis` tag makes this measurable: comparing `primary` against `fallback` medians
    shows how much the exit-visibility effect moves the number.
+7. **Selection into the `primary` subset is non-random.** A venture whose
+   threshold crossing is datable is one that either disclosed financials soon
+   after crossing or was covered in the press at the time — both describe fast
+   risers. Slow burners fall to `fallback` or exclusion, so the revenue-strict
+   median is likely biased *downward*. Bounded dates reduce this pressure by
+   letting a bracketed crossing qualify, but do not eliminate it.
+8. **`a3_first_domain_job` has no state for "this never happened."** A
+   founder-first career like Sara Blakely's has no prior domain employment, which
+   is a fact about the career rather than a research failure, yet the schema can
+   only record `unknown` — the same value used when a job certainly existed but
+   is undated. The two are conflated in the unknown rate.
