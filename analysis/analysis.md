@@ -16,6 +16,8 @@ The second needs a denominator — everyone who started — and this dataset has
 
 What the number is good for is **duration, given success**: how long the middle winner spent before the first real traction. That is worth knowing, and it is not a forecast.
 
+Eleven known biases, their directions, and what mitigates each are catalogued in `docs/BIASES.md`. The two strongest identified effects both push the median **short**, so read it as a floor rather than a typical value.
+
 ## Exclusion audit
 
 **2 of 10 rows excluded (20.0%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.

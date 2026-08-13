@@ -200,6 +200,11 @@ def build_report(all_rows, n_floor=stats.N_FLOOR):
                  "how long the middle winner spent before the first real "
                  "traction. That is worth knowing, and it is not a forecast.")
     lines.append("")
+    lines.append("Eleven known biases, their directions, and what mitigates "
+                 "each are catalogued in `docs/BIASES.md`. The two strongest "
+                 "identified effects both push the median **short**, so read "
+                 "it as a floor rather than a typical value.")
+    lines.append("")
 
     audit = exclusion_audit(all_rows)
     lines.append("## Exclusion audit")
