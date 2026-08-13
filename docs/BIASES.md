@@ -222,6 +222,44 @@ persist — from the sample.
 **Mitigation:** none. Prize and award lists are historical and partially offset
 this within their buckets.
 
+## 12. Two buckets have no sampling list
+
+`frame.md` names sixteen source lists. None of them enumerates **analysts or
+economists**, and none enumerates **freight or trade operators**.
+
+That leaves two buckets sampled by accident rather than by frame. The
+`investors_finance` bucket's `rank1` half can only be reached through Time 100,
+which admits perhaps a dozen finance people a decade, mostly central bankers.
+The `trade_import_logistics` bucket's wave-1 name had to come off Y Combinator
+Top Companies — a startup list — because no trade list in the frame enumerates
+people at all. Institutional Investor's All-America Research Team and the JOC
+Top 100 are named in the frame as *hit-dating* sources, not sampling sources.
+
+**Direction:** these two buckets are drawn from whatever adjacent list happens
+to contain someone plausible, which is exactly the free-recall failure the
+named-list rule exists to prevent.
+
+**Mitigation:** none yet. Adding an analyst-ranking list and a trade-ranking
+list as sampling sources would close it. Recorded here rather than fixed
+mid-wave, because changing the frame between waves is itself a bias.
+
+## 13. Roster membership is asserted, then verified late
+
+The named-list rule requires every roster entry to cite the list it came from.
+In practice a name is proposed from knowledge and the list is attached to it,
+which is recall with a citation rather than sampling from an enumerated list.
+
+Wave 1's roster was built this way. Membership is therefore verified during
+*research*, where each person's sources are being gathered anyway, and anyone
+whose list membership cannot be confirmed is dropped before contributing to any
+median.
+
+**Direction:** unsigned, but it admits the possibility of a name that no list
+actually contains — which would silently reintroduce free recall.
+
+**Mitigation:** membership verification is a required output of each research
+batch, and failures are reported rather than quietly corrected.
+
 ---
 
 ## Which way does it all point?
