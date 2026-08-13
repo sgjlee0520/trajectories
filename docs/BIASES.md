@@ -91,8 +91,50 @@ where this is visible, since excluded rows appear nowhere else.
 The `trade_import_logistics` case was acted on rather than merely recorded:
 after the pilot excluded the bucket entirely, the frame gained `rank1` for it,
 dating private importers by published volume rankings instead of revenue they
-never disclosed. That fixes one bucket. It does not fix the general pattern —
-watch the audit for the next bucket or region that fails the same way.
+never disclosed. Zhang Yin was rescued on it and the bucket went 100% to 0%
+excluded. That fixes one bucket. It does not fix the general pattern — watch
+the audit for the next bucket or region that fails the same way.
+
+## 4a. The trade fix carries its own bias
+
+The mitigation above is not free, and it points the opposite way from bias 4.
+
+The canonical volume ranking for containerized trade is the Journal of
+Commerce / PIERS Top 100, built from **US** bill-of-lading data and available
+in usable form only from roughly 2000 onward. So `rank1` in this bucket
+reliably rescues traders whose freight touches US ports after 2000, and
+reliably fails for a Rotterdam-to-Lagos operator, an intra-Asia trader, or
+anyone whose career predates the series.
+
+Demonstrated on the row that motivated it: Zhang Yin came back at 2001, which
+files `post1995`. Her exclusion was fixed; the pre-1995 shortfall was not
+touched. Expect the same shape at wave scale.
+
+**Direction:** narrows the trade bucket toward recent, US-facing operators.
+Un-empties the bucket without broadening it.
+
+**Mitigation:** none. Recorded so that a future reader does not mistake a 0%
+exclusion rate in this bucket for even coverage of it.
+
+## 4b. The self-description trap
+
+Several biases above are fixed by finding a third-party source. In practice the
+failure mode is subtler than "no source exists": a company's own claim to be
+the largest propagates verbatim into trade press, LinkedIn, and data-broker
+profiles until it is indistinguishable from a ranking in a search snippet.
+
+America Chung Nam's own site says "recognized as a top American exporter to
+China since 2001" and names no ranking body. Three broker profiles repeat it.
+Coding from those would have produced the correct year by luck. The anchor
+instead rests on 2002 trade press attributing the ranking to the Journal of
+Commerce, and on JOC's own "10th year in a row" in 2011.
+
+**Direction:** unsigned, but it manufactures false confidence — a wrong year
+sourced to three places reads stronger than a right year sourced to one.
+
+**Mitigation:** the frame requires a ranking to be published by a third party
+and to name a first year, and the 15% blind re-research audit each wave is the
+check that a researcher applied that rule rather than taking the snippet.
 
 ## 5. Fallback lag (largely fixed, not gone)
 
