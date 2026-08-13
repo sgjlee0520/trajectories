@@ -46,7 +46,10 @@ collected in waves of 25. Wave 1 is nearly done.
   mid-bucket. Their briefs are recoverable from `data/roster.csv` plus the rules
   above; see "If research is unfinished" below.
 
-## STEP 1 — Finish research, if unfinished
+## STEP 1 — Research is COMPLETE. Skip to Step 2.
+
+All 35 rows are researched, validated, and committed (`2eada9c`). Nothing to do
+here. The material below is kept only in case a row must be redone.
 
 Check: `python3 -c "import csv; print(len(list(csv.DictReader(open('data/anchors.csv')))))"`
 Should be **35**. If fewer, research the missing roster ids.
