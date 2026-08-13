@@ -117,6 +117,27 @@ outcome, and the fallback to be the exception.
   the anchor is `unknown` and the row is excluded — that is honest, and better
   than dating a career by an event that came decades late.
 
+- `trade_import_logistics` → **`rev10` first, `rank1` where revenue is
+  unavailable.** Basis `equivalent` for `rank1`.
+
+  Private importers, exporters, and freight operators almost never publish
+  revenue at any point in their history, and they rarely IPO. The second pilot
+  excluded this bucket at **100%** on that alone — the whole bucket, gone, over
+  a criterion it could not physically satisfy.
+
+  What they do leave is a third-party, dated, public record of **volume**:
+  customs and port-authority throughput tables, Journal of Commerce top-100
+  importer and exporter rankings, and trade-press "largest X shipper of Y"
+  designations. `rank1` fires on the first year the person's firm tops such a
+  ranking. Zhang Yin's America Chung Nam, for instance, has been the largest
+  US exporter of recovered paper to China by volume since about 2001 — a
+  datable event, from a source that exists, for a company that never published
+  a revenue figure before its 2006 listing.
+
+  The ranking must be published by a third party and name a first year. A
+  company's own claim to be "the largest" is not a ranking. Where no such
+  ranking exists, the anchor is `unknown` and the row is excluded.
+
 ### Bounded dates
 
 When sources establish that an event happened within a range but not which year,
