@@ -44,6 +44,11 @@ BUCKET_CRITERIA = {
     # Fund managers use fund100; analysts and other non-fund finance careers
     # use rank1, because fund100 dates an analyst's career decades late.
     "investors_finance": {"fund100", "rank1"},
+    # Private importers and freight operators almost never publish revenue --
+    # the second pilot excluded this bucket at 100% on that alone. They are
+    # ranked by VOLUME on published trade lists, which is a real, dated,
+    # third-party record. rank1 fires on the first year at the top of one.
+    "trade_import_logistics": {"rank1"},
 }
 
 CRITERION_BASIS = {
@@ -153,10 +158,17 @@ def parse_span(value):
 
 
 def allowed_criteria(bucket):
-    """Criterion codes permitted for a bucket."""
+    """Criterion codes permitted for a bucket.
+
+    A commercial bucket may carry an extra criterion on top of the commercial
+    set rather than instead of it -- trade/import is still dated on revenue
+    where revenue exists, and only falls back to a volume ranking where it
+    does not. So the two tables are unioned, never chosen between.
+    """
+    extra = BUCKET_CRITERIA.get(bucket, set())
     if bucket in COMMERCIAL_BUCKETS:
-        return COMMERCIAL_CRITERIA
-    return BUCKET_CRITERIA.get(bucket, set())
+        return COMMERCIAL_CRITERIA | extra
+    return extra
 
 
 def validate_row(row):

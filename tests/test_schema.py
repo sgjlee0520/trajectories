@@ -313,3 +313,22 @@ class TestValidateRow(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestTradeBucketCriteria(unittest.TestCase):
+    """The second pilot excluded this bucket at 100% for lack of revenue."""
+
+    def test_trade_accepts_rank1(self):
+        self.assertIn("rank1",
+                      schema.allowed_criteria("trade_import_logistics"))
+
+    def test_trade_still_accepts_revenue(self):
+        """rank1 is an addition, not a replacement: rev10 stays preferred."""
+        row = valid_row()
+        row["bucket"] = "trade_import_logistics"
+        row["hit_criterion"] = "rev10"
+        row["hit_basis"] = "primary"
+        self.assertEqual(schema.validate_row(row), [])
+
+    def test_rank1_in_trade_is_an_equivalent_not_a_primary(self):
+        self.assertEqual(schema.CRITERION_BASIS["rank1"], "equivalent")

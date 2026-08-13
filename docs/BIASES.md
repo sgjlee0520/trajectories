@@ -88,6 +88,12 @@ unreadable.
 geography, gender, and bucket in every wave's report. It is the only table
 where this is visible, since excluded rows appear nowhere else.
 
+The `trade_import_logistics` case was acted on rather than merely recorded:
+after the pilot excluded the bucket entirely, the frame gained `rank1` for it,
+dating private importers by published volume rankings instead of revenue they
+never disclosed. That fixes one bucket. It does not fix the general pattern —
+watch the audit for the next bucket or region that fails the same way.
+
 ## 5. Fallback lag (largely fixed, not gone)
 
 Where revenue is undisclosed, an IPO or $50M+ acquisition stands in. Both
