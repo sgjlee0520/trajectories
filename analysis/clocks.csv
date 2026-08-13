@@ -8,4 +8,4 @@ p06,investors_finance,equivalent,US,F,post1995,10.0,19.0,,37.0,10,10,false,mediu
 p07,software_internet,fallback,US,M,post1995,6.0,11.0,2.0,29.0,6,6,false,high,false,
 p08,software_internet,primary,CN,M,post1995,10.0,18.0,4.0,36.0,10,10,false,high,false,
 p09,software_internet,primary,SE,M,post1995,7.0,8.0,3.0,26.0,7,7,false,medium,false,
-p10,trade_import_logistics,,CN,F,,,,,,,,false,none,true,crossing_undatable
+p10,trade_import_logistics,equivalent,CN,F,post1995,,26.0,,44.0,,,false,none,false,

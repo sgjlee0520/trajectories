@@ -20,17 +20,17 @@ Eleven known biases, their directions, and what mitigates each are catalogued in
 
 ## Exclusion audit
 
-**2 of 10 rows excluded (20.0%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.
+**1 of 10 rows excluded (10.0%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.
 
 | Reason | n |
 |---|---|
-| crossing_undatable | 2 |
+| crossing_undatable | 1 |
 
 | Cross-cut | included | excluded | exclusion rate |
 |---|---|---|---|
 | US | 5 | 0 | 0.0% |
-| non-US | 3 | 2 | 40.0% |
-| women | 3 | 1 | 25.0% |
+| non-US | 4 | 1 | 20.0% |
+| women | 4 | 0 | 0.0% |
 | men | 5 | 1 | 16.7% |
 | bucket: consumer_retail_industrial | 1 | 1 | 50.0% |
 | bucket: hardware_deeptech | 1 | 0 | 0.0% |
@@ -38,7 +38,7 @@ Eleven known biases, their directions, and what mitigates each are catalogued in
 | bucket: media_creators | 1 | 0 | 0.0% |
 | bucket: science_research | 1 | 0 | 0.0% |
 | bucket: software_internet | 3 | 0 | 0.0% |
-| bucket: trade_import_logistics | 0 | 1 | 100.0% |
+| bucket: trade_import_logistics | 1 | 0 | 0.0% |
 
 Era is not audited here: it derives from the hit year, which an excluded row usually lacks. Judging a discarded row's era is a human call, not something to infer.
 
@@ -51,6 +51,6 @@ This is deliberate rather than a missing feature. Watching the median across wav
 | Progress | n |
 |---|---|
 | revenue-strict rows | 4 |
-| included rows | 8 |
+| included rows | 9 |
 | floor | 30 |
 
