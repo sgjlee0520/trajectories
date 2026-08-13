@@ -19,14 +19,42 @@ rule, because the sample composition would no longer be stable across waves.
 
 Total: 100%.
 
-## Enforced cross-cuts
+## Recorded covariates (NOT selection criteria)
 
-Floors, checked against the cumulative sample after every wave. A wave that
-would push any floor below its threshold is rebalanced before research begins.
+**Changed after wave 1, by the study author's decision.** Country, era, and sex
+were previously enforced as floors (non-US >= 30%, pre-1995 hit >= 25%, women
+>= 20%) and a wave that would breach one was rebalanced before research.
 
-- Non-US primary career: >= 30%
-- First hit before 1995: >= 25%
-- Women: >= 20%
+They are no longer selection criteria. **The sole standard for entry is the
+money criterion** in the section below: a person enters if they appear on a
+named source list and their hit can be dated. Nothing about who they are steers
+whether they are drawn.
+
+These three are still **recorded on every row** and still reported in every
+wave's analysis:
+
+- `country_primary` — and the derived non-US share
+- `era` — derived from the hit year, pre1995 / post1995
+- `gender`
+
+The distinction matters. Recording a variable lets you discover whether it
+moves the answer. Selecting on it guarantees it cannot be discovered, because
+you fixed it by hand. Era in particular is a genuine confounder for
+time-to-hit: capital availability, addressable market size, and information
+flow all changed around the internet era, so a sample that drifts entirely
+post-1995 silently answers "how long did it take in the 2000s-2020s" rather
+than the general question. Under quotas that drift was prevented and therefore
+invisible. Under covariates it is measurable, and the report prints the shares
+every wave so it can be seen.
+
+If the shares do drift hard, that is a finding to state in the analysis, not a
+reason to rebalance selection.
+
+**Wave 1 was collected under the old quota regime** and its composition was
+deliberately steered (50% pre-1995, 69% non-US, 42% women). Waves 2 onward are
+not. That discontinuity is recorded in `docs/BIASES.md` and must be stated
+before any median is read, because it means the sample is a mixture of two
+different sampling designs.
 
 ## Named source lists
 
@@ -66,7 +94,7 @@ Revised 2026-08-11 after the 10-person pilot. See `docs/PILOT-REVIEW.md`.
 `rev10` means **$10M in constant 2026 US dollars**, not $10M nominal. A nominal
 threshold would demand that a 1960 founder build a business roughly eleven times
 larger in real terms than a 2020 founder to trigger the same "first hit", which
-inflates every pre-1995 apprenticeship — and the frame requires at least 25% of
+inflates every pre-1995 apprenticeship — and pre-1995 careers are a large share of
 those.
 
 Look up the nominal threshold for a revenue year with:

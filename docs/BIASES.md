@@ -288,6 +288,30 @@ actually contains — which would silently reintroduce free recall.
 **Mitigation:** membership verification is a required output of each research
 batch, and failures are reported rather than quietly corrected.
 
+## 14. The sample mixes two sampling designs
+
+Wave 1 and the pilot were collected under enforced cross-cut floors: non-US
+>= 30%, pre-1995 hit >= 25%, women >= 20%, with any wave that would breach one
+rebalanced before research. Their composition was therefore **steered by hand**
+and came in at 50% pre-1995, 69% non-US, 42% women — well above what the source
+lists would have produced unaided.
+
+After wave 1 the study author removed the floors. Country, era, and sex are now
+recorded covariates only; the sole standard for entry is the money criterion.
+
+**Direction:** unsigned, but it is a discontinuity, not a gradient. Rows 1-35
+oversample old, non-US, and female careers relative to rows 36 onward. If the
+apprenticeship clock differs by era — and there is good reason to think it
+does, since capital availability and market size changed around the internet
+era — then the pooled median is a weighted blend of two eras whose weights were
+set by a design change partway through, not by anything about the world.
+
+**Mitigation:** the shares are printed every wave, so the drift is visible. The
+honest reading once N is large is to report the median for the post-change rows
+separately and check it against the pooled figure. Do NOT retro-fit the early
+rows out; they are correctly collected data, just collected under a different
+rule.
+
 ---
 
 ## Which way does it all point?

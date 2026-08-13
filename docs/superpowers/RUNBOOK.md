@@ -9,11 +9,13 @@ Repeat until the stopping rule fires. Wave size 25.
 Pass the cumulative count for every bucket currently in `data/anchors.csv`.
 The allocator returns the bucket counts for this wave.
 
-## 2. Check the cross-cut floors
+## 2. Record the covariate shares
 
 Compute current shares of non-US, pre-1995 hit, and women from
-`data/anchors.csv`. If adding this wave would push any below its floor
-(30%, 25%, 20%), rebalance the wave's name selection before researching.
+`data/anchors.csv` and note them. **Do not rebalance the wave on them** — as of
+after wave 1 these are recorded covariates, not selection floors. The sole
+standard for entry is the money criterion. If a share drifts hard, that is a
+finding for the analysis, not a reason to steer who gets drawn.
 
 ## 3. Extend the roster
 
