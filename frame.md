@@ -48,6 +48,14 @@ Every roster entry cites the list it came from. No name enters by free recall.
 - Sunday Times Rich List (UK)
 - Pulitzer Prize, Academy Awards, Grammy Awards
 - Endeavor Entrepreneur network (emerging markets)
+- Computer History Museum Fellow Awards (annual since 1987)
+
+Added after wave 1 began, on its own merits rather than to admit any
+particular name: it is an enumerated, annual, third-party honour list for
+computing, the same shape as the Turing Award and Fields Medal already here,
+and its absence was an oversight. It corroborates p11 Stephanie Shirley
+(2018 Fellow). It does **not** contain p14 Kazuhiko Nishi or p15 Sandra
+Kurtzig, who remain unconfirmed — see `docs/BIASES.md` 13.
 
 ## Hit criteria
 
