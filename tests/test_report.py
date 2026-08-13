@@ -364,3 +364,29 @@ class TestMediansWithheldBelowTheFloor(unittest.TestCase):
         text = report.build_report(rows)
         self.assertNotIn("## Medians withheld", text)
         self.assertIn("## Definition strictness", text)
+
+
+class TestSurvivorshipCaveat(unittest.TestCase):
+    """The caveat is the point of the document, not decoration.
+
+    It must survive both the withheld and the full report, because the
+    withheld version is the only one the reader sees for the first ~10 waves.
+    """
+
+    def both_reports(self):
+        return (report.build_report(sample_rows()),
+                report.build_report(sample_rows(), n_floor=0))
+
+    def test_states_what_the_median_supports(self):
+        for text in self.both_reports():
+            self.assertIn("Among people who eventually hit, the middle one "
+                          "took about 8 years.", text)
+
+    def test_states_what_it_does_not_support(self):
+        for text in self.both_reports():
+            self.assertIn("If I start now, I have about a 50% chance of "
+                          "hitting within 8 years.", text)
+
+    def test_names_the_missing_denominator(self):
+        for text in self.both_reports():
+            self.assertIn("denominator", text)

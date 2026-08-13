@@ -2,7 +2,19 @@
 
 ## Survivorship caveat
 
-This sample is conditioned on the outcome. Everyone in it succeeded. These medians describe **time-to-hit among winners** and say nothing about the probability of becoming one.
+This sample is conditioned on the outcome. Everyone in it succeeded. The buckets are filled from lists that select on extreme outcomes — Forbes, Midas, Nobel, Hurun — so there is nobody here who worked at it for twelve years and never crossed. Those people exist in enormous numbers; no list samples them.
+
+So if the median comes back at 8 years, the sentence it supports is:
+
+> **Among people who eventually hit, the middle one took about 8 years.**
+
+The sentence it does **not** support:
+
+> ~~If I start now, I have about a 50% chance of hitting within 8 years.~~
+
+The second needs a denominator — everyone who started — and this dataset has no denominator at all. It is like timing how long lottery winners held their tickets: a real number, correctly computed, that says nothing about whether buying tickets is a good plan.
+
+What the number is good for is **duration, given success**: how long the middle winner spent before the first real traction. That is worth knowing, and it is not a forecast.
 
 ## Exclusion audit
 
