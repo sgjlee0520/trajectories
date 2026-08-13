@@ -95,6 +95,34 @@ never disclosed. Zhang Yin was rescued on it and the bucket went 100% to 0%
 excluded. That fixes one bucket. It does not fix the general pattern — watch
 the audit for the next bucket or region that fails the same way.
 
+## 4c. Confirmed at wave scale: whole buckets fail, not scattered rows
+
+The pilot showed this as a pattern. Wave 1 showed it as a mechanism, in two
+buckets whose exclusion is near-total rather than elevated.
+
+`healthcare_biotech` came in at **three of four excluded**, all
+`crossing_undatable`. The cause is uniform: private generics, enzyme, API, and
+medical-device makers publish nothing until they list, and by then they are two
+decades past the bar. Kiran Mazumdar-Shaw has a sourced 1998 figure at 335% of
+that year's bar and **no revenue figure for any year 1978-1997** after six
+attempts, so the bracket is twenty years. Zhong Huijuan fails the mirror image:
+a good 1997 lower end, and the earliest company-level figure anywhere is 2011.
+
+`trade_import_logistics` failed the same way in the pilot, at 100%.
+
+The shape to watch for: a bucket fails when its *industry* keeps revenue
+private until listing, not when its people are obscure. Both buckets are full
+of famous people with undocumented balance sheets.
+
+**Direction:** removes entire industries rather than random rows, so the
+surviving sample over-represents industries that disclose early — software,
+semiconductors, anything venture-funded or US-listed.
+
+**Mitigation:** partial and per-bucket. `rank1` rescued the trade bucket by
+dating on published volume rankings instead of revenue. No equivalent
+third-party series exists for private pharma. The exclusion audit reports the
+rate per bucket every wave, which is how this was caught.
+
 ## 4a. The trade fix carries its own bias
 
 The mitigation above is not free, and it points the opposite way from bias 4.
