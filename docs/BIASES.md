@@ -391,6 +391,34 @@ value is the rule-compliant one, which is why it stands.
 **Direction:** if the recorded value is wrong it is wrong *early*, and the
 error would shorten that row's clock. Add p75 to the next cross-check.
 
+## 17. The education clock is conditioned on documented schooling
+
+The headline clock counts from `a2_education_end`, so a row needs a sourced
+year for when formal education ended. Ten otherwise-complete rows lacked one; a
+targeted second pass resolved six.
+
+The four that stayed `unknown` are Olugbenga Agboola (NG), Enric Asuncion (ES),
+Radhakishan Damani (IN), and He Xiangjian (CN). **All four are non-US.** The
+six resolved skew Western and recent.
+
+That is not chance. "When did this person finish school" is well documented for
+US and UK figures and poorly documented for Indian and Chinese founders of the
+1970s-80s, and for anyone whose path did not run through a credential worth
+reporting. So the education clock is silently conditioned on people whose
+schooling was recorded — Western, credentialed, recent — even though selection
+into the study is money-only.
+
+**Direction:** unsigned on the median itself, but it drops precisely the
+careers most likely to differ. A founder with no documented schooling plausibly
+started earning earlier, which would *lengthen* their apprenticeship measured
+from any fixed start — so the loss may bias the education clock **short**.
+
+**Mitigation:** `clock_age18` (n=36) and `clock_venture` (n=37) do not need an
+education year and both carry more rows. All three are printed together, and a
+divergence between the education clock and the age-18 clock is the signal that
+this bias is biting. Do not switch the headline to a different clock merely
+because it has more rows — that is choosing the measurement to get a result.
+
 ---
 
 ## Which way does it all point?
