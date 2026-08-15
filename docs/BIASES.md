@@ -337,6 +337,60 @@ separately and check it against the pooled figure. Do NOT retro-fit the early
 rows out; they are correctly collected data, just collected under a different
 rule.
 
+## 15. The audit threshold was unreachable for three waves
+
+`AUDIT_VOID_THRESHOLD` is 0.10 and `AUDIT_FRACTION` is 0.15, so a 25-row wave
+audited 4 rows. One disagreement scores 0.25. **The rule as written could never
+tolerate a single disagreement** — it meant "perfect reproduction or void,"
+which is not what the spec says and not what was intended.
+
+Waves 1 and 2 scored 0.000 and it never surfaced. Wave 3 failed on one row of
+four and was declared void.
+
+**Resolution.** The wave was NOT voided on that score. Instead ten wave-3 rows
+were re-researched blind on **six independent platforms** — Perplexity, Gemini,
+Antigravity (Gemini 3.1 Pro and Opus 4.6), Cursor, and VS Code — none of which
+saw the recorded answers or each other's. Result across 60 comparisons:
+
+| | count |
+|---|---|
+| agree | 46 |
+| **conflict** | **0** |
+| one side `unknown` | 14 |
+
+**Not one platform contradicted a recorded date.** Every gap was a platform
+returning `unknown` where a date exists, which is absence of evidence rather
+than evidence against — Perplexity accounted for 5 of the 14, consistent with a
+search tool rather than an agent that can work through filings.
+
+`stats.audit_sample` now enforces `MIN_AUDIT_ROWS = 10`, so the smallest
+non-zero score is exactly 0.10 and lands at tolerance rather than four times
+over it.
+
+**Honesty note on the sequence.** The flaw is structural and was provable
+before wave 3 — 4 rows and a 0.10 threshold are incompatible arithmetic
+regardless of any result. But it was only noticed once it bit, and the fix was
+made after seeing the outcome it produced. That ordering is exactly what
+pre-registration exists to prevent, so it is recorded here rather than quietly
+corrected. The mitigating fact is that the wave was re-tested with a *stronger*
+instrument, not a weaker one, and passed 60-0.
+
+## 16. One disputed row remains unresolved
+
+p75 (Ginkgo Bioworks) is the row that failed wave 3's original audit and it was
+NOT among the ten drawn for the cross-check, so it has never been adjudicated
+by an independent pass.
+
+Recorded: bounded 2008-2017, upper end a Forbes 2017 estimate of "more than
+$20 million" against that year's bar of $7.6M. The second pass instead pinned
+2019, the first SEC-audited figure, having missed the Forbes data point — and
+pinning to the first *disclosed* figure when the true bound exceeds ten years
+is the fallback-lag error this study was rebuilt to eliminate. The recorded
+value is the rule-compliant one, which is why it stands.
+
+**Direction:** if the recorded value is wrong it is wrong *early*, and the
+error would shorten that row's clock. Add p75 to the next cross-check.
+
 ---
 
 ## Which way does it all point?
