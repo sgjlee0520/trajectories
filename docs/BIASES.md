@@ -84,6 +84,31 @@ filings. Effect on the median is unsigned but the *composition* is provably
 skewed, which makes any era or geography slice untrustworthy before it is
 unreadable.
 
+**UPDATE after wave 2 (n=60): the geographic half of this bias did not
+survive contact with data.** The pilot's 40% non-US vs 0% US exclusion gap has
+closed completely:
+
+| cross-cut | pilot (n=10) | cumulative (n=60) |
+|---|---|---|
+| US excluded | 0% | 18.2% |
+| non-US excluded | 40% | 18.4% |
+| women excluded | 25% | 19.2% |
+| men excluded | 17% | 17.6% |
+
+All four are now within two points of each other. The pilot's gap was two rows
+out of ten — real in the sample, and not a real property of the frame.
+
+What remains is entirely **bucket-level**, which is bias 4c below:
+`healthcare_biotech` 66.7%, `consumer_retail_industrial` 37.5%, against 0% for
+`hardware_deeptech`, `science_research`, and `trade_import_logistics`. The
+mechanism is industry disclosure practice, not geography — and the demographic
+correlation the pilot showed was that mechanism in disguise, because the
+pilot's two undatable rows happened to be non-US private manufacturers.
+
+This entry is kept rather than deleted. A bias that was hypothesised, measured,
+and disconfirmed is a result, and the reasoning that produced it would
+otherwise be repeated.
+
 **Mitigation:** the exclusion audit prints exclusion counts and rates by
 geography, gender, and bucket in every wave's report. It is the only table
 where this is visible, since excluded rows appear nowhere else.
