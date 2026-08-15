@@ -50,7 +50,11 @@ The threshold is **NOT $10 million nominal.** It is inflation-adjusted to 2026 d
 
 (Years not listed: interpolate between neighbours. If a company's revenue in year Y exceeds the figure for year Y, it has crossed.)
 
-**Worked example.** A company with $1.2M revenue in 1976 HAS crossed, because the 1976 bar is about $1.77M — no wait, $1.2M is *below* $1.77M, so it has NOT crossed. A company with $2.0M in 1976 HAS crossed. Check the arithmetic yourself every time; this is the single most common error on this task.
+**Worked example.** The 1976 bar is $1,767,394.
+- A company with **$1.2M** revenue in 1976 has **NOT** crossed — $1.2M is below $1,767,394.
+- A company with **$2.0M** revenue in 1976 **HAS** crossed — $2.0M is above $1,767,394.
+
+Note how small those numbers are. $2 million in 1976 counts, because $2M then is worth more than $10M now. Applying the $10M figure directly to an old company is the single most common error on this task, and it dates careers many years too late.
 
 Convert non-USD revenue at the exchange rate for that revenue year, and state the rate you used.
 
