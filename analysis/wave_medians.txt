@@ -1,3 +1,5 @@
 # Revenue-strict median of clock_education after each wave, one per line.
 10.0
 # last-n: 13
+9.0
+# last-n: 21
