@@ -138,9 +138,15 @@ class TestAudit(unittest.TestCase):
         sample = stats.audit_sample(ids, fraction=0.15, seed=0)
         self.assertEqual(len(sample), 15)
 
-    def test_always_samples_at_least_one(self):
+    def test_tiny_population_is_audited_in_full(self):
+        """Below MIN_AUDIT_ROWS there is no sampling left to do.
+
+        15% of two rows rounds to zero, and a rate-based void threshold
+        cannot be expressed on a sample smaller than its own denominator,
+        so the floor takes everything available rather than one token row.
+        """
         sample = stats.audit_sample(["p001", "p002"], fraction=0.15, seed=0)
-        self.assertEqual(len(sample), 1)
+        self.assertEqual(len(sample), 2)
 
     def test_deterministic_given_seed(self):
         ids = ["p%03d" % i for i in range(50)]
@@ -392,3 +398,20 @@ class TestMainWithholdsTheMedianBelowTheFloor(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestAuditSampleFloor(unittest.TestCase):
+    """The void threshold is a rate; the sample must be able to express it."""
+
+    def test_small_wave_still_audits_at_least_the_floor(self):
+        ids = ["p%02d" % i for i in range(25)]
+        self.assertEqual(len(stats.audit_sample(ids)), stats.MIN_AUDIT_ROWS)
+
+    def test_one_disagreement_no_longer_exceeds_tolerance(self):
+        n = stats.MIN_AUDIT_ROWS
+        pairs = [(2000, 2005)] + [(2000, 2000)] * (n - 1)
+        self.assertLessEqual(stats.audit_disagreement(pairs),
+                             stats.AUDIT_VOID_THRESHOLD)
+
+    def test_never_samples_more_than_exists(self):
+        self.assertEqual(len(stats.audit_sample(["a", "b"])), 2)

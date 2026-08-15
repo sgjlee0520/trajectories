@@ -21,6 +21,12 @@ MAX_HALF_WIDTH = 1.0
 WAVE_SIZE = 25
 AUDIT_FRACTION = 0.15
 AUDIT_VOID_THRESHOLD = 0.10
+# The void threshold is a RATE, so the sample must be large enough to express
+# it. At 15% of a 25-row wave the sample is 4 rows, where one disagreement
+# scores 0.25 -- the rule then means "zero disagreements", far stricter than
+# written, and it silently failed wave 3 on a single row. The sample floor
+# makes the smallest non-zero score (1/10 = 0.10) land exactly at tolerance.
+MIN_AUDIT_ROWS = 10
 
 
 def bootstrap_median_ci(values, iters=10000, seed=0, level=0.95):
@@ -93,6 +99,7 @@ def audit_sample(person_ids, fraction=AUDIT_FRACTION, seed=None):
     if not ordered:
         return []
     k = max(1, int(round(len(ordered) * fraction)))
+    k = min(len(ordered), max(k, MIN_AUDIT_ROWS))
     if seed is None:
         seed = zlib.crc32("|".join(ordered).encode("utf-8"))
     return sorted(random.Random(seed).sample(ordered, k))
