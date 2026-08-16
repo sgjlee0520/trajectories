@@ -419,6 +419,38 @@ divergence between the education clock and the age-18 clock is the signal that
 this bias is biting. Do not switch the headline to a different clock merely
 because it has more rows — that is choosing the measurement to get a result.
 
+## 18. Single-pass research has a measured miss rate
+
+Two independent multi-platform passes have now re-examined rows the first pass
+gave up on, and the miss rate is not small.
+
+**Cross-check (10 wave-3 rows, 6 platforms):** one row recorded `unknown` was
+dated by exactly one platform of six (p62 Shiv Nadar / HCL, from a 1986 India
+Today article). Five platforms returned `unknown` on a row where a sourced
+answer existed.
+
+**Rescue pass (14 excluded rows, Antigravity/Opus):** of 13 rows excluded as
+`crossing_undatable`, **three were datable** — Toni Morrison (a 1998 TIME
+interview where she states the million-copy figure herself), Terry Gou (Chinese
+sources giving Hon Hai's 1985 revenue), and Kim Sung-joo (Forbes Korea giving
+1995 revenue). A fourth, Eileen Burbidge, was mis-labelled rather than
+undatable: her funds are all findable and simply never reached the threshold.
+
+So roughly **one excluded row in four was recoverable**, and the recoveries
+skew non-US and pre-1995 — Japanese, Chinese, Korean, Indian sources that an
+English-first search pass does not reach.
+
+**Direction:** this compounds bias 10 (English-language sourcing). Exclusions
+are not a random sample of hard cases; they are disproportionately cases whose
+evidence sits in another language or an offline archive. Every exclusion left
+standing is therefore weaker evidence of "undatable" than it appears.
+
+**Mitigation:** a second independent pass on excluded rows before any final
+median. One rescue candidate was also correctly REJECTED — an *Economist*
+guest-network poll offered as a `rank1` ranking for Raghuram Rajan, which is
+not a recognised industry ranking. Rescue passes need the same scepticism as
+first passes; the rescue is not automatically right because it found something.
+
 ---
 
 ## Which way does it all point?

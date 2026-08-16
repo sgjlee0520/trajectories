@@ -28,10 +28,10 @@ p29,science_research,equivalent,FR,M,pre1995,24.0,30.0,19.5,48.0,24,24,false,hig
 p30,science_research,equivalent,CN,F,post1995,60.0,67.0,,85.0,60,60,false,high,false,
 p25,consumer_retail_industrial,primary,IN,M,pre1995,7.0,10.0,4.0,28.0,3,11,true,low,false,
 p26,consumer_retail_industrial,primary,GB,F,pre1995,18.0,20.0,10.0,38.0,14,22,true,medium,false,
-p27,consumer_retail_industrial,,KR,F,,,,,,,,false,none,true,crossing_undatable
+p27,consumer_retail_industrial,primary,KR,F,pre1995,7.5,18.5,2.5,36.5,5,10,true,medium,true,roster_unverified
 p31,investors_finance,equivalent,GB,F,post1995,18.0,23.0,13.0,41.0,18,18,false,medium,false,
 p32,investors_finance,,US,M,,,,,,,,false,none,true,crossing_undatable
-p33,media_creators,,US,F,,,,,,,,false,none,true,crossing_undatable
+p33,media_creators,equivalent,US,F,post1995,42.0,48.0,27.0,66.0,41,43,true,high,false,
 p34,media_creators,equivalent,SN,M,pre1995,,17.0,15.0,35.0,,,false,none,false,
 p35,trade_import_logistics,primary,US,M,post1995,6.0,15.5,16.0,33.5,5,7,true,medium,false,
 p38,software_internet,fallback,US,F,post1995,16.0,25.0,12.0,43.0,16,16,false,high,false,
@@ -67,7 +67,7 @@ p65,software_internet,primary,US,M,post1995,6.0,8.0,3.0,26.0,3,9,true,medium,fal
 p66,software_internet,primary,US,M,post1995,8.0,16.0,13.5,34.0,7,9,true,medium,false,
 p67,hardware_deeptech,fallback,HK,M,post1995,4.0,19.0,6.0,37.0,4,4,false,medium,false,
 p68,hardware_deeptech,primary,US,M,post1995,4.0,11.0,2.0,29.0,4,4,false,medium,false,
-p69,hardware_deeptech,,TW,M,,,,,,,,false,none,true,crossing_undatable
+p69,hardware_deeptech,primary,TW,M,pre1995,,16.5,10.5,34.5,,,true,none,false,
 p70,hardware_deeptech,fallback,US,F,post1995,14.0,22.0,3.0,40.0,14,14,false,high,false,
 p71,consumer_retail_industrial,primary,IN,M,post1995,,34.0,5.0,52.0,,,true,none,false,
 p72,consumer_retail_industrial,primary,CN,M,post1995,15.0,28.0,7.0,46.0,11,19,true,medium,false,
@@ -76,7 +76,7 @@ p74,healthcare_biotech,primary,IN,M,pre1995,4.5,13.5,3.5,31.5,1,8,true,medium,fa
 p75,healthcare_biotech,primary,US,M,post1995,4.5,,4.5,,0,9,true,medium,false,
 p76,healthcare_biotech,,US,M,,,,,,,,false,none,true,crossing_undatable
 p77,investors_finance,equivalent,RO,F,post1995,,16.5,,34.5,,,false,none,false,
-p78,investors_finance,,GB,F,,,,,,,,false,none,true,crossing_undatable
+p78,investors_finance,,GB,F,,,,,,,,false,none,true,criterion_never_met
 p79,investors_finance,equivalent,SE,M,post1995,,,,,,,false,none,false,
 p80,science_research,equivalent,FR,F,post1995,25.0,34.0,7.0,52.0,25,25,false,high,false,
 p81,science_research,equivalent,DE,M,post1995,22.0,24.0,,42.0,22,22,false,high,false,

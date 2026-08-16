@@ -20,24 +20,25 @@ Eleven known biases, their directions, and what mitigates each are catalogued in
 
 ## Exclusion audit
 
-**15 of 85 rows excluded (17.6%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.
+**13 of 85 rows excluded (15.3%).** Excluded rows appear in no other table on this page, so a bias in what gets excluded is only visible here.
 
 | Reason | n |
 |---|---|
-| crossing_undatable | 13 |
-| roster_unverified | 2 |
+| criterion_never_met | 1 |
+| crossing_undatable | 9 |
+| roster_unverified | 3 |
 
 | Cross-cut | included | excluded | exclusion rate |
 |---|---|---|---|
-| US | 25 | 5 | 16.7% |
-| non-US | 45 | 10 | 18.2% |
-| women | 26 | 6 | 18.8% |
-| men | 44 | 9 | 17.0% |
+| US | 26 | 4 | 13.3% |
+| non-US | 46 | 9 | 16.4% |
+| women | 27 | 5 | 15.6% |
+| men | 45 | 8 | 15.1% |
 | bucket: consumer_retail_industrial | 8 | 3 | 27.3% |
-| bucket: hardware_deeptech | 12 | 1 | 7.7% |
+| bucket: hardware_deeptech | 13 | 0 | 0.0% |
 | bucket: healthcare_biotech | 4 | 5 | 55.6% |
 | bucket: investors_finance | 7 | 2 | 22.2% |
-| bucket: media_creators | 7 | 1 | 12.5% |
+| bucket: media_creators | 8 | 0 | 0.0% |
 | bucket: science_research | 10 | 0 | 0.0% |
 | bucket: software_internet | 19 | 2 | 9.5% |
 | bucket: trade_import_logistics | 3 | 1 | 25.0% |
@@ -50,7 +51,7 @@ Era is not audited here: it derives from the hit year, which an excluded row usu
 |---|---|
 | Revenue-strict ($10M revenue only) | 9.0 yr (95% CI 7.5-13.0), n=34 |
 | All commercial (+ IPO/acquisition fallback) | 9.5 yr (95% CI 7.5-13.5), n=40 |
-| Pooled (all buckets, mixed definitions) | 13.0 yr (95% CI 9.0-15.0), n=56 |
+| Pooled (all buckets, mixed definitions) | 13.0 yr (95% CI 9.0-15.0), n=57 |
 
 Revenue-strict is the headline number. It differs from the pooled median by **4.0 years**.
 
@@ -58,25 +59,25 @@ Revenue-strict is the headline number. It differs from the pooled median by **4.
 
 | Rows | Median |
 |---|---|
-| high-confidence rows only | 15.0 yr (95% CI 9.5-24.5), n=20 — **too small to read as a finding** |
-| all included rows | 13.0 yr (95% CI 9.0-15.0), n=56 |
+| high-confidence rows only | 16.0 yr (95% CI 10.0-25.0), n=21 — **too small to read as a finding** |
+| all included rows | 13.0 yr (95% CI 9.0-15.0), n=57 |
 
 Both rows pool every bucket and hit basis, so this run qualifies the pooled median, not the revenue-strict headline.
 
-50 of 70 rows fall below high confidence.
+51 of 72 rows fall below high confidence.
 
-**These diverge by 2.0 years.** The dataset is too soft to read the pooled median as a point estimate.
+**These diverge by 3.0 years.** The dataset is too soft to read the pooled median as a point estimate.
 
 ## Bounded-date sensitivity (pooled, primary clock)
 
 | Treatment | Median |
 |---|---|
 | bounded rows dropped | 14.0 yr (95% CI 10.0-18.0), n=31 |
-| all rows, span midpoints | 13.0 yr (95% CI 9.0-15.0), n=56 |
-| all rows, earliest possible | 10.0 yr (95% CI 9.0-14.0), n=56 |
-| all rows, latest possible | 14.0 yr (95% CI 10.0-16.0), n=56 |
+| all rows, span midpoints | 13.0 yr (95% CI 9.0-15.0), n=57 |
+| all rows, earliest possible | 10.0 yr (95% CI 9.0-14.0), n=57 |
+| all rows, latest possible | 14.0 yr (95% CI 10.0-16.0), n=57 |
 
-A bounded date records that sources bracket an event without pinning it. 28 of 70 rows carry one, and every figure here is pooled across buckets and hit bases, so this run qualifies the pooled median, not the revenue-strict headline.
+A bounded date records that sources bracket an event without pinning it. 30 of 72 rows carry one, and every figure here is pooled across buckets and hit bases, so this run qualifies the pooled median, not the revenue-strict headline.
 
 The envelope rows show the full range the data permits; the midpoint row is the pooled median.
 
@@ -84,10 +85,10 @@ The envelope rows show the full range the data permits; the midpoint row is the 
 
 | Clock | Median |
 |---|---|
-| `clock_education` | 13.0 yr (95% CI 9.0-15.0), n=56 |
-| `clock_age18` | 19.0 yr (95% CI 16.5-23.0), n=66 |
-| `clock_venture` | 6.0 yr (95% CI 4.0-8.5), n=58 |
-| `age_at_first_hit` | 37.0 yr (95% CI 34.5-41.0), n=66 |
+| `clock_education` | 13.0 yr (95% CI 9.0-15.0), n=57 |
+| `clock_age18` | 19.0 yr (95% CI 16.5-23.0), n=68 |
+| `clock_venture` | 6.0 yr (95% CI 4.0-9.8), n=60 |
+| `age_at_first_hit` | 37.0 yr (95% CI 34.5-41.0), n=68 |
 
 ## By field (primary clock)
 
@@ -97,7 +98,7 @@ The envelope rows show the full range the data permits; the midpoint row is the 
 | hardware_deeptech | 12.5 yr (95% CI 5.5-16.0), n=11 — **too small to read as a finding** |
 | healthcare_biotech | 7.2 yr (95% CI 4.5-24.0), n=4 — **too small to read as a finding** |
 | investors_finance | 15.0 yr (95% CI 10.0-18.0), n=3 — **too small to read as a finding** |
-| media_creators | 16.0 yr (95% CI 8.0-21.0), n=3 — **too small to read as a finding** |
+| media_creators | 18.5 yr (95% CI 8.0-42.0), n=4 — **too small to read as a finding** |
 | science_research | 26.5 yr (95% CI 17.0-39.5), n=10 — **too small to read as a finding** |
 | software_internet | 9.5 yr (95% CI 6.5-13.5), n=18 — **too small to read as a finding** |
 | trade_import_logistics | n=1, too few to summarise — **too small to read as a finding** |
@@ -108,7 +109,7 @@ Per-slice medians need roughly 30 rows each before they mean anything. Slices be
 
 | Era | Median |
 |---|---|
-| post1995 | 10.0 yr (95% CI 8.0-15.0), n=38 |
+| post1995 | 10.0 yr (95% CI 8.0-15.0), n=39 |
 | pre1995 | 14.5 yr (95% CI 10.0-21.5), n=18 — **too small to read as a finding** |
 
 Per-slice medians need roughly 30 rows each before they mean anything. Slices below that are flagged above.
@@ -139,7 +140,7 @@ Per-slice medians need roughly 30 rows each before they mean anything. Slices be
 | SN | n=0, too few to summarise — **too small to read as a finding** |
 | TW | n=1, too few to summarise — **too small to read as a finding** |
 | UA | n=1, too few to summarise — **too small to read as a finding** |
-| US | 9.2 yr (95% CI 6.0-15.0), n=22 — **too small to read as a finding** |
+| US | 10.0 yr (95% CI 6.0-16.0), n=23 — **too small to read as a finding** |
 
 Per-slice medians need roughly 30 rows each before they mean anything. Slices below that are flagged above.
 
