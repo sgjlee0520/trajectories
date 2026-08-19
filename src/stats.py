@@ -110,18 +110,25 @@ def audit_disagreement(pairs):
 
     `pairs` is [(first_pass, second_pass)]. Each entry is a year, a (lo, hi)
     span for a bounded date, or None. Disagreement means the two readings
-    are more than one year apart, or one pass found a date where the other
-    found nothing. Two spans that overlap agree: they are two honest
-    brackets around the same event, and forcing a researcher to collapse a
-    bracket to one year to satisfy this check would void good waves.
+    CONTRADICT: they are more than one year apart and do not overlap. Two
+    spans that overlap agree -- they are two honest brackets around the same
+    event, and forcing a researcher to collapse a bracket to one year to
+    satisfy this check would void good waves.
+
+    One pass returning None where the other found a date is NOT counted.
+    That used to count, and it made the rule unusable: this study measured a
+    single-pass miss rate near 25% (docs/BIASES.md 18, from a six-platform
+    cross-check and a rescue pass), so on ten audited rows two or three such
+    gaps are expected from search thoroughness alone with no bad data
+    anywhere. Counting them voided waves containing no wrong dates. A miss is
+    still information -- see `audit_misses` -- but it is a rescue signal, not
+    evidence the wave is unreliable.
     """
     if not pairs:
         return 0.0
     bad = 0
     for first, second in pairs:
         if first is None or second is None:
-            if first is not second:
-                bad += 1
             continue
         first_lo, first_hi = _span(first)
         second_lo, second_hi = _span(second)
@@ -130,6 +137,17 @@ def audit_disagreement(pairs):
         if max(first_lo - second_hi, second_lo - first_hi, 0) > 1:
             bad += 1
     return bad / float(len(pairs))
+
+
+def audit_misses(pairs):
+    """Rows where exactly one pass found a date: rescue candidates.
+
+    Returns (first_only, second_only). Not disagreements, but the signal
+    that a row should be revisited against whichever pass found more.
+    """
+    first_only = sum(1 for a, b in pairs if a is not None and b is None)
+    second_only = sum(1 for a, b in pairs if a is None and b is not None)
+    return (first_only, second_only)
 
 
 def _span(value):

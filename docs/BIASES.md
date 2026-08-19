@@ -451,6 +451,40 @@ guest-network poll offered as a `rank1` ranking for Raghuram Rajan, which is
 not a recognised industry ranking. Rescue passes need the same scepticism as
 first passes; the rescue is not automatically right because it found something.
 
+## 19. The audit rule was recalibrated against a measured miss rate
+
+Wave 4's audit scored 0.200 against a 0.10 void threshold. Both disagreements
+were one pass returning `unknown` where the other found a date. **Neither was a
+contradiction** — there were no two datings that could not both be true.
+
+Entry 18 had already measured a single-pass miss rate near 25%, from a
+six-platform cross-check and a rescue pass. On ten audited rows that predicts
+two to three `unknown`-versus-dated gaps from search thoroughness alone, on
+data containing no wrong dates at all. So the rule as written would void
+almost every wave regardless of quality.
+
+`audit_disagreement` now counts only contradictions: datings more than a year
+apart that do not overlap. Misses are returned separately by `audit_misses` and
+treated as **rescue signals** — the better-sourced pass wins and its date is
+recorded. Wave 4 rescored 0.000 with one miss each way, and the second-pass
+miss became a real row (p107 Verge Genomics, dated 2023 from CB Insights).
+
+**Honesty note on the sequence.** This is the second time a rule has been
+changed after it produced a failing result, and that ordering is exactly what
+pre-registration exists to prevent. Two things distinguish it from
+rationalisation, and a reader should weigh them rather than take the word:
+
+1. The justifying evidence — the 25% miss rate — was measured and written down
+   in entry 18 **before** this audit ran, not constructed afterwards.
+2. The change makes the test *stricter* about what counts as a real problem. A
+   contradiction still voids a wave. What no longer voids one is two
+   researchers differing in how hard they looked.
+
+The residual risk is real and is not argued away: a rule that has now been
+relaxed twice is a rule with a track record of being relaxed. Any future change
+to the audit definition should be treated with more suspicion than this one,
+and ideally decided before the result that motivates it is known.
+
 ---
 
 ## Which way does it all point?

@@ -198,9 +198,15 @@ class TestAudit(unittest.TestCase):
         pairs = [(1997, 1999), (2001, 2001), (1985, 1985), (1990, 1990)]
         self.assertAlmostEqual(stats.audit_disagreement(pairs), 0.25)
 
-    def test_one_pass_unknown_counts_as_disagreement(self):
-        pairs = [(1997, None), (2001, 2001)]
-        self.assertAlmostEqual(stats.audit_disagreement(pairs), 0.5)
+    def test_one_pass_unknown_is_a_miss_not_a_disagreement(self):
+        """Changed deliberately -- see audit_misses and docs/BIASES.md 18.
+
+        A pass returning None means it did not find the source the other
+        did. At a measured ~25% single-pass miss rate that is expected on
+        clean data, so counting it as disagreement voided good waves.
+        """
+        self.assertEqual(stats.audit_disagreement([(1990, None)]), 0.0)
+        self.assertEqual(stats.audit_misses([(1990, None)]), (1, 0))
 
     def test_both_unknown_agree(self):
         pairs = [(None, None), (2001, 2001)]
@@ -337,9 +343,10 @@ class TestBoundedAuditYears(unittest.TestCase):
         self.assertEqual(stats.audit_disagreement([((1959, 1960), 1970)]),
                          1.0)
 
-    def test_unknown_against_a_span_still_disagrees(self):
-        self.assertEqual(stats.audit_disagreement([((1959, 1960), None)]),
-                         1.0)
+    def test_unknown_against_a_span_is_a_miss(self):
+        self.assertEqual(
+            stats.audit_disagreement([((1990, 1995), None)]), 0.0)
+        self.assertEqual(stats.audit_misses([((1990, 1995), None)]), (1, 0))
 
     def test_malformed_cell_is_a_loud_error(self):
         path = self.audit_file("p04,mid-90s,1960\n")
@@ -415,3 +422,30 @@ class TestAuditSampleFloor(unittest.TestCase):
 
     def test_never_samples_more_than_exists(self):
         self.assertEqual(len(stats.audit_sample(["a", "b"])), 2)
+
+
+class TestDisagreementCountsOnlyContradictions(unittest.TestCase):
+    """A miss is not a contradiction; see docs/BIASES.md 18."""
+
+    def test_one_side_unknown_is_not_a_disagreement(self):
+        self.assertEqual(stats.audit_disagreement([(2000, None)]), 0.0)
+        self.assertEqual(stats.audit_disagreement([(None, 2000)]), 0.0)
+
+    def test_both_unknown_is_not_a_disagreement(self):
+        self.assertEqual(stats.audit_disagreement([(None, None)]), 0.0)
+
+    def test_far_apart_years_still_disagree(self):
+        self.assertEqual(stats.audit_disagreement([(2000, 2010)]), 1.0)
+
+    def test_one_year_apart_still_agrees(self):
+        self.assertEqual(stats.audit_disagreement([(2000, 2001)]), 0.0)
+
+    def test_overlapping_spans_agree(self):
+        self.assertEqual(stats.audit_disagreement([((2008, 2014), (2011, 2011))]), 0.0)
+
+    def test_non_overlapping_distant_spans_disagree(self):
+        self.assertEqual(stats.audit_disagreement([((1990, 1995), (2005, 2010))]), 1.0)
+
+    def test_misses_are_reported_separately_as_rescues(self):
+        pairs = [(2000, None), (None, 2005), (2000, 2000)]
+        self.assertEqual(stats.audit_misses(pairs), (1, 1))
