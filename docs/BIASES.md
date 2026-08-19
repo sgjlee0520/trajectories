@@ -485,6 +485,33 @@ relaxed twice is a rule with a track record of being relaxed. Any future change
 to the audit definition should be treated with more suspicion than this one,
 and ideally decided before the result that motivates it is known.
 
+## 20. Verified membership is not the same as sampling from a list
+
+Wave 5's roster was built without web search — the session's budget was gone —
+so the agent generated candidate names from memory and then verified each one
+against its source list, discarding roughly a dozen that did not check out.
+
+Every surviving name is genuinely on the list it cites. That fixes the wave 4
+failure (a citation naming nobody) but it does **not** fix the failure the
+named-list rule was written for. Recall proposes the candidate; the list only
+ratifies it. A famous Forbes billionaire recalled from memory and then
+confirmed on Forbes is still a famous billionaire selected by fame.
+
+The observable damage looks small — wave 5 drew Qin Yinglin (hog farming), Zhu
+Gongshan (polysilicon), Xu Hang (medical devices), Martua Sitorus (palm oil),
+Kishore Biyani (Indian retail) — not a list of household names. But that is a
+judgement about the output, not a property of the method, and it will not hold
+every time.
+
+**Direction:** biases toward the more famous members of each list, which
+correlates with larger outcomes and probably with faster ones — so it may bias
+the median **short**.
+
+**Mitigation:** none applied this wave. The fix is to enumerate the list first
+and sample from the enumeration, which requires working search. Where search is
+unavailable, this limitation should be recorded on the wave rather than
+presented as an equivalent roster.
+
 ---
 
 ## Which way does it all point?
