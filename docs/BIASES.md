@@ -512,6 +512,32 @@ and sample from the enumeration, which requires working search. Where search is
 unavailable, this limitation should be recorded on the wave rather than
 presented as an equivalent roster.
 
+## 21. Some upper bounds are qualitative, not numeric
+
+`frame.md` says a bounded date needs a figure below the bar in the earlier year
+and a figure at or above it in the later year. Two wave-5 rows do not have the
+second figure and use a qualitative claim instead:
+
+- **p118 Diane Hendricks / ABC Supply** — ranked #1 on the Inc. 500 in 1986,
+  "after which it was too large to list." No dollar figure was ever found.
+- **p117 Wang Chuanfu / BYD** — the world's largest NiCd battery maker with 65%
+  share by 2002. No RMB revenue figure was located.
+
+Both are almost certainly true and both clear their bars by a wide margin — a
+company with 65% of a global market is not near a $5.6M threshold. But the
+inference is about *magnitude*, not about the date, which makes it a much safer
+class of inference than guessing a year. Both are recorded at `medium`
+confidence with the gap stated in the row notes.
+
+**Direction:** unsigned. The risk is not that these dates are wrong; it is that
+"clearly very large by year Y" gives no purchase on whether the crossing was in
+year Y or several years earlier, so the bound may be wider than the evidence
+truly supports and the midpoint correspondingly arbitrary.
+
+**Mitigation:** the confidence sensitivity run separates high-confidence rows
+from the rest, and the bounded-date sensitivity run shows what the envelope
+does to the median. If either diverges materially, rows like these are why.
+
 ---
 
 ## Which way does it all point?
