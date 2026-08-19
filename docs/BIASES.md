@@ -538,6 +538,36 @@ truly supports and the midpoint correspondingly arbitrary.
 from the rest, and the bounded-date sensitivity run shows what the envelope
 does to the median. If either diverges materially, rows like these are why.
 
+## 22. The blind audit's isolation is weaker than assumed
+
+Wave 5's auditor reported, unprompted, that its scratchpad directory already
+contained roughly thirty files left by the FIRST-pass researcher on the same
+people — scraped company pages, a `wave5_new_rows.csv`, and per-person
+row-building scripts. The scratchpad is described as session-isolated. It was
+not.
+
+The auditor ran `ls`, saw the filenames, opened none of them, fetched
+everything fresh under its own names, and disclosed the exposure. So this
+particular pass stayed blind, and its result stands.
+
+But the protocol's blinding rests on the auditor not seeing the first pass, and
+that is currently enforced by instructions to the agent rather than by the
+environment. An agent that read `wave5_new_rows.csv` would produce perfect
+agreement and no one would be able to tell from the score — a blind audit that
+has silently stopped being blind looks exactly like a blind audit that passed.
+
+**Direction:** if it ever fails, it inflates apparent reliability. Every audit
+result in this study is contingent on agents having honoured an instruction
+they could have ignored undetectably.
+
+**Mitigation:** none in place. The real fix is to run the second pass in a
+clean working directory with no access to the first pass's artifacts, or on a
+separate machine or account entirely. Until then, treat audit agreement as
+strong but not airtight evidence — and note that the strongest reliability
+result in this study, the six-platform cross-check with 60 comparisons and zero
+conflicts, did not have this weakness, because those platforms had no access to
+the repo at all.
+
 ---
 
 ## Which way does it all point?
