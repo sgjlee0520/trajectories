@@ -568,6 +568,61 @@ result in this study, the six-platform cross-check with 60 comparisons and zero
 conflicts, did not have this weakness, because those platforms had no access to
 the repo at all.
 
+## 23. Co-founders of the same company are not independent observations
+
+Wave 6's roster proposed five people who co-founded companies already in the
+sample — Razorpay, Zepto, Meesho, Auth0, Palm. One case is already in the
+collected data: **p70 Donna Dubinsky and p94 Jeff Hawkins both date to 1995 at
+Palm Computing.**
+
+A company crosses the threshold once. Two co-founders therefore share a single
+`a5_first_hit`, and their clocks differ only by their education dates. They are
+two people but one event.
+
+This matters more than it first appears, because the **stopping rule keys off
+the bootstrap CI half-width**, and the bootstrap treats every row as an
+independent draw. Correlated rows narrow the interval without adding
+information, so the study could satisfy its own stopping criterion on precision
+it has not earned. Of all the failure modes catalogued here, this is the one
+that attacks the stopping rule directly.
+
+Note the contrast with prizes, which look similar and are not: Bengio (2019)
+and Liskov (2009) both hold Turing Awards, but in different years. Different
+events, genuinely independent. The test is shared **event**, not shared
+institution.
+
+**Direction:** falsely narrows the confidence interval; no clear effect on the
+median itself.
+
+**Mitigation:** the five wave-6 rows were replaced before research. The Palm
+pair is still in the data and needs a decision — see the open question below.
+Going forward the frame should require one row per hit **event** (entity plus
+year), not merely per person.
+
+**Open question for the study author:** whether to drop one of Dubinsky or
+Hawkins. Both are legitimately on the Computer History Museum Fellows list, so
+excluding either is a selection rule the frame does not currently contain.
+Recorded rather than decided unilaterally.
+
+## 24. Steering away from fame is still steering
+
+While fixing bias 20, the wave-6 roster agent was told to prefer names it would
+not have recalled unprompted. It duly rejected Peter Thiel, Vinod Khosla,
+Jensen Huang, and Hinton/Hopfield from enumerated lists as "too obvious."
+
+That is a second selection bias pointing the opposite way from recall bias. The
+rule is money-only with no steering, and "avoid the famous ones" violates it
+exactly as much as "recall the famous ones" does — it biases toward
+less-prominent or later-career list members.
+
+The instruction was mine, and it was wrong. Correct practice is to enumerate the
+list and then select without regard to prominence, effectively at random among
+eligible candidates.
+
+**Direction:** unknown, plausibly opposite to bias 20, and two opposing biases
+do not cancel — they widen the variance and make the sample harder to
+characterise than either alone.
+
 ---
 
 ## Which way does it all point?
