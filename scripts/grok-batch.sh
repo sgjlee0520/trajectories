@@ -2,6 +2,8 @@
 # Run one Grok research batch.
 #   scripts/grok-batch.sh <output-file> <id> [<id> ...]
 # Example: scripts/grok-batch.sh data/w9-a.csv p211 p212 p213 p214 p215
+# Set EXTRA=... to append a PI note to the assignment, for a batch carrying a
+# row the PI already knows needs care.
 set -u
 cd "$(dirname "$0")/.."
 OUT="$1"; shift
@@ -29,6 +31,11 @@ must WRITE only to: $OUT
 
 $OUT already contains the correct header row. Append one line per person as you
 finish them — never all at the end.
+${EXTRA:+
+# PI NOTE FOR THIS BATCH — READ BEFORE YOU START
+
+$EXTRA
+}
 
 Follow every rule in the brief above literally. When you are done, run the
 self-check in section 8 and paste the schema output."

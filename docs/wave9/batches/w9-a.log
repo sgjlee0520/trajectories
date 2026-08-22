@@ -1,0 +1,67 @@
+- **hit_criterion / basis:** `rev10` / `primary`
+- **Serial check:** Auctomatic sold Mar 2008 for ~$5M. **2008 acq50 = $33,438,062.** $5M is 15% of that bar. Not the hit.
+- **Figure vs bar:** Stripe founding 2009 (YC). Irish Times, filed accounts of Stripe Payments Europe Limited: **€14.2M in 2014**, €49.7M in 2015. Fed G.5A 2014 average: **$1.3297 / €**. €14.2M × 1.3297 = **US$18.88M** vs **2014 bar $7,353,351** (157% above). That is the European subsidiary, so a **floor** on Stripe-wide revenue.
+- **List membership:** confirmed. Named Founder/CEO; Stripe is entry 16 of 91.
+- **Uncertain:** a2 gap is real. SPEL is a subsidiary floor, not a consolidated Stripe number. a3=a4 is a judgment call.
+
+## p214 Bill Clerico — WePay
+
+| Anchor | Date | Conf |
+|---|---|---|
+| a1 birth | 1984-1985 | low (age 29 on 14 Nov 2014, Santa Cruz Sentinel) |
+| a2 education_end | 2007 | high (BC B.S. Computer Science 2003-2007) |
+| a3 first domain job | 2008 | low (= a4; IB is not the software_internet domain) |
+| a4 first venture | 2008 | high |
+| a5 first hit | **2008-2017** | medium |
+| a6 scale | 2017 | high (JPMorgan close; TechCrunch “just over $300M, up to $400M”) |
+
+- **hit_criterion / basis:** `rev10` / `primary`
+- **Figure vs bar:** founding 2008 vs 2008 bar $6,687,612. BC Carroll School: “with $100 million in revenue. It was purchased by JPMorgan Chase in 2017” vs **2017 bar $7,613,770** (~13×; not under 20%). Span **9 years**, not stretched to 10.
+- **$1B payment volume** (Sentinel 2014) is GMV, not converted.
+- **acq fallback barred** for a5 because a revenue figure exists.
+- **List membership:** confirmed. Named Founder/CEO; WePay is entry 17 of 91.
+- **Uncertain:** $100M is loosely tied to the 2017 purchase, not a year-by-year P&L. a3=a4 is a judgment call.
+
+## p215 Suhail Doshi — Mixpanel
+
+| Anchor | Date | Conf |
+|---|---|---|
+| a1 birth | 1988 | medium (age 26 in Dec 2014 WSJ and Mar 2015 Business Insider; age 22 in Apr 2011 Entrepreneur) |
+| a2 education_end | unknown | none (ASU dropout; high-school year not sourced) |
+| a3 first domain job | 2008 | medium (paid Slide internship after sophomore year) |
+| a4 first venture | 2009 | high |
+| a5 first hit | **2009-2018** | medium |
+| a6 scale | 2021 | high ($200M Series C at $1.05B) |
+
+- **hit_criterion / basis:** `rev10` / `primary`
+- **Figure vs bar:** founding 2009 vs 2009 bar $6,663,819. TechCrunch 15 Nov 2021: “When he took over in 2018… $100 million in revenue” vs **2018 bar $7,799,735** (~13×; not under 20%). Span **9 years**.
+- WSJ “profitably since 2012” has no dollar figure, so 2012 is not an end.
+- **List membership:** confirmed. Named Founder/CEO; Mixpanel is entry 18 of 91.
+- **Uncertain:** a2 dropout with no dated prior credential. 9-year bound is wide because early Mixpanel revenue was never published.
+
+---
+
+## Exclusions, era, uncertainty
+
+**Excluded:** none of these five. No `crossing_undatable`.
+
+**Pre-1995 hits:** **0 of 5.** All five crossings sit in 2008–2018.
+
+**Every place I was uncertain**
+
+1. **ARR vs GAAP** on PagerDuty and Optimizely. Same convention as Gusto/Zapier in this dataset; S-1 GAAP for PagerDuty only starts at FY2018 ($79.6M).
+2. **Optimizely “double-digit millions”** is a floor. If it meant barely $10M, the 2013 margin is 38% — flagged, not under 20%.
+3. **Stripe’s €14.2M is SPEL, not consolidated Stripe.** Used as a floor. Global 2014 was almost certainly larger; I did not infer how much.
+4. **Patrick Collison a2** is a real gap. MIT was not completed; Leaving Cert year is not in any source I could open.
+5. **WePay and Mixpanel 9-year bounds** rest on a single later $100M print plus founding year. Honest, not tight. Private-company early P&L was not found after two genuine attempts each.
+6. **a3=a4 judgment calls** on Collison and Clerico (Blakely / p01 rule). A stricter reading would put those a3 cells at `unknown`.
+7. **Age-derived births** (Solomon 1982-1983, Clerico 1984-1985, Doshi 1988) are not calendar-year birth records.
+
+**Researched 5 of 5 assigned people.** No suspected fabricated roster entries. All five list memberships confirmed on a page that names the person or company.
+=== BATCH DONE: docs/wave9/batches/w9-a.csv ===
+rows written: 5
+  p211   Alex Solomon             a5=2013-2014    OK
+  p212   Pete Koomen              a5=2010-2013    OK
+  p213   Patrick Collison         a5=2009-2014    OK
+  p214   Bill Clerico             a5=2008-2017    OK
+  p215   Suhail Doshi             a5=2009-2018    OK

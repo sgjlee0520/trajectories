@@ -1,5 +1,11 @@
 # PI state — read this first after a context reset
 
+> **2026-08-22: collection is handed to Grok.** The study author has given Grok
+> every remaining wave. Claude does not run waves any more and returns only to
+> write the paper once `STOP: True`. Grok's standing orders are
+> **`GROK-RUN-THE-STUDY.md`** at the repo root. This file stays the record of
+> state and decisions.
+
 **Division of labour, set by the study author on 2026-08-22:**
 
 - **Claude is the PI.** Methodology decisions, rule changes, adjudicating
@@ -18,9 +24,9 @@
 
 | | |
 |---|---|
-| people researched | **210** (`data/anchors.csv`), schema 0 errors |
-| included | 181 · excluded 29 (14%) |
-| roster | **235 names** (wave 9 drawn 2026-08-22); 210 researched |
+| people researched | **235** (`data/anchors.csv`), schema 0 errors |
+| included | 201 · excluded 34 (14%) |
+| roster | **235 names**; all 235 researched — wave 10 needs a fresh draw |
 | revenue-strict n | **83** (waves 7–8 folded in 2026-08-22 after audit) |
 | median at n=83 | **9.0 yr**, 95% CI [8.0, 12.5], half-width 2.25 |
 | median history | 10.0, 9.0, 8.8, 9.0, 9.0, 9.8, 9.2, 9.0 |
@@ -34,17 +40,9 @@ second machine, merged here, and were **audited 2026-08-22 — contradiction rat
 
 ## OPEN ITEMS, in priority order
 
-1. **Research wave 9.** The roster is drawn and merged — p211–p235 in
-   `data/roster.csv`. Nothing about them is researched yet. Run in batches of
-   about five:
-
-       scripts/grok-batch.sh docs/wave9/w9-a.csv p211 p212 p213 p214 p215
-
-   then `scripts/merge-batches.sh`, `python3 -m src.schema data/anchors.csv`,
-   and audit with `scripts/grok-audit.sh` before recomputing. **Read
-   `docs/wave9/NOTES.md` first** — it names two rows whose hit entity must be
-   confirmed before the merge absorbs them (p221/p222 Atari, p231 Index
-   Ventures).
+1. **Wave 9 is researched and merged but NOT AUDITED.** It is Grok's first job
+   under `GROK-RUN-THE-STUDY.md`, and nothing may be recomputed until the audit
+   passes. The numbers in the table above are still the pre-wave-9 figures.
 
 2. **The LaTeX paper.** Not started. Claude's job. Should carry: the survivorship
    framing, the constant-dollar method, the full bias catalogue, the audit

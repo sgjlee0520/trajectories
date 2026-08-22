@@ -1,0 +1,67 @@
+
+## p219 Todd Graves — **excluded** (`crossing_undatable`)
+
+| Anchor | Date | Conf |
+|---|---|---|
+| a1 birth | 1972 | high |
+| a2 education end | 1994 (UGA BA, telecommunications) | high |
+| a3 first domain job | 1996 | medium |
+| a4 first venture | 1996 (Raising Cane’s) | high |
+| a5 first hit | **unknown** | none |
+| a6 scale | 2019 ($1.46bn sales) | medium |
+
+- **Hit entity:** Raising Cane’s. Criterion/basis empty (excluded).
+- **Why excluded:** First sourced annual sales are Dallas Morning News 2012: **$250 million** projected for 2012, “up 25 percent from 2011.” 2012 bar **$7,131,511** — 35×. Founding 26 Aug 1996 to 2011/2012 is **15–16 years**. Katrina 2005 (28 stores) and the 100th restaurant ~2011 are counts, not dollars. No 1996–2006 revenue figure found. Dating the hit to 2012 would be the late-disclosure error the brief forbids.
+- **List membership:** confirmed. Forbes profile names him; Self-Made Score 8.
+- **CPI pasted in notes:** 1996, 2011, 2012.
+
+**Uncertain:** a3 — he worked restaurants in college, but no year; a3 set equal to a4. a1 is year-only (Wikipedia 1972).
+
+---
+
+## p220 Ernest Garcia II — not excluded
+
+| Anchor | Date | Conf |
+|---|---|---|
+| a1 birth | 1957 | high |
+| a2 education end | unknown | none |
+| a3 first domain job | 1992 (first used-car lot) | medium |
+| a4 first venture | 1990 (Duck Ventures) | medium |
+| a5 first hit | **1992–1995** | medium |
+| a6 scale | 2017 (Carvana IPO) | high |
+
+- **Hit entity:** Ugly Duckling (later DriveTime). **Criterion:** `rev10`. **Basis:** `primary`. **Not Carvana** (son’s 2012 company).
+- **Figure vs bar:** 1995 revenues **$58.2 million** ($47.8M car sales) vs 1995 bar **$4,733,757** (12.3×). Lower end is 1992, his first used-car dealership — not the 1977 rental firm he bought out of bankruptcy. IPO fallback barred.
+- **List membership:** confirmed. Forbes profile names him; Self-Made Score 9.
+- **CPI pasted in notes:** 1995 and 1996.
+
+**Uncertain:** a2 — Forbes says University of Arizona dropout; Wikipedia says he later earned a BA, citing Forbes, with no year. Recorded unknown. a4 1990 vs Wikipedia’s 1991 purchase date. Pre-1990 real-estate firm has no revenue and is not treated as a prior crossing.
+
+No margin under 20%.
+
+---
+
+## Exclusions, era, margins, gaps
+
+**Excluded (2 of 5):** p218 Pinault and p219 Graves, both `crossing_undatable`. Private/early timber and private restaurant chains did not publish a below-bar/above-bar pair inside 10 years. That is the intended outcome.
+
+**Pre-1995 hit:** **1 definite** (p217 Knight, 1970–1972). p220 Garcia’s bound is 1992–1995 and **straddles 1995** (midpoint 1993.5). Chesky is post-1995. The two excluded rows have no dated hit.
+
+**Margin under 20% above the bar:** none of the dated above-bar figures. Knight’s *below-bar* 1969 Britannica $1M is 12% short of that year’s bar — flagged in notes; it does not move the bound.
+
+**Blunt gaps:** Pinault and Graves a5 really are undatable from published revenue. Garcia and Pinault a2 are unknown after two attempts. Chesky’s crossing year inside 2008–2015 is not in any filing I reached. I did not stretch a 10-year window to save any of those rows.
+
+## Schema (final)
+
+```
+210 rows checked, 0 errors
+```
+
+(`data/anchors.csv` was not edited. The batch file parses as 5 rows × 30 columns; every `unknown` has empty `_src` and `_conf=none`; no bounded range exceeds 10 years.)
+=== BATCH DONE: docs/wave9/batches/w9-b.csv ===
+rows written: 5
+  p216   Brian Chesky             a5=2008-2015    OK
+  p217   Phil Knight              a5=1970-1972    OK
+  p218   François Pinault         a5=unknown      OK
+  p219   Todd Graves              a5=unknown      OK
+  p220   Ernest Garcia II         a5=1992-1995    OK

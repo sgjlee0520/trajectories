@@ -1,0 +1,67 @@
+```
+
+**Loud judgment call:** If Computer Motion is read as Wang’s company that Duggan later ran (inherited), this row’s hit would move to Pharmacyclics (FY2011 $8.2M already above the 2011 bar **$6,986,920**; FY2012 $82.0M). I did not quietly pick the famous 2015 sale.
+
+**Uncertain:** a1 Wikipedia says 1944 or 1945; a2 1962 is implied by “turned 18 in 1962, enrolled at UCSB”, not a diploma date.
+
+---
+
+## p225 Sulaiman Al Habib — **excluded**
+
+| anchor | date | conf |
+|---|---|---|
+| a1 birth | 1953 | high |
+| a2 education end | 1984 (RCP pediatrics fellowship; last completed) | high |
+| a3 first domain job | 1982 (King Saud University) | medium |
+| a4 first venture | 1995 (Olaya / HMG) | high |
+| a5 first hit | **unknown** | none |
+| a6 scale hit | 2020 (Tadawul IPO) | high |
+
+- **hit_entity:** Dr. Sulaiman Al Habib Medical Services Group  
+- **excluded:** true  
+- **exclusion_reason:** `crossing_undatable`  
+- **List membership:** confirmed. Forbes profile names him, Hospital group, Self Made.
+
+**Why excluded:** Founding-year lower bound was tried first. Commercial registration 25 November 1993; operations Olaya 1995. Earliest sourced group revenue is already far above the bar: HMG AR 2020, 2016 revenue **SAR 4,617.2 million**. At the 3.75 SAR/USD peg that is **US$1,231M** vs 2016 rev10 bar **$7,454,953** (~165×). Window 1995–2016 is 21 years, over the 10-year cap. No pre-2016 figure found after HMG IR, the 2020 AR, Argaam, and English/Arabic searches. The 2012 National piece (“We’re doing really well”; SAR 4.5bn expansion plan) is qualitative evidence an earlier crossing occurred, so the 2020 IPO is **barred** as fallback.
+
+```
+python3 -m src.cpi 2016
+  rev10 = $7,454,953
+```
+
+---
+
+## Batch totals
+
+| | |
+|---|---|
+| Researched | **5 of 5** |
+| Excluded | **1** — p225 Sulaiman Al Habib, `crossing_undatable` |
+| Pre-1995 hit | **1 of 5** (p222 Bushnell, 1972–1974). The other three dated hits are all 1997. |
+| Atari collision | **None.** Alcorn’s hit is Silicon Gaming, not Atari. |
+
+**Margins under 20% above the bar:** none. Closest is Duggan 1997 at 32.6% above.
+
+**Places I was uncertain (do not paper over these):**
+
+1. Alcorn a4 Cumma is bounded 1981–1983, not pinned.  
+2. Bushnell education 1968 vs Continuum BS’69.  
+3. Bushnell a5 is a 1972–1974 bound, not a single year.  
+4. Duggan’s hit entity is a real methodology call: Computer Motion 1997 vs Pharmacyclics 2011/2012 vs a CMC 1988 acq50 if “founded” beats “acquired a majority stake”. I recorded Computer Motion and said so in the notes.  
+5. Duggan a2 1962 is inferred from college start, not a high-school diploma line.  
+6. Al Habib has no pre-2016 revenue. That is a gap, not a year I filled.
+
+## Schema (final)
+
+```
+210 rows checked, 0 errors
+```
+
+Batch file separately: `5 rows checked, 0 errors`.
+=== BATCH DONE: docs/wave9/batches/w9-c.csv ===
+rows written: 5
+  p221   Allan Alcorn             a5=1997         OK
+  p222   Nolan Bushnell           a5=1972-1974    OK
+  p223   Jensen Huang             a5=1997         OK
+  p224   Robert Duggan            a5=1997         OK
+  p225   Sulaiman Al Habib        a5=unknown      OK

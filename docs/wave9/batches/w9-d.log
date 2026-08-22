@@ -1,0 +1,67 @@
+| a5 first hit | **2026** (announced 18 Apr 2026) | high |
+| a6 scale hit | unknown | none |
+
+No revenue year. Same announcement-year rule as Karikó; here designated year and announcement year are both 2026.
+
+**List membership:** confirmed. Breakthrough Prize News/98 names “Jean Bennett, University of Pennsylvania.”
+
+**Not excluded.**
+
+---
+
+## p230 Douglas Leone — Sequoia VI — `fund100` / `equivalent`
+
+| Anchor | Date | Conf |
+|---|---|---|
+| a1 birth | 1957 | high |
+| a2 education end | 1988 (MIT Sloan MS) | high |
+| a3 first domain job | 1988 (joined Sequoia) | high |
+| a4 first venture | unknown | none |
+| a5 first hit | **1992** (Sequoia Capital VI, $150M) | medium |
+| a6 scale hit | 2018 (Global Growth III, $8.0B) | medium |
+
+```
+revenue year 1992, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $4,357,914
+  acq50    ($50,000,000 constant 2026) = $21,789,571
+  fund100  ($100,000,000 constant 2026) = $43,579,143
+```
+
+$150M is about **3.4×** the 1992 fund100 bar.
+
+**List membership:** confirmed. Forbes: “Doug Leone is ranked at No. 8 on the 2026 Midas List, his 21st appearance.”
+
+**Not excluded.**
+
+---
+
+## Exclusions
+
+None of the five.
+
+## Pre-1995 hits
+
+**1 of 5:** Leone 1992. Seo 2007, Mokyr 2025, Hopfield 2024, Bennett 2026 are all post-1995.
+
+## Margins under 20%
+
+None. Seo is ~10.6× the 2007 bar. Leone is ~3.4× the 1992 fund100 bar.
+
+## Uncertainties
+
+1. **Seo a3.** Samsung Electro-Mechanics and Daewoo Motors are not biotech. Nexol 1999 is the predecessor; Celltrion Inc. itself is February 2002. I dated a3 to 1999. A stricter reading would use 2002.
+2. **Seo a5 pin vs bound.** I pinned 2007 because Mirae says the BMS supply “began generating revenues … in 2007” and JoongAng gives ₩63.5bn that year. I did not find a 2006 dollar figure. If a later reviewer wants a bound, 2002 (founding) to 2007 is a legal 5-year window and still far above the bar at the upper end.
+3. **Mokyr a4.** I used the 1976 first book as “independently authored.” Many science rows leave a4 unknown for academics. Flagged as a judgment call in the notes.
+4. **Hopfield a3.** Princeton dates Bell Labs as “after graduating” in 1958, not with a separate start-year sentence. Confidence medium.
+5. **Bennett a1.** German Wikipedia gives 1954; English Wikipedia marks year of birth missing; Penn/Yale bios do not state a year. I recorded 1954 at **low** confidence rather than unknown. This is the weakest cell in the batch.
+6. **Bennett a4.** Spark 2013 is sourced as a scientific co-founding. She is also named as a co-founder of GenSight and Limelight; I did not pin those years. If GenSight predates Spark, a4 would move earlier.
+7. **Leone a5.** Sequoia’s own bio dates partner promotion to **1993**; Wikipedia dates VI to **1992**. His Acquired interview still identifies VI as the fund on which he became GP. Confidence medium. If a reviewer required a fund closed after the 1993 promotion, VII 1995 at $250M also clears that year’s $47.3M bar. Wikipedia’s $150M for VI is also in tension with a Thomson/UC compilation that lists VI at $100M; **both** figures still clear $43.6M.
+
+Researched **5 of 5**. No fabricated roster entries. No list-membership failures.
+=== BATCH DONE: docs/wave9/batches/w9-d.csv ===
+rows written: 5
+  p226   Seo Jung-jin             a5=2007         OK
+  p227   Joel Mokyr               a5=2025         OK
+  p228   John J. Hopfield         a5=2024         OK
+  p229   Jean Bennett             a5=2026         OK
+  p230   Douglas Leone            a5=1992         OK

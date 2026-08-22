@@ -1,0 +1,67 @@
+
+- **hit_entity:** American Seafoods
+- **excluded:** true, `crossing_undatable`
+- **List membership:** confirmed. Forbes profile names him; “owns over 68% of publicly traded Aker”.
+
+**Why excluded:** founding-year lower bound was tried. American Seafoods 1988 (company history naming him). Earliest sourced revenue is Seattle Times 1 Feb 2000: “annual sales of $300 million”. **1988-2000 is 12 years**, over the 10-year maximum. Reporting 2000 as a5 would date the career too late.
+
+**CPI (pasted, years considered):**
+
+```
+python3 -m src.cpi 1988
+  rev10 = $3,674,564
+python3 -m src.cpi 2000
+  rev10 = $5,348,773
+```
+
+$300M vs the 2000 bar is far above; the crossing is known but undatable inside 10 years. Puget Sound Business Journal 23 Nov 1998 (possible in-window figure) was paywalled; Wayback failed. Aker 1996 is an **inherited going concern** — cannot use Aker’s founding as a lower bound. No sourced `rank1`.
+
+**Uncertain on a4:** Bloomberg cites Aker’s bio for a 69-foot trawler in 1982. That would make the first venture earlier; it was not retrieved as a primary quote, so a4 uses the 1988 company-history sentence that names him.
+
+---
+
+## Batch summary
+
+| | |
+|---|---|
+| Researched | **5 of 5** |
+| Excluded | p232 (aud1m undatable), p235 (rev10 12-year span) |
+| Pre-1995 hit | **1 of 5** (p234, 1989-1992). Dated non-excluded: p231 1999, p233 2018-2019, p234 1989-1992 |
+| Margin under 20% | **none** |
+| p231 vs p151 | **Different events.** Barksdale Group 1999 fund vs Index Ventures IX 2018. |
+
+**Where I was uncertain**
+
+- p231 a2 (Harvard year never stated); a4 company unnamed.
+- p231 Barksdale close month not in Form D; dated from “fund created in 1999” plus contemporaneous $180M figure.
+- p232 a1; whether some Chronicle piece ever hit 1M (no source).
+- p233 a2; a5 is a 1-year bound on “millions of streams”, not a pinned crossing year.
+- p234 Amerex/Hamilton volume vs revenue (left unused); NMH diploma conflict.
+- p235 1982 vs 1988 first boat; the 1998 PSBJ revenue snippet was not retrieved.
+
+---
+
+## Self-check (section 8)
+
+1. Every `_date` is a year, `YYYY-YYYY`, or `unknown`.
+2. Every non-`unknown` date has a real URL.
+3. Every `unknown` has empty `_src` and `_conf=none`.
+4. CPI command output pasted for every dollar year used (1999, 1992, 1988, 2000). aud1m rows have no dollar year.
+5. Notes quote the sentences used.
+6. No bound exceeds 10 years (2018-2019; 1989-1992).
+7. Schema:
+
+```
+python3 -m src.schema docs/wave9/batches/w9-e.csv
+5 rows checked, 0 errors
+
+python3 -m src.schema data/anchors.csv
+210 rows checked, 0 errors
+```
+=== BATCH DONE: docs/wave9/batches/w9-e.csv ===
+rows written: 5
+  p231   Danny Rimer              a5=1999         OK
+  p232   Susie Neilson            a5=unknown      OK
+  p233   Olivia Dean              a5=2018-2019    OK
+  p234   Brad Jacobs              a5=1989-1992    OK
+  p235   Kjell Inge Rokke         a5=unknown      OK
