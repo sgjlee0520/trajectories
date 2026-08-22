@@ -1,0 +1,571 @@
+% !TEX program = xelatex
+%
+% 필요 엔진: XeLaTeX 또는 LuaLaTeX (kotex 사용, pdfLaTeX 로는 조판되지 않음)
+%   컴파일:  xelatex -interaction=nonstopmode analysis/interim-report-ko.tex
+% 파일 인코딩: UTF-8
+%
+\documentclass[11pt]{article}
+
+\usepackage{kotex}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf,skip=6pt}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.15}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}p{2.1cm}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}p{5.4cm}}
+
+\title{\bfseries 도제 기간 궤적 연구\\[0.3em]\large 중간 연구 보고서}
+\author{\normalsize \texttt{trajectories} 연구 저장소}
+\date{\normalsize 2026년 8월 22일 기준 \\[0.2em]
+      \small 조사 인원 160명 / 포함 134행 / revenue-strict 60행 시점의 스냅샷}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+이 문서는 진행 중인 연구의 \textbf{중간 보고서}이며, 최종 결과가 아니다.
+현재 조사가 끝난 160명을 기준으로 revenue-strict 부분집합 60행에서
+교육 종료 시점부터 첫 성공까지의 중앙값(median)은 \textbf{9.2년},
+95\% 신뢰구간(confidence interval, CI)은 $[8.5,\ 13.0]$이다.
+사전 등록된 중단 규칙은 아직 \texttt{STOP: False}를 반환하며, 이 수치는 수렴하지 않았다.
+지금까지의 수치가 시사하는 바를 한 문장으로 적으면,
+\textbf{이 방식으로 연구가 계속될 경우 도제 기간은 대략 9년 부근으로 보인다}는 것이다.
+다만 이 값은 \textbf{성공한 사람들 사이에서의} 소요 기간이며 분모가 없다.
+성공 확률에 대해서는 아무것도 말하지 않는다.
+측정된 편향 중 가장 강한 두 가지가 모두 값을 짧게 미는 방향이므로,
+9.2년은 대표값이 아니라 \textbf{하한선}으로 읽어야 한다.
+\end{abstract}
+
+\section{이 보고서가 다루는 시점}
+
+이 보고서의 모든 수치는 \textbf{조사 인원 160명, 포함 134행, revenue-strict 60행}
+시점의 상태다. 파일럿 10명과 웨이브 1$\sim$6(각 25명)이 종료된 상태이며,
+\textbf{웨이브 7과 8(p161\,--\,p210)은 현재 추첨되어 조사가 진행 중이지만
+이 보고서의 어떤 숫자에도 포함되어 있지 않다.}
+작업 중 \texttt{data/anchors.csv}가 160행을 넘어 늘어나더라도
+이 문서는 160행 상태를 보고한다는 원칙으로 작성되었다.
+
+이 문서에 실린 모든 수치는 다음 명령의 실제 출력에서 가져온 것이다.
+
+\begin{quote}\ttfamily\small
+PYTHONUTF8=1 python -m src.stats analysis/clocks.csv\\
+PYTHONUTF8=1 python -m src.stats analysis/clocks.csv -{}-history analysis/wave\_medians.txt
+\end{quote}
+
+\section{무엇을 측정하는가}
+
+측정 대상은 \textbf{형식 교육이 끝난 해부터 첫 성공(first hit)이 일어난 해까지의 경과 연수}다.
+저장소에서 이 값은 \texttt{clock\_education}이며, 여섯 개의 날짜 앵커
+(\texttt{a1} 출생 $\sim$ \texttt{a6} 대규모 성공) 중
+\texttt{a2\_education\_end}와 \texttt{a5\_first\_hit}의 차이로 계산된다.
+
+\subsection{판정 기준은 불변 2026년 달러 기준이다}
+
+상업 버킷에서 \texttt{rev10}은 \textbf{명목 1{,}000만 달러가 아니라
+불변(constant) 2026년 달러 기준 1{,}000만 달러}를 뜻한다. 이 구분은 장식이 아니다.
+명목 기준을 썼다면 1960년에 창업한 사람은 2020년에 창업한 사람보다
+실질 기준으로 약 열한 배 큰 사업을 만들어야 동일한 "첫 성공"으로 인정받게 된다.
+즉 명목 기준은 오래된 경력의 도제 기간을 일괄적으로 부풀린다.
+1960년의 실제 문턱값은 \$919{,}417이며, \texttt{python -m src.cpi \textless{}연도\textgreater{}}로 조회한다.
+첫 파일럿에서 이 규칙을 놓친 결과 한 행이 11년, 다른 한 행이 6년 늦게 기록된 적이 있다.
+
+비상업 버킷에는 등가 기준(basis \texttt{equivalent})이 적용된다.
+\texttt{science\_research}는 수상 발표 연도(\texttt{prize}),
+\texttt{media\_creators}는 자기 작업의 100만 관객 도달(\texttt{aud1m}),
+\texttt{investors\_finance}는 펀드매니저의 경우 1억 달러 초과 첫 펀드 결성(\texttt{fund100}),
+애널리스트\,·\,이코노미스트의 경우 공인된 업계 순위 1위 도달(\texttt{rank1})이다.
+\texttt{trade\_import\_logistics}는 매출이 우선이되, 매출이 존재하지 않는 것이 정상인 업종이므로
+제3자가 발행한 물동량 순위의 1위 등재(\texttt{rank1})를 허용한다.
+
+기업공개(IPO)나 5{,}000만 달러 초과 인수(\texttt{acq50})는 \textbf{대체 기준(fallback)}이며,
+더 이른 문턱 통과가 있었다고 알려진 경우에는 사용이 금지된다.
+근거가 이른 통과를 시사하지만 연도를 특정할 수 없으면 범위 날짜(\texttt{YYYY-YYYY}, 최대 10년 폭)로 기록하고,
+범위조차 잡히지 않으면 그 행은 \texttt{crossing\_undatable} 사유로 제외한다.
+연도를 추정하지 않는다는 원칙이 이 연구의 가장 강한 규칙이다.
+
+\section{표본 구성}
+
+\subsection{버킷과 비중}
+
+버킷 비중은 \texttt{frame.md}에 동결되어 있으며 최대잉여법으로 웨이브마다 누적 배분된다.
+추첨된 160명의 실제 구성은 아래와 같고, 목표 비중과 사실상 일치한다.
+
+\begin{table}[h]
+\centering
+\caption{버킷별 구성 (추첨 160명 기준, 포함 행은 제외 처리 후 134행 기준)}
+\begin{tabular}{L R R R R}
+\toprule
+버킷 & 목표 비중 & 추첨 인원 & 실제 비중 & 포함 행 \\
+\midrule
+\texttt{software\_internet}           & 25\,\% & 40 & 25.0\,\% & 36 \\
+\texttt{hardware\_deeptech}           & 15\,\% & 24 & 15.0\,\% & 24 \\
+\texttt{consumer\_retail\_industrial} & 13\,\% & 21 & 13.1\,\% & 13 \\
+\texttt{science\_research}            & 12\,\% & 19 & 11.9\,\% & 19 \\
+\texttt{investors\_finance}           & 10\,\% & 16 & 10.0\,\% & 14 \\
+\texttt{media\_creators}              & 10\,\% & 16 & 10.0\,\% & 14 \\
+\texttt{healthcare\_biotech}          & 10\,\% & 16 & 10.0\,\% & \phantom{0}9 \\
+\texttt{trade\_import\_logistics}     & \phantom{0}5\,\% & \phantom{0}8 & \phantom{0}5.0\,\% & \phantom{0}5 \\
+\midrule
+합계 & 100\,\% & 160 & 100\,\% & 134 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{지명 출처 목록}
+
+자유 회상으로 들어온 이름은 없다. 모든 명단 항목은 자신이 나온 목록을 인용한다.
+160명의 출처 분포는 다음과 같다.
+
+\begin{table}[h]
+\centering
+\caption{출처 목록별 추첨 인원 (160명)}
+\begin{tabular}{L R L R}
+\toprule
+출처 목록 & 인원 & 출처 목록 & 인원 \\
+\midrule
+Forbes World's Billionaires (self-made) & 36 & Computer History Museum Fellows & 5 \\
+Y Combinator Top Companies              & 18 & Hurun Rich List (중국\,·\,인도)  & 8 \\
+Fortune 40 Under 40                     & 15 & 노벨상 (물리\,·\,화학\,·\,의학\,·\,경제) & 12 \\
+Endeavor Entrepreneur network           & 15 & Fields Medal                    & 3 \\
+Midas List / Midas List Europe          & 15 & Time 100                        & 3 \\
+Academy Awards                          & \phantom{0}6 & Turing Award            & 2 \\
+Forbes 400 (self-made 6\,--\,10)        & \phantom{0}5 & Breakthrough Prize      & 2 \\
+Pulitzer Prize                          & \phantom{0}5 & Sunday Times Rich List (영국) & 2 \\
+Grammy Awards                           & \phantom{0}5 & Nikkei / Toyo Keizai (일본) & 2 \\
+                                        &              & 매일경제 / 조선일보 (한국) & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{비조종(non-steering) 선정 규칙}
+
+웨이브 6에서 확립되어 현재 사용 중인 선정 규칙은 다음과 같다.
+\textbf{목록을 발행 순서대로 열거하고, 그 성공 주체(hit entity)가
+\texttt{data/anchors.csv}와 \texttt{data/roster.csv} 어디에도 등장하지 않는 항목을 앞에서부터 취한다.}
+Y Combinator Top Companies는 공개 API로 기계 열거가 가능해(91개 항목) 이 규칙에 잘 맞는다.
+
+여기서 중요한 것은 \textbf{유명하다는 이유로 이름을 건너뛰지 않는다}는 점이다.
+\texttt{docs/BIASES.md} 24번 항목은 웨이브 6의 명단 작성 에이전트가
+"너무 뻔하다"는 이유로 Peter Thiel, Vinod Khosla, Jensen Huang 등을 열거된 목록에서 배제한 사건을 기록한다.
+유명한 이름을 회상해서 넣는 것이 편향이듯, 유명한 이름을 피하는 것도 정확히 같은 크기의 편향이다.
+두 편향은 상쇄되지 않고 분산만 키운다.
+
+\subsection{쿼터에서 공변량으로의 전환, 그리고 웨이브 1의 불연속}
+
+이 표본의 가장 중요한 구조적 사실은 \textbf{두 개의 서로 다른 표집 설계가 섞여 있다}는 것이다.
+
+파일럿과 웨이브 1은 교차 하한선이 강제되던 체제에서 수집되었다.
+비미국 $\geq$ 30\,\%, 1995년 이전 성공 $\geq$ 25\,\%, 여성 $\geq$ 20\,\%가 요구되었고,
+이를 위반할 웨이브는 조사 전에 손으로 재조정되었다.
+그 결과 해당 구간의 구성은 1995년 이전 50\,\%, 비미국 69\,\%, 여성 42\,\%로,
+출처 목록이 그냥 내놓았을 값보다 훨씬 높다.
+
+웨이브 1 이후 연구 저자가 하한선을 제거했다.
+현재 \textbf{입장 기준은 금전 기준 하나뿐}이며,
+국가(\texttt{country\_primary}), 시대(\texttt{era}), 성별(\texttt{gender})은
+\textbf{선정 기준이 아니라 기록되는 공변량}이다.
+이 구분은 실질적이다. 변수를 기록하면 그 변수가 답을 움직이는지 발견할 수 있지만,
+그 변수로 선정하면 손으로 고정해 버린 것이므로 발견 자체가 불가능해진다.
+특히 시대는 도제 기간의 진짜 교란 요인이다.
+자본 가용성, 시장 규모, 정보 흐름이 모두 인터넷 시대를 전후해 달라졌기 때문에,
+표본이 1995년 이후로 완전히 쏠리면 이 연구는 일반적 질문 대신
+"2000\,--\,2020년대에는 얼마나 걸렸는가"에 조용히 답하게 된다.
+
+포함된 134행의 현재 공변량 분포는 아래와 같다.
+
+\begin{table}[h]
+\centering
+\caption{공변량 분포 (포함 134행)}
+\begin{tabular}{L R R}
+\toprule
+구분 & 행 수 & 비중 \\
+\midrule
+비미국 경력 & 86 & 64.2\,\% \\
+미국 경력   & 48 & 35.8\,\% \\
+여성        & 45 & 33.6\,\% \\
+남성        & 89 & 66.4\,\% \\
+1995년 이전 성공 & 28 & 20.9\,\% \\
+1995년 이후 성공 & 106 & 79.1\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+이 불연속은 기울기가 아니라 계단이다.
+초기 행들은 이후 행들에 비해 오래되고, 비미국이며, 여성인 경력을 과대표집한다.
+따라서 통합 중앙값은 두 시대의 가중 혼합이며,
+그 가중치는 세계에 대한 무엇이 아니라 수집 도중의 설계 변경이 정했다.
+올바른 처리는 초기 행을 사후에 제거하는 것이 아니라
+$N$이 충분해지면 설계 변경 이후 행만으로 중앙값을 따로 내어 통합값과 대조하는 것이다.
+초기 행은 잘못 수집된 데이터가 아니라 다른 규칙으로 정확히 수집된 데이터다.
+
+\section{현재 수치}
+
+\subsection{헤드라인}
+
+\begin{table}[h]
+\centering
+\caption{revenue-strict 헤드라인 (\texttt{hit\_basis = primary}, \texttt{clock\_education})}
+\begin{tabular}{L R}
+\toprule
+항목 & 값 \\
+\midrule
+revenue-strict $n$ & 60 \\
+중앙값(median)     & 9.2년 \\
+95\% 신뢰구간      & $[8.5,\ 13.0]$ \\
+신뢰구간 반너비(half-width) & 2.25년 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+신뢰구간은 부트스트랩으로 산출되며 중앙값을 중심으로 비대칭이다.
+하한 8.5년은 중앙값에서 0.7년 떨어져 있는 반면 상한 13.0년은 3.8년 떨어져 있다.
+즉 데이터가 허용하는 범위는 짧은 쪽보다 긴 쪽으로 훨씬 넓다.
+
+\subsection{정의 엄격도에 따른 비교}
+
+헤드라인이 어떤 정의 위에 서 있는지 보이기 위해 세 수준을 나란히 출력한다.
+
+\begin{table}[h]
+\centering
+\caption{정의 엄격도별 중앙값 (\texttt{clock\_education})}
+\begin{tabular}{L R R}
+\toprule
+수준 & 중앙값 (95\% CI) & $n$ \\
+\midrule
+revenue-strict (매출 \$10M 기준만) & 9.2년 $[8.5,\ 13.0]$ & 60 \\
+전 상업 버킷 (IPO\,·\,인수 대체 기준 포함) & 10.0년 $[8.5,\ 13.5]$ & 68 \\
+통합 (전 버킷, 혼합 정의) & 14.0년 $[10.0,\ 15.0]$ & 103 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+헤드라인과 통합값의 차이는 \textbf{4.8년}이다.
+이 격차의 대부분은 비상업 버킷, 특히 \texttt{science\_research}(통합 기준 29.0년, $n$=19)가 통합값을 끌어올리기 때문이다.
+서로 다른 종류의 사건에는 원리적으로 환율이 없으므로,
+헤드라인은 정의가 섞이지 않는 revenue-strict 쪽으로 고정되어 있다.
+
+\subsection{보조 시계}
+
+\begin{table}[h]
+\centering
+\caption{전 버킷 통합 기준 시계 비교}
+\begin{tabular}{L R R}
+\toprule
+시계 & 중앙값 (95\% CI) & $n$ \\
+\midrule
+\texttt{clock\_education} (교육 종료 $\to$ 첫 성공) & 14.0년 $[10.0,\ 15.0]$ & 103 \\
+\texttt{clock\_age18} (만 18세 $\to$ 첫 성공)       & 20.0년 $[18.0,\ 23.0]$ & 121 \\
+\texttt{clock\_venture} (첫 창업 $\to$ 첫 성공)     & \phantom{0}5.0년 $[4.0,\ 6.5]$ & 114 \\
+\texttt{age\_at\_first\_hit} (첫 성공 시 연령)      & 38.0년 $[36.0,\ 41.0]$ & 121 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+행 수가 더 많다는 이유로 헤드라인 시계를 바꾸는 것은 금지된다.
+그것은 결과를 얻기 위해 측정을 고르는 일이기 때문이다.
+
+\subsection{웨이브별 중앙값 이력}
+
+\begin{table}[h]
+\centering
+\caption{웨이브 종료 시점의 revenue-strict 중앙값 (\texttt{analysis/wave\_medians.txt})}
+\begin{tabular}{L R R R}
+\toprule
+기록 시점 & 누적 조사 인원 & revenue-strict $n$ & 중앙값 \\
+\midrule
+웨이브 1 마감 & \phantom{0}35 & 13 & 10.0년 \\
+웨이브 2 마감 & \phantom{0}60 & 21 & \phantom{0}9.0년 \\
+웨이브 3 마감 & \phantom{0}85 & 28 & \phantom{0}8.8년 \\
+중간 기록     & --- & 34 & \phantom{0}9.0년 \\
+웨이브 4 마감 & 110 & 45 & \phantom{0}9.0년 \\
+웨이브 5 마감 & 135 & 52 & \phantom{0}9.8년 \\
+웨이브 6 마감 & 160 & 60 & \phantom{0}9.2년 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+파일럿 10명 시점은 로그에 남아 있지 않다. 로그의 첫 항목은 웨이브 1 마감 시점이며,
+네 번째 항목($n$=34)은 웨이브 마감이 아니라 중간에 기록된 값으로,
+중앙값이 $n$=30 하한선을 처음 넘어 출력된 시점이다.
+누적 조사 인원 열은 웨이브 구조(파일럿 10명 + 웨이브당 25명)에서 재구성한 것이고,
+$n$과 중앙값 두 열은 로그 파일에 있는 그대로다.
+
+중앙값은 기록이 시작된 이래 8.8년에서 10.0년 사이의 좁은 띠 안에서 움직였고 추세를 보이지 않는다.
+다만 마지막 두 기록의 이동폭이 각각 0.80년과 0.60년으로,
+중단 규칙이 요구하는 0.50년보다 크다.
+
+\section{중단 규칙}
+
+중단 규칙은 웨이브 1 이전에 사전 등록되었고 이후 변경되지 않았다.
+\texttt{hit\_basis = primary}인 revenue-strict 부분집합에서
+\texttt{clock\_education}의 중앙값과 95\,\% 부트스트랩 신뢰구간을 매 웨이브 계산하고,
+다음 두 조건이 \textbf{동시에} 만족될 때 수집을 멈춘다.
+
+\begin{enumerate}
+\item 연속 두 웨이브에 걸쳐 중앙값의 이동이 각각 0.5년 미만일 것
+\item 부트스트랩 신뢰구간의 반너비가 1.0년 이하일 것
+\end{enumerate}
+
+또한 revenue-strict $n$이 30에 이르기 전에는 중앙값을 아예 들여다보지 않는다.
+이 하한선은 선택적 중단(optional stopping)을 막기 위한 것이다.
+매 웨이브 확인하면서 수치가 안정되어 보이는 순간에 멈추면
+잡음이 우연히 작았던 웨이브에서 우선적으로 멈추게 되고,
+그 결과 실제보다 정밀해 보이는 중앙값이 나온다.
+$n$=30 하한선은 이미 통과했으므로 현재 중앙값은 출력된다.
+
+현재 규칙의 판정은 다음과 같다.
+
+\begin{quote}\ttfamily\small
+STOP: False - median drift too large (0.80, 0.60 yr; need both \textless{} 0.50)
+\end{quote}
+
+즉 조건 1이 깨져 있다. 조건 2는 더 크게 깨져 있다.
+반너비 2.25년은 문턱값 1.00년의 두 배가 넘는다.
+
+\subsection{규칙이 함의하는 표본 크기}
+
+중앙값의 정밀도는 대략 $\sqrt{n}$에 비례해 개선된다.
+반너비를 2.25년에서 1.00년으로 줄이려면 $n$이 약 $(2.25/1.00)^2 \approx 5.06$배 필요하므로,
+\textbf{revenue-strict 약 300행}이 요구된다.
+현재 조사 인원 대비 revenue-strict 산출률이 $60/160 = 37.5\,\%$이므로,
+이 비율이 유지된다면 \textbf{조사 인원 약 800명}에 해당한다.
+현재 160명이므로 앞으로 여섯 배 이상이 남아 있다는 뜻이다.
+
+이 계산과 관련해 한 가지 불일치를 기록해 둔다.
+\texttt{docs/HANDOFF.md}는 같은 취지의 추정을
+"revenue-strict $n \approx 230$, 조사 인원 약 500명"으로 적고 있으나,
+현재 반너비 2.25년(또는 같은 문서가 다른 절에서 언급하는 2.50년)에서 출발한
+위 산술은 그 값을 재현하지 않는다.
+이 보고서는 실제 CLI 출력값에서 직접 계산한 300행 / 800명 쪽을 사용한다.
+
+수렴하지 않았다는 사실 자체는 규칙이 정상 작동하고 있다는 신호다.
+다만 사전 등록된 규칙이 아직 만족되지 않은 상태에서
+현재 중앙값과 그 실제 구간, 그리고 수렴하지 않았다는 진술을 함께 공표하는 것 역시
+정당한 과학적 산출물이다. 어느 쪽을 택할지는 연구 저자의 결정 사항이다.
+
+\section{데이터 품질}
+
+\subsection{제외 감사}
+
+\textbf{160행 중 26행(16.2\,\%)이 제외되었다.}
+제외된 행은 다른 어떤 표에도 나타나지 않으므로,
+무엇이 제외되는지에 편향이 있다면 오직 이 절에서만 보인다.
+
+\begin{table}[h]
+\centering
+\caption{제외 사유}
+\begin{tabular}{L R}
+\toprule
+사유 & 행 수 \\
+\midrule
+\texttt{crossing\_undatable} (문턱 통과 연도를 특정도 범위 지정도 못 함) & 22 \\
+\texttt{roster\_unverified} (명단 출처가 그 인물을 실제로 담고 있지 않음) & \phantom{0}3 \\
+\texttt{criterion\_never\_met} (기준을 끝내 충족하지 못함) & \phantom{0}1 \\
+\midrule
+합계 & 26 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{교차 구분별 제외율}
+\begin{tabular}{L R R R}
+\toprule
+구분 & 포함 & 제외 & 제외율 \\
+\midrule
+미국   & 48 & \phantom{0}8 & 14.3\,\% \\
+비미국 & 86 & 18 & 17.3\,\% \\
+여성   & 45 & \phantom{0}6 & 11.8\,\% \\
+남성   & 89 & 20 & 18.3\,\% \\
+\midrule
+\texttt{hardware\_deeptech}           & 24 & \phantom{0}0 & \phantom{0}0.0\,\% \\
+\texttt{science\_research}            & 19 & \phantom{0}0 & \phantom{0}0.0\,\% \\
+\texttt{software\_internet}           & 36 & \phantom{0}4 & 10.0\,\% \\
+\texttt{investors\_finance}           & 14 & \phantom{0}2 & 12.5\,\% \\
+\texttt{media\_creators}              & 14 & \phantom{0}2 & 12.5\,\% \\
+\texttt{trade\_import\_logistics}     & \phantom{0}5 & \phantom{0}3 & 37.5\,\% \\
+\texttt{consumer\_retail\_industrial} & 13 & \phantom{0}8 & 38.1\,\% \\
+\texttt{healthcare\_biotech}          & \phantom{0}9 & \phantom{0}7 & 43.8\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+제외는 흩어진 개별 행의 문제가 아니라 \textbf{버킷 단위로 몰린다.}
+\texttt{hardware\_deeptech}와 \texttt{science\_research}는 제외율이 0\,\%인 반면
+\texttt{healthcare\_biotech}는 43.8\,\%, \texttt{consumer\_retail\_industrial}은 38.1\,\%다.
+이는 무작위 결측이 아니라 해당 업종의 공시 관행이 만드는 구조적 결측이다.
+시대(era)는 성공 연도에서 파생되는데 제외된 행에는 대개 그 연도가 없으므로 이 표에서 감사하지 않는다.
+제외된 행의 시대를 판정하는 것은 추론이지 측정이 아니다.
+
+\subsection{범위 날짜의 비중}
+
+포함된 134행 중 \textbf{64행(47.8\,\%)이 범위로 지정된 \texttt{a5}}를 가진다.
+즉 성공 연도가 \texttt{YYYY-YYYY} 형태로 기록되어 있고, 시계는 그 중점을 사용한다.
+범위 날짜는 추측이 아니라 실제 측정이다.
+근거가 사건을 두 해 사이에 가두었다는 사실 자체가 정보이며,
+마음에 드는 연도를 포함할 때까지 범위를 넓히는 것은 허용되지 않는다(최대 폭 10년).
+
+절반에 가까운 행이 범위 날짜를 갖기 때문에 범위 민감도 분석이 중요하다.
+전 버킷 통합 기준의 결과는 다음과 같다.
+
+\begin{table}[h]
+\centering
+\caption{범위 날짜 민감도 (전 버킷 통합, \texttt{clock\_education})}
+\begin{tabular}{L R R}
+\toprule
+처리 방식 & 중앙값 (95\% CI) & $n$ \\
+\midrule
+범위 행 제외 & 16.0년 $[13.0,\ 19.0]$ & \phantom{0}54 \\
+전체, 범위 중점 사용 & 14.0년 $[10.0,\ 15.0]$ & 103 \\
+전체, 가능한 최이른 해 & 12.0년 $[9.0,\ 14.0]$ & 103 \\
+전체, 가능한 최늦은 해 & 14.0년 $[12.0,\ 18.0]$ & 103 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+이 표는 통합 중앙값을 한정할 뿐 revenue-strict 헤드라인을 한정하지 않는다는 점에 주의한다.
+같은 이유로 신뢰도 민감도 분석 역시 통합 기준이다.
+고신뢰 행만 쓰면 21.0년 $[14.0,\ 27.5]$, $n$=38이고 전체 행은 14.0년 $[10.0,\ 15.0]$, $n$=103으로
+\textbf{7.0년 벌어진다}. 포함 134행 중 96행이 고신뢰에 못 미친다.
+이 격차는 통합 중앙값을 점추정치로 읽으면 안 된다는 뜻이다.
+
+\subsection{현재의 구속 조건은 \texttt{a2}다}
+
+\textbf{포함된 134행 중 31행의 \texttt{a2\_education\_end}가 \texttt{unknown}이다.}
+헤드라인 시계는 \texttt{a2}에서 출발하므로, 이 31행은 헤드라인에 전혀 기여하지 못한다.
+
+구체적으로 보면 이 제약의 크기가 드러난다.
+포함 행 중 \texttt{hit\_basis = primary}인 행은 77행인데,
+그중 \texttt{a2}가 채워진 행은 60행뿐이다.
+즉 \textbf{매출 기준으로 성공 연도가 확정된 17개의 행이 오직 교육 종료 연도가 없다는 이유로
+헤드라인 표본에서 빠져 있다.}
+이는 \texttt{a5}보다 큰 손실이며, 따라서 \textbf{현재 이 연구의 구속 조건은 \texttt{a5}가 아니라 \texttt{a2}다.}
+
+그리고 이 결측은 무작위가 아니다.
+"이 사람이 학교를 언제 마쳤는가"는 미국\,·\,영국 인물에 대해서는 잘 기록되어 있고,
+1970\,--\,80년대 인도\,·\,중국 창업자나 보고할 만한 학위를 거치지 않은 경력에 대해서는 잘 기록되어 있지 않다.
+선정 기준은 금전 하나뿐인데도, 교육 시계는 조용히
+"학력이 기록된 사람들", 즉 서구\,·\,고학력\,·\,최근 경력 쪽으로 조건화된다.
+
+\section{한계}
+
+\texttt{docs/BIASES.md}는 24개의 편향을 방향과 함께 기록한다.
+중앙값을 인용하기 전에 반드시 읽어야 할 항목들을 방향과 함께 정리하면 다음과 같다.
+
+\begin{table}[h]
+\centering
+\caption{주요 편향과 그 방향}
+\begin{tabular}{p{0.8cm} p{7.6cm} p{5.6cm}}
+\toprule
+번호 & 내용 & 중앙값에 미치는 방향 \\
+\midrule
+1 & 생존 편향. 표본 전체가 결과로 조건화되어 있다. 12년을 일하고 끝내 넘지 못한 사람은 어떤 목록도 표집하지 않는다. & 값의 편향이 아니라 \textbf{의미의 한계}. 데이터를 늘려도 교정 불가. \\
+2 & 극단적 성과로 선정하고 완만한 이정표로 날짜를 매긴다. Bezos급에 도달한 사람은 \$10M에서 멈춘 사람보다 그 문턱을 더 빨리 넘었을 가능성이 크고, 후자는 표본에 들어오지 못한다. & \textbf{짧게} \\
+3 & \texttt{primary}로의 진입이 무작위가 아니다. 매출을 일찍 공개한 기업, 즉 빨리 성장한 기업이 과대표집된다. & \textbf{짧게} \\
+5 & 대체 기준(IPO\,·\,인수)의 지연. 규칙 개정으로 대부분 막혔으나 잔여 지연이 남는다. 포함 행 중 8행이 대체 기준이다. & 해당 행에 대해 길게 \\
+17 & 교육 시계가 학력이 기록된 사람에게 조건화된다(위 6.3절). 학력 기록이 없는 창업자는 더 일찍 벌기 시작했을 개연성이 있다. & 부호 불명, 아마 \textbf{짧게} \\
+18 & 단일 패스 조사의 측정된 누락률. 제외된 14행을 재조사했더니 \texttt{crossing\_undatable} 13행 중 3행이 실제로는 날짜 지정 가능했다. 즉 \textbf{제외 4건 중 1건꼴로 회수 가능}했고, 회수된 행은 비미국\,·\,1995년 이전으로 쏠린다. & 구성 편향. 남아 있는 제외는 보이는 것보다 약한 근거다. \\
+22 & 블라인드 감사의 격리가 환경이 아니라 지시로 유지된다. 웨이브 6에서 4개의 병렬 조사 에이전트가 완성된 답이 담긴 54개 산출물을 공유 작업 디렉터리에 남겼다. 손으로 옮긴 뒤에야 감사가 진행되었다. & 실패할 경우 \textbf{신뢰도를 과대평가}시킨다. \\
+23 & 같은 회사 공동창업자는 독립 관측이 아니다. p70 Dubinsky와 p94 Hawkins는 둘 다 1995년 Palm Computing에 걸린다. 한 사건, 두 행이다. & 중앙값에는 영향이 작으나 \textbf{신뢰구간을 부당하게 좁힌다}. 중단 규칙을 직접 공격하는 유일한 실패 모드다. \\
+24 & 유명세를 피하는 것도 조종이다. 열거된 목록에서 "너무 뻔하다"는 이유로 이름을 배제한 사례가 기록되어 있다. & 방향 불명. 20번과 반대 방향이며 상쇄되지 않고 분산만 키운다. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{분모가 없다}
+
+이 한계는 다른 모든 것 위에 있으므로 따로 적는다.
+
+중앙값 9.2년은 \textbf{성공한 사람들 사이에서의} 소요 기간이다.
+버킷은 Forbes, Midas, Nobel, Hurun처럼 극단적 결과로 선정하는 목록에서 채워지므로,
+12년을 일하고 끝내 문턱을 넘지 못한 사람은 이 표본에 한 명도 없다.
+그런 사람들은 막대한 수로 존재하며, 드물어서가 아니라 \textbf{구성상} 부재한다.
+
+따라서 이 수치가 뒷받침하는 문장은 다음 하나뿐이다.
+
+\begin{quote}
+결국 성공한 사람들 중 가운데 사람은 약 9년이 걸렸다.
+\end{quote}
+
+이 수치가 뒷받침하지 \textbf{않는} 문장은 다음과 같다.
+
+\begin{quote}
+지금 시작하면 약 9년 안에 성공할 확률이 대략 50\,\%다.
+\end{quote}
+
+두 번째 문장에는 분모, 즉 시작한 사람 전부가 필요하고 이 데이터셋에는 분모가 전혀 없다.
+복권 당첨자들이 표를 얼마나 오래 들고 있었는지 재는 것과 같다.
+정확히 계산된 진짜 숫자이지만 복권을 사는 것이 좋은 계획인지에 대해서는 아무것도 말하지 않는다.
+
+그리고 측정된 편향 중 가장 강한 두 가지(2번과 3번)가 모두 값을 짧게 미는 방향이다.
+따라서 정상적으로 성공한 경력의 참 중앙값은
+이 연구가 보고하는 값보다 \textbf{길다}고 보는 것이 작업 가정이며,
+9.2년은 대표값이 아니라 \textbf{하한선}이다.
+
+\subsection{이 문서가 하지 않는 것}
+
+설계 명세(\texttt{docs/superpowers/specs/2026-07-31-apprenticeship-trajectories-design.md})는
+\textbf{완성된 숫자를 저자 자신의 일정에 적용하는 것}을 명시적 비목표(non-goal)로 규정한다.
+그것은 숫자가 존재한 뒤에야 시작할 수 있는 별개의 프로젝트다.
+성공 확률, 기저율, 실패 건수 추정 역시 비목표다.
+따라서 이 보고서에는 제언, 시사점, 조언에 해당하는 절이 없다.
+이 문서는 무엇을 어떻게 측정했고, 얼마나 불확실하며, 무엇이 그 값을 바꿀 수 있는지만 기술한다.
+
+\section{향후 계획}
+
+\begin{enumerate}
+\item \textbf{웨이브 7\,·\,8 종료.} p161\,--\,p210이 추첨되어 조사 중이다.
+      종료 시 조사 인원 210명이 되며, 현재 산출률이 유지되면 revenue-strict는 약 79행이 된다.
+      두 웨이브 모두 검증 0오류와 블라인드 감사를 통과해야 마감된다.
+
+\item \textbf{\texttt{a2} 표적 재조사.} 포함 행 중 31행의 교육 종료 연도가 없고,
+      그중 17행은 이미 매출 기준 성공 연도가 확정된 \texttt{primary} 행이다.
+      이 17행을 채우면 새 인물을 한 명도 추가하지 않고 헤드라인 표본이 60행에서 최대 77행으로 늘어난다.
+      단위 노력 대비 표본 증가가 가장 큰 작업이다.
+
+\item \textbf{제외 행 2차 패스.} 편향 18번이 제외 4건 중 1건꼴의 회수 가능성을 측정했고,
+      회수는 비미국\,·\,비영어권 근거로 쏠린다.
+      최종 중앙값을 내기 전에 22개의 \texttt{crossing\_undatable} 행에 대한 독립 2차 패스가 필요하다.
+      단, 회수 패스도 1차 패스와 동일한 회의주의를 적용해야 한다.
+      실제로 한 회수 후보(Raghuram Rajan에게 제시된 \textit{Economist} 게스트 네트워크 설문)는
+      공인된 업계 순위가 아니므로 올바르게 기각되었다.
+
+\item \textbf{Palm 쌍에 대한 결정.} p70과 p94는 하나의 사건에 걸린 두 행이다.
+      상관된 행은 정보를 더하지 않으면서 부트스트랩 구간을 좁히므로,
+      연구가 스스로 벌지 않은 정밀도로 자기 중단 조건을 만족시킬 수 있다.
+      앞으로의 프레임은 인물당 1행이 아니라 \textbf{성공 사건(주체 + 연도)당 1행}을 요구해야 한다.
+
+\item \textbf{블라인드 감사의 환경적 격리.} 병렬 1차 조사 에이전트는 문제를 키운다.
+      에이전트마다 출력 파일을 분리하고, 감사자를 파견하기 전에 1차 산출물을 공유 디렉터리 밖으로 옮겨야 한다.
+      또한 \texttt{docs/RESEARCH-RULES.md}가 모든 에이전트에게 \texttt{data/anchors.csv}를 열라고 지시하므로,
+      감사 프롬프트에서 이 지시를 명시적으로 배제해야 한다.
+
+\item \textbf{두 버킷의 표집 목록 확보.} \texttt{investors\_finance}의 애널리스트\,·\,이코노미스트 절반과
+      \texttt{trade\_import\_logistics} 전체에는 전용 표집 목록이 없다(편향 12번).
+      다만 프레임 변경은 그 자체가 편향이므로 웨이브 도중에는 하지 않는다.
+
+\item \textbf{설계 변경 이후 행의 분리 보고.} $N$이 충분해지면
+      웨이브 2 이후 행만으로 중앙값을 산출해 통합값과 대조한다(편향 14번).
+\end{enumerate}
+
+\vspace{1em}
+\hrule
+\vspace{0.6em}
+{\small
+이 보고서의 모든 수치는 커밋 95a1a41(웨이브 6 마감) 시점의
+\texttt{data/anchors.csv} 160행, \texttt{analysis/clocks.csv},
+\texttt{analysis/wave\_medians.txt}에서 직접 산출되었다.
+어떤 수치도 다른 문서에서 옮겨 적지 않았다.
+}
+
+\end{document}

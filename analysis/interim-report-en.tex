@@ -1,0 +1,619 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1.05in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\caveat}{\emph{\small Reminder: every median below is time-to-hit
+among people who already succeeded. The sample has no denominator, so no figure
+here supports a statement about the odds of succeeding.}\par\medskip}
+
+\title{\bfseries Apprenticeship Trajectories\\[0.35em]
+\large Interim status report at 160 people researched}
+\author{\normalsize Generated from the study repository at \texttt{\textasciitilde/trajectories}}
+\date{\normalsize 22 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+This is a snapshot taken part way through data collection, not a result. As of
+this writing the study has researched 160 people, included 134 of them, and can
+compute its headline revenue-strict clock on 60 rows. On those 60 rows the
+median time from the end of formal education to a first \$10M constant-2026
+crossing is \textbf{9.2 years}, with a bootstrap 95\% confidence interval of
+8.5 to 13.0 years. The study's own pre-registered stopping rule reports
+\texttt{STOP: False}: neither the wave-over-wave stability criterion nor the
+precision criterion is met. If collection continues as it has been going, the
+figure the study is heading toward looks like roughly nine years of
+apprenticeship. That is a description of where the running estimate sits, not a
+finding. Above all, the median describes duration given success. It is
+conditioned on the outcome, it has no denominator, and the two strongest
+measured biases both push it short, so it should be read as a floor.
+\end{abstract}
+
+\section{Scope of this snapshot}
+
+\textbf{These numbers cover waves through wave 6 only.} The pilot (10 people)
+and waves 1 through 6 (25 people each) make 160 rows in
+\texttt{data/anchors.csv}. \textbf{Waves 7 and 8, covering p161 through p210,
+are drawn and in research right now, and they are not in any figure in this
+document.} When those waves close, every number here moves. Nothing in this
+report should be quoted without that qualification.
+
+The state described is: 160 people researched, 134 included, 26 excluded, and
+60 rows that satisfy the revenue-strict definition of the primary clock.
+
+\section{What is being measured}
+
+For each person the study records six dated career anchors: birth, end of
+formal education, first full-time paid work in the field of the eventual hit,
+first venture founded or independently authored, first hit, and the later scale
+event they are famous for now. From these it computes four clocks. The headline
+one is \texttt{clock\_education}, the number of years from
+\texttt{a2\_education\_end} to \texttt{a5\_first\_hit}.
+
+\subsection{The hit criterion}
+
+For the commercial buckets, a hit is the first year the person's own venture
+reached \textbf{\$10 million in constant 2026 US dollars}. The constant-dollar
+part is load-bearing, and it was a correction made after the pilot.
+
+A nominal \$10M threshold would have required a 1960 founder to build a
+business roughly eleven times larger in real terms than a 2020 founder before
+either counted as having hit. Since a large share of the sample has pre-1995
+careers, a nominal bar would have inflated exactly those apprenticeships and
+manufactured an era effect out of arithmetic. The deflated thresholds, from
+\texttt{python -m src.cpi}, make the point concrete.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Revenue year & \texttt{rev10} & \texttt{acq50} & \texttt{fund100} \\
+\midrule
+1960 & \$919,417 & \$4,597,087 & \$9,194,174 \\
+1995 & \$4,733,757 & \$23,668,786 & \$47,337,572 \\
+2020 & \$8,039,032 & \$40,195,159 & \$80,390,318 \\
+\bottomrule
+\end{tabular}
+\caption{Nominal dollar thresholds equivalent to the constant-2026 bars. The
+1960 bar is about one eleventh of the 2026 bar.}
+\end{table}
+
+Non-USD accounts are converted at the spot rate for the revenue year, then
+compared against that year's nominal threshold.
+
+Where revenue is undisclosed, an IPO or an acquisition above \$50M constant is
+permitted as a fallback basis, but only when no earlier crossing is known to
+have occurred. A qualitative claim in a source, that the venture was already
+large or industry-leading by a stated year, counts as establishing an earlier
+crossing and bars the fallback. In that case the row gets a bounded date
+\texttt{YYYY--YYYY} at most ten years wide, or it is excluded as
+\texttt{crossing\_undatable}. This is deliberately strict: dating a row by a
+later IPO produces a confidently sourced answer that is years wrong, which is
+how the first pilot dated Gordon Moore about eleven years late.
+
+The non-commercial buckets use per-bucket equivalents: a Nobel, Turing, Fields
+or Breakthrough prize announcement for \texttt{science\_research}; a
+million-person audience for \texttt{media\_creators}; a first \$100M constant
+fund for fund managers, or a first year topping a recognised industry ranking
+for analysts and economists; and revenue first, third-party volume rankings
+second, for \texttt{trade\_import\_logistics}. These are not commensurable with
+each other, which is precisely why the revenue-strict subset is the headline
+and the pooled figure is reported only alongside it.
+
+\section{Sample construction}
+
+\subsection{Buckets}
+
+The frame fixes eight field buckets with cumulative target shares. It was
+frozen on 31 July 2026 and revised once, on 11 August 2026, after the
+ten-person pilot. It has not been touched since wave 1 began, because changing
+the frame mid-collection would invalidate the stopping rule: the sample
+composition would no longer be stable across waves.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+Bucket & Target & \multicolumn{2}{c}{Drawn (160)} & \multicolumn{2}{c}{Included (134)} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+ & share & $n$ & share & $n$ & share \\
+\midrule
+\texttt{software\_internet}           & 25\% & 40 & 25.0\% & 36 & 26.9\% \\
+\texttt{hardware\_deeptech}           & 15\% & 24 & 15.0\% & 24 & 17.9\% \\
+\texttt{consumer\_retail\_industrial} & 13\% & 21 & 13.1\% & 13 & 9.7\% \\
+\texttt{science\_research}            & 12\% & 19 & 11.9\% & 19 & 14.2\% \\
+\texttt{investors\_finance}           & 10\% & 16 & 10.0\% & 14 & 10.4\% \\
+\texttt{media\_creators}              & 10\% & 16 & 10.0\% & 14 & 10.4\% \\
+\texttt{healthcare\_biotech}          & 10\% & 16 & 10.0\% & 9  & 6.7\% \\
+\texttt{trade\_import\_logistics}     & 5\%  & 8  & 5.0\%  & 5  & 3.7\% \\
+\bottomrule
+\end{tabular}
+\caption{Bucket shares as drawn and as they survive exclusion. Drawing tracks
+the target closely. Exclusion does not, and it pulls the analysed sample away
+from the frame; see Section~\ref{sec:quality}.}
+\end{table}
+
+\subsection{Named source lists}
+
+No name enters by free recall. Every roster entry cites the enumerated,
+third-party list it came from, and roster membership must be evidenced by a URL
+that names the person. Four names so far were credited to lists that turned out
+not to contain them. The lists are: Forbes 400 (self-made score 6 to 10);
+Forbes World's Billionaires (self-made); Midas List and Midas List Europe;
+Fortune 40 Under 40; the Nobel Prizes in Physics, Chemistry, Medicine and
+Economics; the Turing Award; the Fields Medal; the Breakthrough Prize; Time
+100; Y Combinator Top Companies; the Hurun Rich List for China and India;
+Nikkei and Toyo Keizai rankings for Japan; Maeil Business and Chosun Ilbo
+rankings for Korea; the Sunday Times Rich List; the Pulitzer Prize; the Academy
+Awards; the Grammy Awards; the Endeavor Entrepreneur network; and the Computer
+History Museum Fellow Awards.
+
+The last of these was added after wave 1 began. It was admitted on its own
+merits, as an enumerated annual third-party honour list for computing with the
+same shape as the Turing Award and Fields Medal already present, rather than to
+admit any particular name.
+
+\subsection{The selection rule}
+
+Selection is money-only. The procedure that has worked, and that is
+non-steering, is to enumerate a list in its published order and take the first
+entries whose hit entity appears nowhere in \texttt{data/anchors.csv} or
+\texttt{data/roster.csv}. Prominence is not a criterion in either direction.
+
+That last clause was learned the hard way. A wave-6 roster agent was told to
+prefer names it would not have recalled unprompted, and it duly rejected Peter
+Thiel, Vinod Khosla, Jensen Huang and the Hinton/Hopfield pair from enumerated
+lists as too obvious. Steering away from fame is a selection bias exactly as
+much as recalling famous names is, and the two do not cancel: they widen the
+variance and make the sample harder to characterise than either alone. This is
+recorded as bias 24.
+
+\subsection{Covariates, not quotas, and the wave-1 discontinuity}
+
+Country, era and sex were originally enforced as floors: non-US at least 30\%,
+pre-1995 hit at least 25\%, women at least 20\%, with any wave that would
+breach a floor rebalanced by hand before research began. \textbf{After wave 1
+the study author removed the floors.} The three variables are still recorded on
+every row and reported every wave, but they no longer steer who is drawn.
+
+The reasoning is that recording a variable lets you discover whether it moves
+the answer, while selecting on it guarantees you cannot, because you fixed it
+by hand. Era in particular is a genuine confounder for time-to-hit, since
+capital availability, addressable market size and information flow all changed
+around the internet era. Under quotas any drift was prevented and therefore
+invisible. Under covariates it is measurable.
+
+\textbf{This makes the sample a mixture of two sampling designs, and that must
+be stated before any median is read.} The pilot and wave 1, rows 1 to 35, were
+steered by hand and came in at 50\% pre-1995, 69\% non-US and 42\% women, well
+above what the source lists produce unaided. Waves 2 onward were not steered.
+The discontinuity is a step, not a gradient, and is recorded as bias 14. The
+honest treatment once $N$ is large is to report the post-change rows separately
+and check them against the pooled figure, not to retro-fit the early rows out:
+they are correctly collected data, collected under a different rule.
+
+The current cumulative composition of the 134 included rows is 86 non-US
+(64.2\%), 45 women (33.6\%), and 26 pre-1995 hits (19.4\%) against 108
+post-1995. If those shares drift hard, that is a finding to state, not a reason
+to resume rebalancing.
+
+\section{The current numbers}
+
+\caveat
+
+\subsection{Headline}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Revenue-strict $n$ & 60 \\
+Median \texttt{clock\_education} & 9.2 yr \\
+Bootstrap 95\% CI & 8.5 to 13.0 yr \\
+CI half-width & 2.25 yr \\
+Stopping-rule threshold on half-width & 1.00 yr \\
+\bottomrule
+\end{tabular}
+\caption{Output of \texttt{python -m src.stats analysis/clocks.csv} at 160
+people researched.}
+\end{table}
+
+Revenue-strict means the 60 included rows that carry hit basis
+\texttt{primary}, that is an actual dated \$10M constant crossing rather than a
+fallback or a per-bucket equivalent, and that also have a usable education
+year. Of the 134 included rows, 77 carry basis \texttt{primary}, 49
+\texttt{equivalent} and 8 \texttt{fallback}. The drop from 77 to 60 is missing
+education years, discussed in Section~\ref{sec:quality}.
+
+\subsection{Definition strictness}
+
+\caveat
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrl}
+\toprule
+Definition & $n$ & Median (95\% CI) \\
+\midrule
+Revenue-strict (\$10M revenue only)             & 60  & 9.2 yr (8.5 to 13.0) \\
+All commercial (plus IPO/acquisition fallback)  & 68  & 10.0 yr (8.5 to 13.5) \\
+Pooled (all buckets, mixed definitions)         & 103 & 14.0 yr (10.0 to 15.0) \\
+\bottomrule
+\end{tabular}
+\caption{The headline and the pooled figure differ by 4.8 years. The pooled
+number mixes prizes, audiences, funds and rankings with revenue crossings,
+which is why it is not the headline.}
+\end{table}
+
+\subsection{The other three clocks}
+
+\caveat
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrl}
+\toprule
+Clock & $n$ & Median (95\% CI) \\
+\midrule
+\texttt{clock\_education}   & 103 & 14.0 yr (10.0 to 15.0) \\
+\texttt{clock\_age18}       & 121 & 20.0 yr (18.0 to 23.0) \\
+\texttt{clock\_venture}     & 114 & 5.0 yr (4.0 to 6.5) \\
+\texttt{age\_at\_first\_hit}& 121 & 38.0 yr (36.0 to 41.0) \\
+\bottomrule
+\end{tabular}
+\caption{All four clocks, pooled across every bucket and hit basis. These are
+not the revenue-strict headline. They are printed together so a divergence
+between the education clock and the age-18 clock stays visible, since that
+divergence is the signal that the missing-education-year bias is biting.}
+\end{table}
+
+Note that \texttt{clock\_venture}, the years from first venture to first hit,
+sits at 5.0 years while the education clock sits far above it. Most of the
+measured apprenticeship is spent before the venture that hits exists.
+
+\subsection{Wave-by-wave median history}
+
+\caveat
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Wave closed & Revenue-strict $n$ & Median \\
+\midrule
+Pilot  & 13 & 10.0 yr \\
+Wave 1 & 21 & 9.0 yr \\
+Wave 2 & 28 & 8.8 yr \\
+Wave 3 & 34 & 9.0 yr \\
+Wave 4 & 45 & 9.0 yr \\
+Wave 5 & 52 & 9.8 yr \\
+Wave 6 & 60 & 9.2 yr \\
+\bottomrule
+\end{tabular}
+\caption{Contents of \texttt{analysis/wave\_medians.txt}. The median has stayed
+inside a 1.2-year band across seven closings while $n$ went from 13 to 60.}
+\end{table}
+
+This table is the basis for the claim in the abstract. The estimate has been
+sitting near nine years for six consecutive closings, and its movement is not
+growing. That is what "if the research keeps going as it has been, it looks
+like roughly nine years" means, and it is the limit of what the history
+supports. It describes where the running estimate has settled. It is not a
+converged result, and the stopping rule below says so formally.
+
+\section{The stopping rule}
+
+The rule is pre-registered in \texttt{src/stats.py} and has three parts.
+
+\begin{enumerate}
+\item Revenue-strict $n$ of at least 30 (\texttt{N\_FLOOR}). \textbf{Met}, at
+      $n = 60$. Below this floor the median is withheld entirely, in both the
+      CLI and \texttt{analysis.md}.
+\item Median drift under 0.50 years across two consecutive waves
+      (\texttt{MAX\_DRIFT}). \textbf{Not met}: the last two drifts are 0.80 and
+      0.60 years.
+\item Bootstrap CI half-width at or under 1.00 years
+      (\texttt{MAX\_HALF\_WIDTH}). \textbf{Not met}: it is 2.25 years.
+\end{enumerate}
+
+The CLI accordingly prints:
+
+\begin{quote}
+\texttt{STOP: False - median drift too large (0.80, 0.60 yr; need both < 0.50)}
+\end{quote}
+
+\subsection{Roughly what $n$ the rule implies}
+
+Bootstrap median precision improves approximately with the square root of $n$.
+Taking that at face value, closing the gap from a 2.25-year half-width to 1.00
+year needs about
+\[
+n \approx 60 \times \left(\frac{2.25}{1.00}\right)^{2} \approx 304
+\]
+revenue-strict rows. At the current yield of 60 revenue-strict rows per 160
+people researched, that is on the order of \textbf{800 people}, or roughly 26
+further waves of 25.
+
+Three qualifications on that arithmetic. First, the square-root rule is an
+approximation and a bootstrap half-width for a median does not follow it
+exactly, so the figure is an order of magnitude rather than a target. Second,
+the yield ratio is not fixed: it depends on the exclusion rate and on the
+missing education years discussed below, and improving either would lower the
+people count without lowering the row count. Third, and most seriously, bias 23
+means the half-width criterion can be satisfied on precision the study has not
+earned; see Section~\ref{sec:limits}. Note that
+\texttt{docs/HANDOFF.md} carries an older and lower estimate of this figure,
+computed against a different half-width; the arithmetic above uses the current
+2.25.
+
+The rule refusing to call the number settled is correct behaviour, not a
+failure. Stopping earlier and reporting the median with its actual interval,
+plus the honest statement that it has not converged, is also a legitimate
+scientific outcome. Which of those happens is a decision for the study author.
+
+\section{Data quality}
+\label{sec:quality}
+
+\subsection{The exclusion audit}
+
+Twenty-six of 160 rows are excluded, 16.2\%. Excluded rows appear in no other
+table in the analysis, so a bias in what gets excluded is only visible here.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Exclusion reason & $n$ \\
+\midrule
+\texttt{crossing\_undatable}   & 22 \\
+\texttt{roster\_unverified}    & 3 \\
+\texttt{criterion\_never\_met} & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Why rows were dropped. An honest exclusion beats a fabricated date,
+and every one of these has survived independent re-checking.}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Cross-cut & Included & Excluded & Exclusion rate \\
+\midrule
+US     & 48 & 8  & 14.3\% \\
+non-US & 86 & 18 & 17.3\% \\
+women  & 45 & 6  & 11.8\% \\
+men    & 89 & 20 & 18.3\% \\
+\midrule
+\texttt{hardware\_deeptech}           & 24 & 0 & 0.0\% \\
+\texttt{science\_research}            & 19 & 0 & 0.0\% \\
+\texttt{software\_internet}           & 36 & 4 & 10.0\% \\
+\texttt{investors\_finance}           & 14 & 2 & 12.5\% \\
+\texttt{media\_creators}              & 14 & 2 & 12.5\% \\
+\texttt{trade\_import\_logistics}     & 5  & 3 & 37.5\% \\
+\texttt{consumer\_retail\_industrial} & 13 & 8 & 38.1\% \\
+\texttt{healthcare\_biotech}          & 9  & 7 & 43.8\% \\
+\bottomrule
+\end{tabular}
+\caption{Exclusion is not uniform. Two buckets lose nothing; two lose nearly
+half. Era is not audited here, because an excluded row usually lacks the hit
+year that era derives from, and judging a discarded row's era by hand would be
+an inference rather than a measurement.}
+\end{table}
+
+The bucket pattern is the important one. \texttt{healthcare\_biotech} and
+\texttt{consumer\_retail\_industrial} lose roughly two rows in five, almost
+entirely to \texttt{crossing\_undatable}, because private companies in those
+sectors do not publish early revenue. That is a whole-bucket failure mode
+rather than scattered bad luck, and it is the same problem that once excluded
+\texttt{trade\_import\_logistics} at 100\%, before the third-party volume
+ranking criterion was added.
+
+\subsection{Bounded dates}
+
+\textbf{64 of the 134 included rows carry a bounded
+\texttt{a5\_first\_hit}}, recorded as \texttt{YYYY--YYYY} with a source for
+each end and a maximum span of ten years. Counting any bounded anchor rather
+than \texttt{a5} alone, 65 of 134 rows are affected. The clocks use the
+midpoint, and the report prints a sensitivity run so the uncertainty stays
+visible.
+
+\caveat
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrl}
+\toprule
+Treatment & $n$ & Median (95\% CI) \\
+\midrule
+Bounded rows dropped        & 54  & 16.0 yr (13.0 to 19.0) \\
+All rows, span midpoints    & 103 & 14.0 yr (10.0 to 15.0) \\
+All rows, earliest possible & 103 & 12.0 yr (9.0 to 14.0) \\
+All rows, latest possible   & 103 & 14.0 yr (12.0 to 18.0) \\
+\bottomrule
+\end{tabular}
+\caption{Bounded-date sensitivity, pooled across all buckets and hit bases.
+This run qualifies the pooled median, not the revenue-strict headline. The
+envelope rows show the full range the data permits.}
+\end{table}
+
+A bounded date is a real measurement rather than a guess. \texttt{1960--1961}
+says the sources place the event in those two years, whether from two sources
+bracketing it or from one stating the range. A company's founding year is a
+valid lower bound, since it cannot earn revenue before it exists. It is not
+licence to widen a range until it contains a convenient year.
+
+\subsection{The binding constraint is now \texttt{a2}, not \texttt{a5}}
+
+\textbf{31 of the 134 included rows have
+\texttt{a2\_education\_end = unknown}.} Those rows contribute nothing to the
+headline clock, because the headline clock counts from the education year.
+This, and not the datability of the hit, is now what limits the study: 77
+included rows carry a \texttt{primary} hit basis, but only 60 reach the
+revenue-strict median.
+
+The loss is not random. When a person finished school is well documented for US
+and UK figures and poorly documented for Indian and Chinese founders of the
+1970s and 1980s, and for anyone whose path did not run through a credential
+worth reporting. So the education clock is silently conditioned on people whose
+schooling was recorded, which means Western, credentialed and recent, even
+though selection into the study is money-only. A targeted second pass on an
+earlier cohort of ten such rows resolved six, and all four that stayed unknown
+were non-US.
+
+\subsection{Confidence}
+
+\caveat
+
+96 of the 134 included rows fall below high confidence on at least one anchor.
+Restricting the pooled clock to high-confidence rows only gives 21.0 years (95\%
+CI 14.0 to 27.5) on $n = 38$, against 14.0 years on all 103. Those diverge by
+7.0 years, which is the clearest signal in the dataset that the pooled median
+cannot be read as a point estimate. Both rows of that comparison pool every
+bucket and hit basis, so the run qualifies the pooled figure and not the
+revenue-strict headline.
+
+\section{Limitations}
+\label{sec:limits}
+
+\texttt{docs/BIASES.md} catalogues 24. The ones that bear on reading the
+current number are below, each with the direction it pushes.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{p{0.05\textwidth}p{0.50\textwidth}p{0.30\textwidth}}
+\toprule
+\# & Bias & Direction \\
+\midrule
+1 & Survivorship. Everyone in the sample succeeded. Nobody appears who worked
+    twelve or twenty years and never crossed. & Not a shift in value but a hard
+    limit on meaning. Uncorrectable by more data. \\
+\addlinespace
+2 & Extreme-outcome selection, modest-milestone dating. Buckets are filled from
+    lists that select the very top, but each person is dated at a milestone
+    most passed decades earlier. People who ultimately reached Bezos scale
+    probably crossed \$10M faster than people who crossed it and stopped there.
+    & \textbf{Short.} \\
+\addlinespace
+3 & Selection into \texttt{primary} is non-random. A crossing is datable mainly
+    when the company disclosed revenue early, which favours fast risers, and
+    that is exactly the subset the stopping rule tracks. & \textbf{Short.} \\
+\addlinespace
+5 & Residual fallback lag on the 8 rows that legitimately use IPO or
+    acquisition dating. & Long, on affected rows. \\
+\addlinespace
+6 & The \$10M level is a judgment, not a natural boundary. & Unknown. A lower
+    bar would shorten every clock. \\
+\addlinespace
+7 & Non-commercial equivalents are not commensurable with revenue or with each
+    other. & Unknown; adds variance to the pooled median only. \\
+\addlinespace
+14 & The sample mixes two sampling designs. Rows 1 to 35 were steered; rows 36
+    onward were not. & Unsigned, and a step rather than a gradient. \\
+\addlinespace
+17 & The education clock is conditioned on documented schooling, and the 31
+    missing years skew non-US and pre-1995. & Plausibly short. \\
+\addlinespace
+18 & Single-pass research has a measured miss rate. A rescue pass on 14
+    excluded rows found 3 of 13 \texttt{crossing\_undatable} rows to be
+    datable, and the recoveries skewed non-US and pre-1995. & Composition.
+    Every standing exclusion is weaker evidence than it looks. \\
+\addlinespace
+22 & Blind-audit isolation is enforced by instruction, not by environment. Wave
+    6's four concurrent research agents left 54 artifacts, including finished
+    per-person answers, in a shared scratchpad. & If it ever fails it inflates
+    apparent reliability, undetectably. \\
+\addlinespace
+23 & Co-founders of one company are not independent observations. p70 Dubinsky
+    and p94 Hawkins both date to 1995 at Palm Computing: two people, one event.
+    & \textbf{Falsely narrows the CI}, which attacks the stopping rule
+    directly. \\
+\addlinespace
+24 & Steering away from fame is still steering. & Unknown, plausibly opposite
+    to recall bias. Two opposing biases widen variance rather than cancelling. \\
+\bottomrule
+\end{tabular}
+\caption{Selected biases and their directions, numbered as in
+\texttt{docs/BIASES.md}.}
+\end{table}
+
+Two points deserve stating outside the table.
+
+\textbf{The two strongest identified effects both push short.} Biases 2 and 3
+work in the same direction, and nothing of comparable strength pushes the other
+way. The working assumption should therefore be that the true median for a
+normal successful career is longer than 9.2 years, and that the reported figure
+is a floor.
+
+\textbf{Bias 1 sits above all of it and cannot be corrected.} However precise
+the figure becomes, it describes people who made it. The people who worked
+twenty years and did not are absent by construction, not by rarity. A median of
+9.2 years supports the sentence "among people who eventually hit, the middle
+one took about 9.2 years." It does not support any sentence about the
+probability of hitting, because that needs a denominator and this dataset has
+none. Timing how long lottery winners held their tickets gives a real number,
+correctly computed, that says nothing about whether buying tickets is wise.
+$N = 1000$ would make the median precise and leave it exactly as uninformative
+about odds.
+
+Two mitigations that worked are worth recording alongside the failures. The
+strongest reliability evidence the study has produced is a six-platform
+cross-check, 60 comparisons with zero conflicts, on rows verified with no
+access to the repository at all. And wave 6's blind audit came back at 0.00
+disagreement on 10 drawn rows, with one second-pass-only miss.
+
+\section{What happens next}
+
+\begin{enumerate}
+\item \textbf{Close waves 7 and 8}, p161 through p210, currently in research.
+      That takes the sample to 210 people and will move every figure here.
+\item \textbf{Re-run the pipeline} on the merged file: \texttt{src.clocks},
+      \texttt{src.report}, then \texttt{src.stats --history}. Two more wave
+      medians enter \texttt{analysis/wave\_medians.txt} and the drift criterion
+      is re-evaluated against them.
+\item \textbf{Attack \texttt{a2}, since it is the binding constraint.} A
+      targeted second pass on the 31 included rows with an unknown education
+      year would add rows to the headline clock without researching a single
+      new person, and would specifically recover the non-US and pre-1995
+      careers the clock is currently missing.
+\item \textbf{Run a second independent pass on the 22
+      \texttt{crossing\_undatable} rows.} The measured recovery rate on an
+      earlier batch was roughly one in four, concentrated in non-English
+      sources.
+\item \textbf{Decide the Palm pair} (bias 23) and adopt a one-row-per-hit-event
+      rule, entity plus year, rather than one row per person. That matters
+      before the CI half-width is trusted, not after.
+\item \textbf{Fix the blind-audit isolation} (bias 22) by running second passes
+      in a clean working directory with no access to first-pass artifacts, and
+      by carving the \texttt{data/anchors.csv} instruction out of any brief
+      handed to an auditor.
+\item \textbf{Resolve the seven items in \texttt{docs/OPEN-QUESTIONS.md}}, two
+      of which decide whether a recorded row is included or excluded.
+\end{enumerate}
+
+Whether the study runs to the stopping rule's roughly 800 people, or stops
+earlier and reports the interval as it stands, is the study author's call. Both
+are defensible. Only one of them is currently the pre-registered default.
+
+\vspace{1.5em}
+\noindent\rule{\linewidth}{0.4pt}
+
+\footnotesize
+\noindent Every figure in this document was computed from the repository at 160
+rows in \texttt{data/anchors.csv}. Medians and intervals come from
+\texttt{python -m src.stats analysis/clocks.csv} and
+\texttt{analysis/analysis.md}; wave history from
+\texttt{analysis/wave\_medians.txt}; thresholds from \texttt{python -m src.cpi};
+counts from \texttt{data/anchors.csv} and \texttt{analysis/clocks.csv}
+directly. Bias numbering follows \texttt{docs/BIASES.md}.
+
+\end{document}
