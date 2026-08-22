@@ -674,3 +674,396 @@ p141's own `clock_venture` under each span (a4 = 2013): `2015-2024` → **6.5**;
    `curl` against SEC EDGAR and named URLs, so no finding depends on a search
    engine — but a further keyword sweep for a 2021-2023 Alpaca revenue figure
    could not be run.
+
+---
+
+# 3. Q7 — p146 Mateo Marietti (CookUnity / Sushi Pop)
+
+## 3.1 The question as written, and why it is the interesting one
+
+> "What was the annual revenue of POP / Sushi Pop (the Argentine restaurant group
+> co-founded by Mateo Marietti and Diego Araujo in 2007/08, which grew to eight
+> brands in four countries) in any year between 2010 and 2021? **Group revenue,
+> not the Sushi Pop brand alone.** Quote the figure, the year and the source URL."
+
+> "this is the one row where the blind audit's second pass reached a different
+> verdict than the first, and the disagreement metric could not see it because
+> the first pass returned `unknown`."
+
+The audit-visibility point is worth restating for the author because it
+generalises: the disagreement metric compares recorded values, and `unknown`
+compares equal to `unknown`. **A first pass that excludes a row and a second pass
+that includes it with a dated bound score as agreement.** That is a defect in the
+metric, not in either pass, and it is a close cousin of `BIASES.md` 22's
+complaint that "a blind audit that has silently stopped being blind looks exactly
+like a blind audit that passed."
+
+## 3.2 The governing rule, quoted
+
+`frame.md`, commercial buckets:
+
+> "1. `rev10` — first year **the person's own venture** reached the
+> constant-dollar $10M threshold. Basis `primary`."
+
+and on what counts as knowing a crossing happened:
+
+> "A qualitative claim in a source — that the venture was already large,
+> profitable, or industry-leading by a stated year — is enough to establish that
+> an earlier crossing occurred, even with no dollar figure attached. **Only the
+> *year* needs pinning or bounding, not the crossing itself.**"
+
+and on bounds:
+
+> "record the anchor as `YYYY-YYYY` — low year first, **at most 10 years wide
+> (arithmetic difference, so 1960-1970 is the widest permitted range)**"
+
+> "A bounded date is a real measurement, not a guess. … **It is not licence to
+> widen a range until it contains a year you like.**"
+
+The serial-founder consequence: POP (2007/08) precedes CookUnity on any reading,
+so **POP must be settled before CookUnity is even reached.**
+
+## 3.3 The Sushi Pop / POP evidence, re-verified from source
+
+### Currency basis, re-derived
+
+World Bank indicator `PA.NUS.FCRF`, official annual-average ARS/USD, fetched
+directly from
+<https://api.worldbank.org/v2/country/ARG/indicator/PA.NUS.FCRF?date=2007:2022&format=json>:
+
+| year | ARS per USD |
+|---|---|
+| 2009 | 3.71010683052328 |
+| 2010 | 3.89629515447050 |
+| 2011 | 4.11013957621326 |
+| 2018 | 28.0949916666667 |
+| 2021 | 94.9907416666667 |
+
+These match the row's `notes` exactly (2009: 3.7101, 2018: 28.0950). No error
+there.
+
+### The 2009 figure — confirmed, and it carries a SECOND figure the row does not use
+
+El Cronista, "Un sushi barato para competir con la pizza y las empanadas"
+(8 March 2010),
+<https://www.cronista.com/impresa-general/un-sushi-barato-para-competir-con-la-pizza-y-las-empanadas/>.
+Verbatim:
+
+> "Hace apenas un año y medio estos dos emprendedores sub-30 fundaron Sushi Pop"
+
+> "cerró 2009 con una **facturación de $ 3 millones**"
+
+> "Durante este año, **tienen previsto triplicar esa cifra**"
+
+> "ya cuenta con **tres sucursales**"
+
+> "Hoy la cadena responde unos **500 pedidos diarios**"
+
+> "la cantidad de empleados –**ya suman 200**–"
+
+> "van de menos de $ 1 a $ 2 por pieza" (competitors "arrancan en los $ 3 por
+> pieza")
+
+Against the constant-2026-dollar bars:
+
+| year | ARS | rate | USD | rev10 bar | % of bar |
+|---|---|---|---|---|---|
+| 2009 (actual) | 3,000,000 | 3.71011 | **$808,602** | $6,663,819 | **12.1%** |
+| 2010 (founders' projection, "triplicar") | 9,000,000 | 3.89630 | **$2,309,887** | $6,773,124 | **34.1%** |
+| 2018 (projection, La Nación) | 200,000,000 | 28.09499 | **$7,118,707** | $7,799,735 | **91.3%** |
+
+**The 2010 projection is new to this file and it matters.** At 34.1% of bar it
+sits nowhere near the threshold — a 66% margin, far outside the 20% flag zone
+that disqualified the 2018 figure. If the author is willing to treat a founder
+projection reported by a national business daily as a below-bar anchor at all,
+2010 is a far safer instance of that class than 2018 is. **It moves the lower end
+of the bracket from 2009 to 2010 — and 2010-2021 is 11 years, still one year over
+the cap.** So it improves the bracket without rescuing it.
+
+### The 2018 figure — why it cannot decide, quantified both ways
+
+The row's `notes` reject the La Nación April 2018 figure (350 employees, five
+Izakaya restaurants, "la compañía proyecta facturar $200 millones") as too close
+to the bar. I could not re-fetch the La Nación article — the URL I attempted
+returned 404 and, with WebSearch budget exhausted (see 3.6), I could not locate
+the live one. Taking the figure as the row records it, the arithmetic is:
+
+- **ARS needed to reach the 2018 bar: 219,133,490 — i.e. 109.6% of the ARS 200M
+  projection.** POP had to beat its own April projection by 9.6% to cross.
+- Argentine CPI inflation in 2018 ran roughly 47.6%, so a projection struck at
+  Q1-2018 menu prices would very likely be beaten in nominal pesos.
+- **But the peso fell harder than prices rose**: the annual-average rate went
+  16.5627 (2017) → 28.0950 (2018), a 69.6% depreciation against 47.6% inflation.
+  So the USD figure would tend to fall even as the ARS figure rose.
+
+**These two effects run in opposite directions and neither is sourced.** The
+honest conclusion is the first pass's: a projection sitting within 9.6% of the
+bar, in a currency that lost 41% of its value inside the measurement year, cannot
+serve as either end of a bound. `frame.md`'s "not licence to widen a range until
+it contains a year you like" applies symmetrically to narrowing one.
+
+### The qualitative scale claim — re-verified, and it is genuinely dated 2021
+
+Endeavor Argentina's entrepreneur profile,
+<https://www.endeavor.org.ar/emprendedores/mateo-marietti/>, verbatim:
+
+> "cofundó POP y le dio a los clientes la oportunidad de elegir diferentes
+> estilos de comida a través de **8 marcas**, una de ellas, la conocida Sushi POP"
+
+> "En pocos años, su modelo innovador escaló a **4 países de la región** y **hoy
+> emplea a más de 1000 personas** en Sudamérica"
+
+and the announcement item of 21 April 2021,
+<https://www.endeavor.org.ar/mateo-marietti-argentino-escalo-cookunity-estados-unidos-se-suma-la-red-endeavor/>,
+repeats "8 marcas", "4 países de la región", "más de 1000 personas en
+Sudamérica", gives his age as "36", and dates the CookUnity Series A: "ronda de
+inversión Serie A de 15,5 millones de dólares" raised "**A finales de 2020**".
+
+**I tried and failed to date the eight-brand / four-country / 1,000-employee
+state to any year earlier than 2021, and the surrounding evidence says it really
+does belong to ~2021 rather than earlier:**
+
+- March 2010 (El Cronista): **three** sucursales, **200** employees, one brand.
+- April 2018 (La Nación, per the row's notes): **350** employees, **five**
+  Izakaya restaurants.
+- April 2021 (Endeavor): **8** brands, **4** countries, **1,000+** employees.
+
+So the "already large" claim `frame.md` accepts attaches to 2021, not to 2016 or
+2018. **This is the finding that most strengthens the first pass's exclusion**,
+and it is the opposite of what I expected to find when I went looking: had any
+source dated the 4-country footprint to 2016 or earlier, the bracket would have
+closed at 2009-2016 (7 years) and the row would be rescued as a POP hit. No such
+source surfaced.
+
+### An internal inconsistency in the source base, flagged not used
+
+The employee-to-revenue ratios in these sources do not reconcile:
+
+- 2018: 350 employees ↔ US$7.12M = **~US$20,300 revenue per employee** —
+  plausible for Argentine restaurants.
+- 2009: 200 employees ↔ US$0.81M = **~US$4,040 revenue per employee** —
+  implausible. Argentina's minimum wage in 2009 was around ARS 1,400/month;
+  200 employees at that wage with the statutory 13th month is roughly ARS 3.6M of
+  payroll alone, i.e. **more than the ARS 3M of revenue reported for the same
+  period.**
+
+At least one of the two 2010-article numbers is measuring something other than
+what it appears to (franchisee headcount counted in, or ARS 3M being a
+company-level rather than system-wide figure). **I record this as a caution
+against leaning on headcount as a revenue proxy anywhere in this row — including
+against reading the 1,000-employee 2021 claim as a quantitative statement.** It
+is not evidence for any year and I have not used it as such.
+
+## 3.4 The CookUnity leg — a primary-source finding that changes the second pass's arithmetic
+
+**CookUnity Inc. is an EDGAR filer: CIK 0001766491**, Delaware, 630 Flushing
+Avenue, Brooklyn NY. It has filed **twelve** Form D / D/A notices. Parsed
+directly from the XML:
+
+| filed | accession | year of incorporation | previous name | revenue range | total sold | date of first sale | signed |
+|---|---|---|---|---|---|---|---|
+| 2019-02-06 | 0001766491-19-000001 | **2014** (`withinFiveYears: true`) | None | **Decline to Disclose** | $3,157,807 | 2019-01-15 | **Mateo Marietti** |
+| 2019-02-15 | 0001766491-19-000002 | **2014** | None | Decline to Disclose | $1,400,000 | — | Mateo Marietti |
+| 2020-01-03 | 0001766491-20-000001 | `overFiveYears: true` | **Cookunity LLC** | Decline to Disclose | $2,537,388 | 2019-12-20 | Mateo Marietti |
+| 2020-02-25 (D/A) | 0001766491-20-000002 | overFiveYears | — | Decline to Disclose | $1,846,799 | — | Mateo Marietti |
+| 2020-09-22 (D/A) | 0001766491-20-000003 | overFiveYears | — | Decline to Disclose | $4,699,999 | — | Mateo Marietti |
+| 2021-01-07 | 0001766491-21-000001 | overFiveYears | None | Decline to Disclose | $4,034,794 | 2020-12-24 | Mateo Marietti |
+| 2021-04-06 | 0001766491-21-000002 | overFiveYears | — | Decline to Disclose | $141,012 | — | Mateo Marietti |
+| 2022-12-08 | 0001766491-22-000002 | overFiveYears | Cookunity LLC | Decline to Disclose | $4,540,529 | 2022-11-28 | Mateo Marietti |
+| 2023-04-27 | 0001766491-23-000001 | overFiveYears | Cookunity LLC | Decline to Disclose | **$46,999,985** | **2021-06-16** | Mateo Marietti |
+| 2024-10-30 | 0000950123-24-010019 | overFiveYears | None | Decline to Disclose | $11,250,000 | 2024-10-15 | /s/ James Cosgrove |
+| 2024-11-14 | 0000950123-24-011668 | overFiveYears | — | Decline to Disclose | $12,999,990 | — | /s/ James Cosgrove |
+| 2025-04-08 | 0000950123-25-003383 | overFiveYears | — | Decline to Disclose | $24,162 | — | /s/ James Cosgrove |
+
+Verbatim from the first one,
+<https://www.sec.gov/Archives/edgar/data/1766491/000176649119000001/primary_doc.xml>:
+
+```xml
+<entityName>CookUnity Inc.</entityName>
+<jurisdictionOfInc>DELAWARE</jurisdictionOfInc>
+<yearOfInc>
+    <withinFiveYears>true</withinFiveYears>
+    <value>2014</value>
+</yearOfInc>
+<issuerSize><revenueRange>Decline to Disclose</revenueRange></issuerSize>
+<signatureName>Mateo Marietti</signatureName>
+```
+
+**Three consequences.**
+
+1. **CookUnity's founding year of record with the SEC is 2014, not 2018**, signed
+   by Marietti himself, and the entity previously existed as "Cookunity LLC".
+   Every secondary source the row relies on — Endeavor's infobox ("Founded:
+   2018"), the row's own note that CookUnity was "founded after he moved to the
+   United States in 2016" — is contradicted by the company's own federal filing.
+   This is the same class of correction as the Alpaca Form D in section 2.
+2. **The second pass's proposed bound of `2018-2025` does not survive it.** If
+   the lower bound is the hit entity's founding year, that is 2014, and
+   **2014-2025 is 11 years — over the cap.** I verified this in code: feeding
+   p146 `2014-2025` yields `era=''` and all three clocks `None`, exactly as
+   `2013-2024` does for p141. The second pass's verdict was reached without this
+   filing.
+   *However*, `2014-2024` is exactly 10 and **is** admissible (`frame.md`:
+   "at most 10 years wide (arithmetic difference…)"), so the second pass's
+   conclusion can be rescued by moving the upper end to the sourced 2024 revenue
+   rather than the 2025 ARR.
+3. **All twelve filings say "Decline to Disclose" on revenue range.** The trick
+   that settled Alpaca's founding year gives nothing on CookUnity's revenue. The
+   regulator route is closed here too.
+
+**The CookUnity below-bar anchor the row already holds is better than the
+founding year anyway.** The row's `notes` record CookUnity's "own revenue was
+only about US$2M at its 2018 peak before he shut that line down". US$2M vs the
+2018 bar of $7,799,735 = **25.6% of bar** — comfortably below, outside the flag
+zone. Paired with the sourced US$350M for 2024 (**3,592% of the 2024 bar**), that
+gives **2018-2024, span 6**, which is tighter and better-founded than either
+`2018-2025` or `2014-2024`.
+
+Datable further? The $47M round with **date of first sale 16 June 2021** (the row
+records this as "September 2021"; the SEC says June) and the 2022 Series C make a
+2021 or 2022 crossing very likely, but **no revenue figure for CookUnity in any
+year between 2019 and 2023 was found**, so the upper end cannot honestly move
+below 2024.
+
+## 3.5 Options and consequences
+
+Recomputed with `src.clocks` + `src.stats.bootstrap_median_ci` (seed 0, 10,000
+iters). p146's own clocks, for `a2 = 2007`, `a4 = 2007-2008`:
+
+| hit span | entity | clock_education | clock_venture | age_at_hit | admissible? |
+|---|---|---|---|---|---|
+| `2009-2021` | POP | — | — | — | **no** (12 > 10) |
+| `2010-2021` | POP | — | — | — | **no** (11 > 10) |
+| `2018-2021` | POP | 12.5 | 12.0 | 35.0 | yes (3) |
+| `2014-2025` | CookUnity | — | — | — | **no** (11 > 10) |
+| `2014-2024` | CookUnity | 12.0 | 11.5 | 34.5 | yes (10, at the cap) |
+| `2018-2025` | CookUnity | 14.5 | 14.0 | 37.0 | yes (7) |
+| `2018-2024` | CookUnity | 14.0 | 13.5 | 36.5 | yes (6) |
+
+Sample effect:
+
+| scenario | education n / med / half | venture n / med / half | age n / med / half |
+|---|---|---|---|
+| **status quo — p146 excluded** | 103 / **14.00** / **2.500** | 114 / 5.00 / 1.250 | 121 / **38.00** / 2.500 |
+| in as `2018-2025` | 104 / **14.00** / 2.750 | 115 / 5.00 / 1.250 | 122 / 37.50 / 2.000 |
+| in as `2018-2024` | 104 / **14.00** / 2.750 | 115 / 5.00 / 1.250 | 122 / 37.50 / 2.000 |
+| in as `2014-2024` | 104 / **14.00** / 2.750 | 115 / 5.00 / 1.250 | 122 / 37.50 / 2.250 |
+| in as `2018-2021` | 104 / **14.00** / 2.750 | 115 / 5.00 / 1.250 | 122 / 37.50 / 2.250 |
+
+**One correction to the framing in `OPEN-QUESTIONS.md`.** It says "including it
+would add a clock of roughly 14 years, which is long, and the study's two
+strongest known biases both push the median short." The first half is confirmed
+(14.5 / 14.0 under `2018-2025`). **The second half does not follow: the median
+does not move.** It is 14.00 in every scenario above, because a single 14-year
+observation added at the median cannot shift a 103-observation median. What
+changes is the interval (half-width 2.500 → 2.750, correctly widening) and the
+age median (38.00 → 37.50). So the "it would help correct a short bias" argument
+for inclusion is **not supported by the arithmetic** — inclusion is a
+data-completeness question, not a bias-correction lever.
+
+### Option 1 — keep excluded, `crossing_undatable` (status quo, first-pass verdict)
+
+- **The rule:** `frame.md` says a qualitative scale claim establishes an earlier
+  crossing; Endeavor's 2021 claim does that for POP; the best sourced below-bar
+  year for POP is 2009 (or 2010 on the projection), and 2009-2021 = 12 /
+  2010-2021 = 11, both over the cap. `frame.md` then requires
+  `excluded = true, crossing_undatable`.
+- **Strengthened by this pass**, not weakened: the 3 → 5 → 8 brand and 200 → 350
+  → 1,000 employee progression shows the scale claim genuinely belongs to 2021,
+  closing the one route that could have rescued POP as a dated hit.
+- **Cost:** 133 included; the discard pile keeps a fully-researched row; the
+  Argentine / non-US row count stays one lower, feeding `BIASES.md` 4
+  ("Exclusion correlates with era and geography") and 4c.
+
+### Option 2 — include as CookUnity `2018-2024` (span 6) — second pass, repaired
+
+- **The rule:** hold that POP never *demonstrably* crossed, on the ground that
+  every dated POP figure is below bar (12.1%, 34.1%, 91.3%) and the only
+  above-bar evidence is a headcount claim the 2009 arithmetic shows is an
+  unreliable revenue proxy (3.3). Then CookUnity is the first venture with a
+  sourced crossing, bounded from its sourced below-bar 2018 (US$2M, 25.6% of bar)
+  to its sourced above-bar 2024 (US$350M, 3,592% of bar).
+- **Better than the second pass's own `2018-2025`**: span 6 rather than 7, and it
+  sidesteps the 2014 founding-year problem by using a below-bar year rather than
+  the founding year as the lower end — which `frame.md` prefers anyway, since the
+  founding-year rule is offered as a fallback ("Where the earliest published
+  figure is already above threshold, bound the crossing from the entity's
+  founding to that figure's year").
+- **What it costs:** it requires overriding `frame.md`'s explicit instruction
+  that a qualitative claim suffices — "A qualitative claim … is enough to
+  establish that an earlier crossing occurred, even with no dollar figure
+  attached." Choosing this option is choosing to disbelieve Endeavor's own
+  description of a company its network vetted. That is a defensible call but it
+  is a call *against* the frame's text, and it should be recorded as such.
+- Sample: 134 included; education half-width 2.500 → 2.750; median unchanged.
+
+### Option 3 — include as CookUnity `2014-2024` (span 10, at the cap)
+
+- Uses the SEC founding year as the lower bound instead of the US$2M 2018 figure.
+  Strictly more conservative about the lower end, at the price of sitting exactly
+  on the 10-year limit and pulling the midpoint back to 2019 — which is almost
+  certainly too early, since CookUnity had ~US$2M of revenue in 2018 and was
+  still raising $2-5M tranches through 2020.
+- Recommended against on the evidence: where a sourced below-bar year exists, it
+  dominates the founding-year fallback. Recorded for completeness because the
+  2014 filing is real and an author who distrusts the US$2M figure may want it.
+
+### Option 4 — include as POP `2018-2021` (span 3)
+
+- The bound the first pass explicitly refused: "Using it as a lower end would
+  produce a tidy 2018-2021 bound that is exactly the kind of stretched bound
+  frame.md forbids." I agree, and section 3.3 quantifies why — the 2018 figure is
+  a pre-year projection sitting 9.6% under the bar in a year the currency lost
+  41%.
+- Recorded only so the author can see it was tested, not overlooked.
+
+### Option 5 — record the audit-metric defect regardless of the row decision
+
+Independent of which of 1-4 is chosen, the fact that a first-pass `unknown` and a
+second-pass dated bound score as *agreement* is a live measurement problem for
+`BIASES.md` 18/19, which calibrate the audit rule against a measured
+disagreement rate. Costs nothing and changes no data.
+
+## 3.6 What is still genuinely unresolved
+
+1. **No group-level revenue figure for POP exists in any source I could reach**,
+   for any year. Q7 asks exactly the right question and it is still open. Every
+   number in the record describes the Sushi Pop brand (2009, 2018) rather than
+   the eight-brand group, which is precisely the ambiguity `OPEN-QUESTIONS.md`
+   identifies: "the dated figures describe the Sushi Pop *brand*, while the
+   qualitative claim describes the eight-brand *group*".
+2. **The La Nación April 2018 article could not be re-fetched** (404 on the URL I
+   tried; WebSearch budget exhausted). Its figures are taken as the row records
+   them and were not independently re-verified in this pass. Everything that
+   turns on the 91.3%-of-bar number therefore rests on the first pass's
+   transcription.
+3. **No CookUnity revenue figure for 2019-2023 was found**, so the upper end of
+   any CookUnity bound cannot honestly move below 2024 even though the funding
+   pattern strongly suggests a 2021-2022 crossing.
+4. **Whether "1,000+ employees across 8 brands in 4 countries" is a claim about
+   Marietti's *own venture* is itself unexamined.** He moved to the US in 2016
+   and founded CookUnity; POP's 2021 scale may postdate his operational
+   involvement. `frame.md` does not say the founder must still be present at the
+   crossing, so this does not change the analysis — but nobody has checked
+   whether he still owned POP in 2021, and it is the kind of thing that would
+   matter if the frame were ever tightened.
+5. **Budget note:** WebSearch was exhausted during section 2 and both
+   DuckDuckGo HTML endpoints returned JS challenges to `curl`, so section 3 was
+   researched entirely by direct URL fetch and SEC EDGAR. Targeted keyword
+   searching for a POP group revenue figure and for CookUnity 2021-2022 revenue
+   was **not possible** and is the obvious next step for whoever picks this up.
+
+---
+
+## Cross-cutting note for the author
+
+Two of the three items turned on the same trick: **the company's own SEC Form D
+carries a signed `yearOfInc`, and in both cases it contradicted the secondary
+sources the rows were built on** (AlpacaDB → 2015, confirming the row; CookUnity
+Inc. → 2014, contradicting every source that says 2016 or 2018). Neither pass
+checked for a parent-company EDGAR filer, only for the operating subsidiary or
+not at all. **For any US-incorporated private venture in this study, a Form D
+lookup is a cheap, primary-source founding-year check** — and the founding year
+is load-bearing under `frame.md`'s bounded-date rule, because it sets the lower
+end of a great many brackets. Worth a sweep across the existing US rows,
+independent of these three decisions.
