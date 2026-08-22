@@ -411,3 +411,266 @@ tie-break for which of the two goes, which is where B vs C vs D returns.
    to leave A in place and print the sensitivity.
 4. **p70's `a5_first_hit_src` is dead with no archive**, independent of the pair
    decision. A fixable data-quality defect regardless of outcome; not fixed here.
+
+---
+
+# 2. Q5 — p141 Yoshi Yokokawa (Alpaca)
+
+## 2.1 The question as written
+
+> "In what year was Alpaca (the US brokerage-infrastructure company founded by
+> Yoshi Yokokawa, legal entity AlpacaDB, Inc.) founded, and what was its revenue
+> in any year before 2024? Four sources give four different founding years —
+> 2013 (Ikkyo Technology, the Kobe predecessor), 2015 (AlpacaDB/Sacra), 2017
+> (Keio) and 2018 (MEXT). Quote the figure or year and the source URL."
+
+> "**On the 2013 lineage the span is 11 years and the row must instead be
+> `crossing_undatable`.**"
+
+That clause is mechanically true and I verified it in code rather than by
+reading: `src/schema.parse_span` returns `(None, None)` when
+`hi - lo > MAX_SPAN_YEARS`, so feeding p141 `2013-2024` yields `era=''`,
+`clock_venture=None`, `clock_education=None` — the row silently contributes
+nothing. The 10-year cap is enforced, not merely documented.
+
+## 2.2 The founding year is now SETTLED by a primary regulator filing
+
+**This is new evidence the first pass did not have.** AlpacaDB, Inc. has its own
+EDGAR filer record — **CIK 0001689386** — separate from the broker-dealer
+subsidiary (CIK 0001702580) the first pass checked. It filed two Form D notices.
+
+Form D, filed 17 November 2016, accession 0001689386-16-000001,
+<https://www.sec.gov/Archives/edgar/data/1689386/000168938616000001/primary_doc.xml>
+(amended by D/A 0001689386-17-000001 filed 2 Feb 2017, identical on these
+fields). Verbatim from the XML:
+
+```xml
+<entityName>AlpacaDB, Inc.</entityName>
+<issuerAddress><street1>55 EAST 3RD AVE</street1><city>SAN MATEO</city>
+  <stateOrCountry>CA</stateOrCountry></issuerAddress>
+<jurisdictionOfInc>DELAWARE</jurisdictionOfInc>
+<issuerPreviousNameList><value>None</value></issuerPreviousNameList>
+<entityType>Corporation</entityType>
+<yearOfInc>
+    <withinFiveYears>true</withinFiveYears>
+    <value>2015</value>
+</yearOfInc>
+<industryGroupType>Other Technology</industryGroupType>
+<issuerSize><revenueRange>Not Applicable</revenueRange></issuerSize>
+<dateOfFirstSale><value>2016-11-04</value></dateOfFirstSale>
+<totalOfferingAmount>2500000</totalOfferingAmount>
+<totalAmountSold>1221677</totalAmountSold>
+<signatureName>/s/ Tsuyoshi Yokokawa</signatureName>
+<signatureTitle>CEO and President</signatureTitle>
+```
+
+**What this establishes.** The company itself, signed by Yokokawa as CEO and
+President, told the SEC in November 2016 that AlpacaDB, Inc. is a Delaware
+corporation whose **year of incorporation is 2015**, and that it has had **no
+previous names** (`issuerPreviousNameList: None`). That is a signed federal
+filing, contemporaneous with the period in question, and for the question *when
+was AlpacaDB, Inc. founded* it outranks Sacra, the Keio page (2017), the MEXT
+page (2018) and the kigyotv interview (2013). **The 2015 lower bound the row
+already uses now rests on a primary source rather than a data aggregator.**
+
+What it does **not** settle: whether Ikkyo Technology Inc. (Kobe, Feb 2013) is
+"the same venture" for `frame.md` purposes. `issuerPreviousNameList: None` shows
+AlpacaDB was not a *renamed* Ikkyo, i.e. they are two distinct legal entities —
+which weakens the 2013 lineage argument without killing it, because the frame
+dates the person's venture rather than a legal entity, and Yokokawa himself says
+Ikkyo "later evolved into AlpacaDB". Still a judgment call, but a better-informed
+one.
+
+`revenueRange = "Not Applicable"` is **not** a revenue statement. Form D's
+issuer-size options for an operating company are "No Revenues" / "$1 -
+$1,000,000" / … / "Decline to Disclose" / "Not Applicable"; the last is the
+option intended for pooled funds. Its use here is a filing quirk and gives no
+bound. Had they ticked "No Revenues" this row would be closed.
+
+**No later Form D exists.** EDGAR full-text search for `"AlpacaDB"`
+(`https://efts.sec.gov/LATEST/search-index?q=%22AlpacaDB%22&forms=D`) returns
+exactly two hits — the 2016 D and the 2017 D/A. The 2021 Series B, 2023 SBI note
+and 2024 Series C produced no further Form D under this CIK. I also enumerated
+every EDGAR company matching "alpaca" (19 CIKs) to check for a renamed parent;
+the only near-miss is "Alpaca, Inc." CIK 0001929936, an unrelated Omaha,
+Nebraska corporation, year of incorporation 2021, Form D signed by Karen
+Borchert. Ruled out.
+
+## 2.3 Revenue: what exists, checked against constant-2026-dollar bars
+
+**Upper end (confirmed, unchanged).** Sacra, <https://sacra.com/c/alpaca/>:
+$100M annualised as of September 2025, "up from **$60M at the end of 2024**".
+$60,000,000 vs the **2024 rev10 bar of $9,743,619** = **615.8% of bar, +515.8%
+margin** — decisively above. The 2025 $100M vs the 2025 bar of $10,000,000 =
+1,000% of bar.
+
+Sacra also gives the funding history: Series B $50M led by Tribe Capital (2021,
+$215M post), Series B-2 $50M led by Unbound (2021, $475M post), $15M SBI
+convertible note (2023, $250M cap), Series C $50M from Tencent (2024, $461M
+post), $115M raised in total. **No source gives a revenue figure for any year
+before 2024.** Valuation is not revenue, and `frame.md` forbids inferring one
+from the other.
+
+**The regulator route is now exhausted, one filing further than the first pass
+went.** The row's `notes` list four X-17A-5 filings (2021-02-12, 2022-02-14,
+2023-04-19, 2024-06-12). EDGAR CIK 0001702580 actually holds **eight**:
+
+| filed | period | format |
+|---|---|---|
+| 2019-01-29 | 2018-11-30 | paper (placeholder stub only) |
+| 2020-01-31 | 2019-11-30 | paper stub + FOCUSN |
+| 2021-02-12 | 2020-11-30 | electronic |
+| 2022-02-14 (+ /A 2022-02-18) | 2021-11-30 | electronic |
+| 2023-04-19 (+ /A 2023-05-25) | 2022-12-31 | electronic |
+| 2024-06-12 | 2023-12-31 | electronic |
+| 2025-03-25 | 2024-12-31 | paper (placeholder stub only) |
+| **2026-02-27** | **2025-12-31** | **electronic — not checked by the first pass** |
+
+I downloaded and text-extracted the newest one,
+<https://www.sec.gov/Archives/edgar/data/1702580/000170258026000007/AlpacaSec2025Public.pdf>
+(811,570 bytes, 18 pages). Its financial statement is titled "Statement of
+Financial Condition" and its notes "Notes to Statement of Financial Condition".
+**No income statement, no revenue line** — the same confidential-treatment
+posture as 2020-2023. The three paper filings resolve to `9999999997-*.paper`
+placeholder stubs with no document behind them. **The regulator gives no revenue
+for any year, 2018 through 2025.**
+
+The 2025 filing does confirm the entity structure the row assumes:
+
+> "Alpaca Securities LLC (the 'Company') is a **wholly owned subsidiary of
+> AlpacaDB, Inc. (the 'Parent')**. The Company is a registered broker-dealer with
+> the Securities and Exchange Commission ('SEC') and is a member of the Financial
+> Industry Regulatory Authority ('FINRA'), and the Securities Investor Protection
+> Corporation ('SIPC')."
+
+**One genuinely new hard date, from the SEC header of the 2019 paper filing**
+(<https://www.sec.gov/Archives/edgar/data/1702580/999999999719000303/9999999997-19-000303.txt>):
+
+```
+CONFORMED SUBMISSION TYPE:  X-17A-5
+CONFORMED PERIOD OF REPORT: 20181130
+FILED AS OF DATE:           20190129
+PERIOD START:               20180326
+COMPANY CONFORMED NAME:     ALPACA SECURITIES LLC
+STATE OF INCORPORATION:     DE
+SEC FILE NUMBER:            008-69928
+```
+
+**`PERIOD START: 2018-03-26`** is the first day of Alpaca Securities LLC's first
+reported fiscal period. The brokerage business — the business that earns the
+revenue Sacra measures — did not exist as a reporting broker-dealer before
+26 March 2018.
+
+**Still negative after this pass:** TechCrunch (Oct 2023) reports revenue grew
+17x since the Aug-2021 Series B but "the company declined to provide the
+baseline"; the Endeavor entrepreneur profile
+(<https://endeavor.org/entrepreneurs/yoshi-yokokawa/>) carries only "Alpaca is an
+API provider and self-clearing broker-dealer that enables developers and
+entrepreneurs to launch and scale products for trading assets" and **no**
+founding year, revenue, AUC, customer count or dated scale claim; Latka's $5.7M
+for 2024 contradicts Sacra by an order of magnitude and is unusable either way.
+
+## 2.4 What the decision actually costs the study — the decisive number
+
+p141 has `a1_birth_date = unknown` and `a2_education_end_date = unknown`.
+**It therefore contributes to `clock_venture` only.** Recomputed with
+`src.clocks` + `src.stats.bootstrap_median_ci` (seed 0, 10,000 iters):
+
+| scenario | clock_education n / med / half | clock_venture n / med / half |
+|---|---|---|
+| status quo, hit `2015-2024` | 103 / 14.00 / **2.500** | 114 / 5.00 / **1.250** |
+| hit `2018-2024` | 103 / 14.00 / 2.500 | 114 / 5.00 / 1.375 |
+| hit `2022-2023` | 103 / 14.00 / 2.500 | 114 / 5.00 / 1.375 |
+| **excluded** | 103 / 14.00 / **2.500** | 113 / 5.00 / **1.250** |
+
+**Excluding p141 changes the headline education clock by exactly nothing — same
+n, same median, same interval — and leaves the venture median at 5.00 with an
+identical interval.** Whatever is decided, no reported number moves. That is the
+most useful single fact for a one-sitting decision: this is a data-integrity
+call, not a results call.
+
+p141's own `clock_venture` under each span (a4 = 2013): `2015-2024` → **6.5**;
+`2018-2024` → 8.0; `2022-2023` → 9.5; `2013-2024` → `None` (span rejected).
+
+## 2.5 Options and consequences
+
+### Option 1 — keep as recorded, `2015-2024`, re-sourced to the Form D
+
+- Span 9, inside the cap. **The lower bound upgrades from Sacra (an aggregator)
+  to a signed SEC Form D**, so `a5_first_hit_src` would gain
+  `https://www.sec.gov/Archives/edgar/data/1689386/000168938616000001/primary_doc.xml`.
+  A strict improvement in provenance, and arguably grounds to lift
+  `a5_first_hit_conf` above `low` on the *bound* (though not on the crossing).
+- **The known defect survives it.** The row's own notes concede: "the 17x growth
+  since 2021 makes it likely that the true crossing sits late in the bracket,
+  around 2022-2023, so the bracket midpoint of 2019-2020 that the clocks will use
+  is probably several years early." Under `frame.md` that is not fatal — the
+  founding year is an explicitly sanctioned lower bound ("**The founding year is
+  a valid lower bound.** A company cannot earn revenue before it exists…") — but
+  the row dates the hit early by an unknown amount, in the direction `BIASES.md`
+  already says the study leans (short).
+- Sample: 134 included, no reported figure changes.
+
+### Option 2 — narrow to `2018-2024`, on Alpaca Securities' `PERIOD START`
+
+- Span 6, comfortably inside the cap; **halves the residual dating error** and
+  moves the midpoint from 2019/2020 to 2021, much closer to the 2022-2023 the
+  17x claim implies.
+- **Rule it leans on:** `frame.md` allows the bound to start at "the sourced
+  founding **(or first-production)** year of the hit entity". 26 March 2018 is
+  the SEC-recorded first day of the broker-dealer's first reporting period.
+- **Its weakness, stated plainly:** the hit entity of record is AlpacaDB, Inc.,
+  not Alpaca Securities LLC, and AlpacaDB *was* in production before 2018 —
+  Labellio shipped June 2015 and was sold to Kyocera Communication Systems in
+  January 2016 (terms undisclosed), and Capitalico existed. So "first production"
+  for the *entity* is 2015, and 2018 is first production only for the *current
+  revenue line*. Choosing 2018 is a defensible reading but it is a reading, and
+  it makes the bound tighter than the frame compels — the mirror image of the
+  failure mode `frame.md` names: "It is not licence to widen a range until it
+  contains a year you like." The same caution cuts against narrowing to one.
+- Effect: p141's `clock_venture` 6.5 → 8.0; sample venture half-width 1.250 →
+  1.375, an honest slight widening. No other number moves.
+
+### Option 3 — exclude, `crossing_undatable`, on the 2013 Ikkyo lineage
+
+- The reading the first-pass researcher raised against its own row. Requires
+  holding that Yokokawa's venture began with Ikkyo Technology (Kobe, Feb 2013),
+  making the bracket 2013-2024 = span 11 > cap.
+- **The Form D weakens this option.** `issuerPreviousNameList: None` shows
+  AlpacaDB, Inc. was a fresh Delaware incorporation in 2015, not a renamed Ikkyo.
+  Two distinct entities. The lineage argument now rests solely on Yokokawa's own
+  interview language that Ikkyo "later evolved into AlpacaDB" — a
+  self-description, the evidentiary class `BIASES.md` 4b ("The self-description
+  trap") already flags as weak.
+- Effect: 133 included; **`clock_education` completely unchanged** (n 103, median
+  14.00, half 2.500); `clock_venture` n 114 → 113, median and interval unchanged.
+  The discard pile gains one `crossing_undatable`, marginally worsening the
+  exclusion-rate statistics `BIASES.md` 4/4c track — and note `BIASES.md` 4
+  says exclusion already correlates with era and geography, so adding a
+  non-US row to the discard pile pushes that bias very slightly further.
+
+### Option 4 — pin to `2022-2023` on the 17x claim
+
+- **Not permitted.** It requires deriving an absolute from a relative whose
+  baseline was withheld, which is inference. `OPEN-QUESTIONS.md` states the
+  standard: "the frame's rule is that no year is ever inferred, and a confident
+  paraphrase is exactly how an inferred year gets laundered into data." Recorded
+  only so the author can see it was considered and rejected.
+
+## 2.6 What is still genuinely unresolved
+
+1. **No revenue figure for Alpaca in any year before 2024 exists in any source I
+   could reach.** Eight SEC broker-dealer filings (one of which the first pass
+   never saw), two Form Ds, Sacra, Endeavor and TechCrunch all fail to produce
+   one. The crossing is **boundable but not datable**, and every option above is
+   a choice of bound, not the discovery of a year.
+2. **The Ikkyo-lineage question is a definitional judgment `frame.md` does not
+   adjudicate.** The Form D makes the two-entity reading stronger; it cannot make
+   it certain.
+3. **The residual early-dating error is real under every non-excluding option**
+   and is unquantifiable without the 2021 baseline TechCrunch was refused.
+4. **Budget note:** the session's WebSearch allowance (200/200) was exhausted
+   partway through this section. Everything above came from direct WebFetch and
+   `curl` against SEC EDGAR and named URLs, so no finding depends on a search
+   engine — but a further keyword sweep for a 2021-2023 Alpaca revenue figure
+   could not be run.
