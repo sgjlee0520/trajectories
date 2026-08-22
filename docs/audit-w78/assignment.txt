@@ -1,0 +1,10 @@
+p164|Ken Olsen|Digital Equipment Corporation|rev10
+p165|Steve Wozniak|Apple Computer, Inc.|rev10
+p182|Jeff Bezos|Amazon.com, Inc.|rev10
+p183|Neal O'Mara|HelloSign (JN Projects, Inc., d/b/a HelloSign)|rev10
+p184|Mark Zuckerberg|Facebook (Thefacebook, Inc.)|rev10
+p195|Elad Gil|Cosmic - Aleph 1, L.P.|fund100
+p196|Trae Stephens|Founders Fund IX, LP|fund100
+p202|Edward Witten|Fields Medal|prize
+p206|Zhang Yiming|ByteDance|rev10
+p210|Fred Smith|Federal Express|rev10

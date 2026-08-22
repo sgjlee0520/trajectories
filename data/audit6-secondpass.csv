@@ -1,0 +1,101 @@
+person_id,second_pass,evidence
+p164,1958-1962,"Ken Olsen / Digital Equipment Corporation / rev10. Bounded range 1958-1962 (4 years). BELOW 1958: FundingUniverse (International Directory of Company Histories, Vol. 6, St. James Press 1992) https://www.fundinguniverse.com/company-histories/digital-equipment-corporation-history/ : ""In early 1958 Digital shipped its first products, the Digital Laboratory Module and the Digital Systems Module. The company sold $94,000 worth of these modules to research facilities. Despite the recession of the late 1950s, Digital turned a profit at the end of its first year."" Corroboration, Computerworld via CNN archive https://web.archive.org/web/20090425132250/http://www.cnn.com/TECH/computing/9905/12/1957.idg/index.html : ""Within a year's time, Digital had made $94,000 and turned a small profit."" python3 -m src.cpi 1958 output:
+revenue year 1958, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $897,674
+  acq50    ($50,000,000 constant 2026) = $4,488,372
+  fund100  ($100,000,000 constant 2026) = $8,976,744
+$94,000 is below the 1958 rev10 bar of $897,674. AT/ABOVE 1962: same CNN/Computerworld page: ""In 1962, Digital got its big break: International Telephone and Telegraph placed a huge order for 15 PDP-1s. By the end of 1962, Digital reported sales of $6.5 million and net profits of $807,000."" Company financial summary in DEC, Digital 1957 to the Present (1978), Computer History Museum copy http://s3data.computerhistory.org/pdp-1/dec.digital_1957_to_the_present_(1978).1957-1978.102630349.pdf (Wayback https://web.archive.org/web/20170708163139if_/http://s3data.computerhistory.org/pdp-1/dec.digital_1957_to_the_present_(1978).1957-1978.102630349.pdf ) lists FINANCIAL SUMMARY 1962 $6,535,502 (and 1963 $9,906,968). The 1963 figure matches the primary 1968 DEC annual report highlights on Internet Archive https://archive.org/details/Digi2485_1968 : ""FISCAL YEARS 1968 1967 1966 1965 1964 1963 Net Sales $57,339,400 $38,895,782 $22,776,434 $14,982,920 $10,909,565 $9,906,968"". python3 -m src.cpi 1962 output:
+revenue year 1962, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $938,054
+  acq50    ($50,000,000 constant 2026) = $4,690,271
+  fund100  ($100,000,000 constant 2026) = $9,380,543
+$6,535,502 is ~7.0x the 1962 rev10 bar of $938,054 (far above 20% margin). LOOKED FOR AND DID NOT FIND: sourced year-by-year net sales for 1959, 1960, and 1961 (Britannica claims '$1.3 million in revenue' in 1960 but the page did not load; even if true it would sit inside this range). DEC fiscal year ends Saturday nearest June 30; CNN treats the $6.5M as calendar 1962 and the 1978 company history labels the $6,535,502 row '1962'. First venture is DEC (later AMS is after). Serial-founder check: no earlier company."
+p165,1978,"Steve Wozniak / Apple Computer, Inc. / rev10. Single year 1978. Primary source: Apple Computer, Inc. employee-plan Form S-1 (Registration No. 2-70449), SEC FOIA release 18-02062-FOIA, https://www.sec.gov/files/18-02062-FOIA.pdf . SELECTED CONSOLIDATED FINANCIAL INFORMATION table: January 3, 1977 (inception) to September 30, 1977 Revenues $773,977; Fiscal Year Ended September 30, 1978 Revenues $7,883,486; FY ended September 30, 1979 Revenues $47,938,981. CONSOLIDATED STATEMENT OF INCOME in the same filing: ""Revenues (Note 1): Net sales $773,977"" (inception to Sept 30, 1977); net sales $7,856,360 plus interest income $27,126 = total revenues $7,883,486 for FY ended September 30, 1978. python3 -m src.cpi 1977 output:
+revenue year 1977, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $1,882,321
+  acq50    ($50,000,000 constant 2026) = $9,411,604
+  fund100  ($100,000,000 constant 2026) = $18,823,208
+FY1977 revenues $773,977 are below the 1977 rev10 bar of $1,882,321 (stub year from incorporation Jan 3 1977 to Sept 30 1977; not annualized). python3 -m src.cpi 1978 output:
+revenue year 1978, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $2,025,203
+  acq50    ($50,000,000 constant 2026) = $10,126,016
+  fund100  ($100,000,000 constant 2026) = $20,252,032
+FY1978 revenues $7,883,486 are 3.89x the 1978 rev10 bar of $2,025,203 (margin well above 20%). Apple fiscal year ends last Saturday of September; the 1978 label is the company's own FY1978. Serial-founder check: assigned entity is Apple Computer, Inc. (partnership 1976, incorporated Jan 3 1977); no earlier Wozniak company crossed. LOOKED FOR: a separate calendar-year 1977 full-year figure — not published; the stub is the sourced 1977 number."
+p182,1996,"Jeff Bezos / Amazon.com, Inc. / rev10. Single year 1996. Primary source: Amazon.com, Inc. Form S-1/A filed April 21, 1997, https://content.edgar-online.com/ExternalLink/EDGAR/0000891020-97-000603.html?hash=e563b5e0f98f004dd7bd183be04ad796653cfd7e1fc13fb9be4ceb2b65b77515 (SEC registration 333-23795). SUMMARY FINANCIAL DATA (in thousands): ""FOR THE PERIOD FROM JULY 5, 1994 (INCEPTION) TO DECEMBER 31, 1994 Net sales $ -- ; YEAR ENDED DECEMBER 31, 1995 Net sales $511 ; 1996 Net sales $15,746"". Also: ""The Company was founded in July 1994 and began selling books on its Web site in July 1995."" python3 -m src.cpi 1995 output:
+revenue year 1995, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $4,733,757
+  acq50    ($50,000,000 constant 2026) = $23,668,786
+  fund100  ($100,000,000 constant 2026) = $47,337,572
+1995 net sales $511,000 are below the 1995 rev10 bar of $4,733,757. python3 -m src.cpi 1996 output:
+revenue year 1996, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $4,873,534
+  acq50    ($50,000,000 constant 2026) = $24,367,668
+  fund100  ($100,000,000 constant 2026) = $48,735,335
+1996 net sales $15,746,000 are 3.23x the 1996 rev10 bar of $4,873,534 (margin well above 20%). Serial-founder check: Amazon (Cadabra/Amazon.com) is Bezos's first company; prior work was D. E. Shaw. LOOKED FOR: any earlier Bezos venture with revenue — none found."
+p202,1990,"Edward Witten / Fields Medal / prize. Announcement year 1990 (criterion is prize; date is the announcement year). International Mathematical Union, Fields Medals 1990 page https://www.mathunion.org/imu-awards/fields-medal/fields-medals-1990 names Edward WITTEN among the four 1990 medalists, quoting Faddeev, ICM Proc. 1990, p.27: ""Althought he is definitely a physicist his command of mathematics is rivalled by few mathematicians, and his ability to interpret physical ideas in mathematical form is quite unique."" Britannica https://www.britannica.com/biography/Edward-Witten : ""Witten was awarded the Fields Medal at the International Congress of Mathematicians in Kyōto, Japan, in 1990."" IAS https://www.ias.edu/news/edward-witten-receives-basic-science-lifetime-award-theoretical-physics : ""created what is known as topological quantum field theory, for which he won the Fields Medal in 1990."" python3 -m src.cpi 1990 output (year used; prize does not compare to the revenue bar):
+revenue year 1990, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $4,059,725
+  acq50    ($50,000,000 constant 2026) = $20,298,624
+  fund100  ($100,000,000 constant 2026) = $40,597,249
+LOOKED FOR: any earlier equivalent prize on the assigned entity — Fields Medal is the assigned hit; IMU lists 1990 as the award year. Confidence high."
+p183,unknown,"Neal O'Mara / HelloSign (JN Projects, Inc., d/b/a HelloSign) / rev10. unknown. LOOKED FOR and did not find a sourced annual revenue figure at or above the constant-dollar bar. Dropbox Form 10-K / 2019 10-K note on the Feb 8, 2019 acquisition (https://dropbox.gcs-web.com/node/9036/html and https://www.sec.gov/Archives/edgar/data/1467623/0001467623-20-000011.txt): ""On February 8, 2019, the Company acquired all outstanding stock of JN Projects, Inc. (d/b/a HelloSign)""; total purchase consideration $177.9 million. TechCrunch https://techcrunch.com/2019/01/28/dropbox-snares-hellosign-for-230m-gets-workflow-and-esignature/ : ""The company paid a hefty $230 million for the privilege."" acq50 is barred: some revenue was published, so an acquisition date would be later than a revenue crossing if one occurred. GetLatka https://getlatka.com/companies/hellosign/funding headline: ""How Hellosign hit $7.2M revenue and 47K customers in 2016."" python3 -m src.cpi 2016 output:
+revenue year 2016, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $7,454,953
+  acq50    ($50,000,000 constant 2026) = $37,274,766
+  fund100  ($100,000,000 constant 2026) = $74,549,532
+If the Latka $7.2M 2016 figure is taken at face value it is BELOW the 2016 rev10 bar of $7,454,953 (about 3% under; do not treat Latka as a primary filing). Hacker News comment claiming ""HelloSign makes less than $4 million a year"" (https://news.ycombinator.com/item?id=19017219) is unsourced. Dropbox 10-Q for Q1 2019 did not break out HelloSign full-year pre-acquisition revenue. Founded via Y Combinator W11 (~2011); founding-to-acquisition span is 8 years, but there is no sourced above-bar revenue end, so a bounded range cannot be closed. python3 -m src.cpi 2019 output:
+revenue year 2019, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $7,941,064
+  acq50    ($50,000,000 constant 2026) = $39,705,321
+  fund100  ($100,000,000 constant 2026) = $79,410,641
+Did not guess 2017/2018. Serial-founder check not needed given undatable revenue. unknown is the answer."
+p184,2004-2007,"Mark Zuckerberg / Facebook (Thefacebook, Inc.) / rev10. Bounded range 2004-2007 (3 years). LOWER 2004: Facebook, Inc. Form S-1 filed Feb 1, 2012 https://www.sec.gov/Archives/edgar/data/1326801/000119312512034517/d287954ds1.htm : ""We were incorporated in Delaware in July 2004."" Founding year is a valid lower end (cannot earn before it exists). AT/ABOVE 2007: same S-1, SELECTED CONSOLIDATED FINANCIAL DATA, Year Ended December 31, 2007 Revenue $153 (in millions). Quoted table header and row: ""Year Ended December 31, 2007 2008 2009 2010 2011 (in millions) Revenue $153 $272 $777 $1,974 $3,711"". python3 -m src.cpi 2004 output:
+revenue year 2004, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $5,867,498
+  acq50    ($50,000,000 constant 2026) = $29,337,491
+  fund100  ($100,000,000 constant 2026) = $58,674,983
+python3 -m src.cpi 2007 output:
+revenue year 2007, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $6,440,333
+  acq50    ($50,000,000 constant 2026) = $32,201,663
+  fund100  ($100,000,000 constant 2026) = $64,403,326
+2007 revenue $153 million is 23.8x the 2007 rev10 bar of $6,440,333 (far above 20% margin). LOOKED FOR: 2004, 2005, 2006 annual revenue in the S-1 selected financials and MD&A — the S-1 table begins at 2007; contemporaneous press (TechCrunch 2012-02-01 https://techcrunch.com/2012/02/01/facebook-ipo-facebook-ipo-facebook-ipo/ claimed ""$382,000 in revenue 2004, $9 million in 2005, $48 million in 2006"") but those sentences are NOT in the S-1 I fetched, so they are not used. Serial-founder check: Facebook/Thefacebook is the first company."
+p195,2020,"Elad Gil / Cosmic - Aleph 1, L.P. / fund100. Single year 2020. Primary source: SEC Form D filed 2020-03-27, accession 0001807070-20-000002, https://www.sec.gov/Archives/edgar/data/1807071/000180707020000002/xslFormDX01/primary_doc.xml (CIK 0001807070 Cosmic - Aleph 1, L.P. is an issuer on this notice). Issuer year of organization: 2020. Related person: ""Gil, Elad ... Managing Director of the General Partner."" Type of Filing: New Notice. Date of First Sale: 2020-03-18. Offering and Sales Amounts: Total Offering Amount $300,000,000 USD; Total Amount Sold $300,000,000 USD; Total Remaining to be Sold $0. Signature: Cosmic - Aleph 1, L.P. /s/Elad Gil, Elad Gil, Managing Director of the General Partner, 2020-03-27. CAVEAT (stated, not inferred away): the same Form D also names Cosmic - Bet 1, L.P. as a co-issuer; the $300,000,000 is the notice total, not a line-item split. formds.com https://www.formds.com/issuers/cosmic-aleph-1-l-p attributes Reported Sold $300,000,000 to Cosmic - Aleph 1, L.P. python3 -m src.cpi 2020 output:
+revenue year 2020, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $8,039,032
+  acq50    ($50,000,000 constant 2026) = $40,195,159
+  fund100  ($100,000,000 constant 2026) = $80,390,318
+The $300,000,000 sold on this 2020 first-sale notice is 3.73x the 2020 fund100 bar of $80,390,318. Even if the $300M were split equally across the two named issuers ($150M each), Aleph 1 would still be 1.87x the bar (this split is NOT sourced; it is only a sensitivity). Pitchbook/Yahoo https://finance.yahoo.com/news/exclusive-prominent-solo-vc-elad-060000502.html describes Cosmic-Aleph 2 as closing on $620 million in 2021 and Aleph 3 at nearly $1.1 billion, i.e. Aleph 1 is treated as the first Cosmic-Aleph fund. LOOKED FOR: a later amendment that isolates Aleph 1's standalone sold amount — EDGAR for CIK 0001807070 shows only this one Form D."
+p196,2023-2025,"Trae Stephens / Founders Fund IX, LP / fund100. Bounded range 2023-2025 (2 years). BELOW/ZERO at 2023 filing: SEC Form D filed 2023-04-04, CIK 0001971631, https://www.sec.gov/Archives/edgar/data/1971631/000197163123000001/xslFormDX01/primary_doc.xml Issuer: Founders Fund IX, LP, year of organization 2023. Related person: ""Stephens, Trae ... Managing Member of the General Partner of the Issuer."" Type of Filing: New Notice; First Sale Yet to Occur. Total Offering Amount $675,000,000; Total Amount Sold $0; Total Remaining to be Sold $675,000,000. python3 -m src.cpi 2023 output:
+revenue year 2023, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $9,464,470
+  acq50    ($50,000,000 constant 2026) = $47,322,352
+  fund100  ($100,000,000 constant 2026) = $94,644,704
+$0 sold as of 2023-04-04 is below the 2023 fund100 bar of $94,644,704. AT/ABOVE 2025: SEC Form D/A filed 2025-10-16 https://www.sec.gov/Archives/edgar/data/2090410/000123191925000327/xslFormDX01/primary_doc.xml Issuers: Founders Fund IX, LP and Founders Fund IX Principals Fund, LP. Date of First Sale: 2023-04-07. Total Offering Amount $971,584,000; Total Amount Sold $971,584,000; Remaining $0. Clarification: ""The Total Amount Sold includes the General Partner's capital commitment to the Issuers."" Related person: ""Stephens, Trae ... Managing Member of the General Partner of the Issuers."" python3 -m src.cpi 2025 output:
+revenue year 2025, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $10,000,000
+  acq50    ($50,000,000 constant 2026) = $50,000,000
+  fund100  ($100,000,000 constant 2026) = $100,000,000
+$971,584,000 sold is 9.72x the 2025 fund100 bar of $100,000,000. CAVEAT: the 2025 amount is a joint notice covering the Principals Fund as well. aum13f https://aum13f.com/firm/founders-fund-llc?view_all=fund lists The Founders Fund IX LP AUM $745.4M and Principals Fund $223.8M; even the $745M IX LP figure (if that split is right) is still far above the bar, but the split is not in the Form D itself. LOOKED FOR: an interim 2023/2024 amendment showing amount sold in calendar 2023 after the April 7 first sale — not found. Axios https://www.axios.com/2024/12/24/founders-fund-3-billion (Dec 24, 2024) said the firm ""hasn't yet begun investing what it now calls 'Fund IX,'"" which is why 2023 is not reported as a single closed year."
+p206,2012-2020,"Zhang Yiming / ByteDance / rev10. Bounded range 2012-2020 (8 years, under 10). LOWER 2012: company founding. Qichacha/financing table https://www.qcc.com/product/5999d014-de49-4f36-81f8-af8155ad4242.html lists 2012-03-08 angel round; Wikipedia/company histories consistently give March 2012 founding by Zhang Yiming. Founding year is a valid lower end (cannot earn before it exists). AT/ABOVE 2020: CNBC https://www.cnbc.com/2021/06/17/chinas-bytedance-tiktok-owner-saw-revenue-surge-111percent-in-2020.html : ""ByteDance's revenue for 2020 totaled $34.3 billion, up 111% year-on-year."" ""Revenue for last year totaled $34.3 billion, up 111% year-on-year, senior management at the company told employees in a company-wide meeting."" (USD as reported by CNBC from the internal meeting; no RMB conversion required for this figure.) WSJ https://www.wsj.com/tech/tiktok-owner-bytedances-annual-revenue-jumps-to-34-3-billion-11623903622 : ""ByteDance said its total revenue grew 111% from a year ago, while gross profit rose 93% to $19 billion, according to excerpts of a company memo."" python3 -m src.cpi 2012 output:
+revenue year 2012, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $7,131,511
+  acq50    ($50,000,000 constant 2026) = $35,657,554
+  fund100  ($100,000,000 constant 2026) = $71,315,109
+python3 -m src.cpi 2020 output:
+revenue year 2020, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $8,039,032
+  acq50    ($50,000,000 constant 2026) = $40,195,159
+  fund100  ($100,000,000 constant 2026) = $80,390,318
+2020 revenue $34.3 billion is thousands of times the 2020 rev10 bar of $8,039,032. LOOKED FOR and did not use as a single-year pin: Forbes 2017-05-26 https://www.forbes.com/sites/ywang/2017/05/26/jinri-toutiao-how-chinas-11-billion-news-aggregator-is-no-fake/ ""Zhang estimates that the company's revenue, which comes mostly from online advertising, grew fivefold to more than 6 billion yuan ($869 million) last year"" — that is 86 Research analyst Zhang Xueru, not a company-reported year, so not used to name 2016. SCMP 2017-12-01 target of 50 billion yuan for 2018 is a target, not actual. No audited year-by-year RMB series for 2013-2019 was found. Serial-founder check: Qichacha bio notes Zhang founded 99fang previously; assigned entity is ByteDance, which is the one given."
+p210,1973-1975,"Fred Smith / Federal Express / rev10. Bounded range 1973-1975 (2 years). LOWER 1973: FedEx Investor Relations financial timeline https://investors.fedex.com/company-overview/financial-timeline/default.aspx : ""FedEx began as Federal Express when the company was incorporated in 1971. ... Operations began in 1973 with the pickup and delivery of the first overnight packages. There were only 186 packages that night."" Operations-start year is the valid lower end (cannot earn overnight-package revenue before operations). AT/ABOVE 1975: International Directory of Company Histories via Encyclopedia.com https://www.encyclopedia.com/social-sciences-and-law/economics-business-and-labor/businesses-and-occupations/fedex-corp and the same text at https://www.referenceforbusiness.com/history2/5/Fedex-Corporation.html : ""The company lost $29 million in its first 26 months of operation: in 1975 alone it gained $43.5 million in sales against an $11.5 million loss."" Also: ""In 1977 company profits hit $8 million on sales of $110 million."" python3 -m src.cpi 1973 output:
+revenue year 1973, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $1,379,126
+  acq50    ($50,000,000 constant 2026) = $6,895,631
+  fund100  ($100,000,000 constant 2026) = $13,791,261
+python3 -m src.cpi 1975 output:
+revenue year 1975, thresholds in nominal USD:
+  rev10    ($10,000,000 constant 2026) = $1,671,103
+  acq50    ($50,000,000 constant 2026) = $8,355,516
+  fund100  ($100,000,000 constant 2026) = $16,711,033
+1975 sales $43.5 million are 26.0x the 1975 rev10 bar of $1,671,103 (far above 20% margin). LOOKED FOR: 1973 and 1974 annual sales in an IPO prospectus or contemporaneous 10-K — not found online. First 26 months' $29 million loss is not a revenue figure and is not used as one. Serial-founder check: Federal Express is Smith's first company (Yale paper is not a company)."

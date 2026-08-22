@@ -600,12 +600,19 @@ A company crosses the threshold once. Two co-founders therefore share a single
 `a5_first_hit`, and their clocks differ only by their education dates. They are
 two people but one event.
 
-This matters more than it first appears, because the **stopping rule keys off
-the bootstrap CI half-width**, and the bootstrap treats every row as an
-independent draw. Correlated rows narrow the interval without adding
-information, so the study could satisfy its own stopping criterion on precision
-it has not earned. Of all the failure modes catalogued here, this is the one
-that attacks the stopping rule directly.
+The mechanism to fear is the **stopping rule**, which keys off the bootstrap CI
+half-width while the bootstrap treats every row as an independent draw.
+Correlated rows narrow the interval without adding information, so a study can
+satisfy its own stopping criterion on precision it has not earned.
+
+**Correction, 2026-08-22.** This entry originally called the Palm pair the one
+failure mode here that attacks the stopping rule directly. It does not, and the
+claim was made without checking. Both Palm rows are `hit_basis=fallback` (the
+acq50 US Robotics acquisition), and the rule tracks only `hit_basis == 'primary'`
+(`src/stats.py:160`). Dropping p70 leaves revenue-strict n at 60, unchanged. The
+danger above is real and would bite a shared-event pair on **primary** basis —
+which is why the frame rule below still matters — but this pair is not an
+instance of it. It double-counts one event in the **pooled** analysis only.
 
 Note the contrast with prizes, which look similar and are not: Bengio (2019)
 and Liskov (2009) both hold Turing Awards, but in different years. Different
@@ -615,15 +622,28 @@ institution.
 **Direction:** falsely narrows the confidence interval; no clear effect on the
 median itself.
 
-**Mitigation:** the five wave-6 rows were replaced before research. The Palm
-pair is still in the data and needs a decision — see the open question below.
-Going forward the frame should require one row per hit **event** (entity plus
-year), not merely per person.
+**Direction, restated:** falsely narrows the pooled confidence interval; no
+effect on the revenue-strict interval the stopping rule reads; no clear effect
+on the median.
 
-**Open question for the study author:** whether to drop one of Dubinsky or
-Hawkins. Both are legitimately on the Computer History Museum Fellows list, so
-excluding either is a selection rule the frame does not currently contain.
-Recorded rather than decided unilaterally.
+**Mitigation:** the five wave-6 rows were replaced before research. Going
+forward `frame.md` requires one row per hit **event** (entity plus year), not
+merely per person — added 2026-08-22.
+
+**Resolved 2026-08-22 by the study author: keep both rows, document the
+correlation.** Neither row reaches the stopping rule. Both are legitimately on
+the Computer History Museum Fellows list, so dropping either would need a
+selection rule the frame does not contain — and the obvious candidate rule,
+"keep the founder," systematically prefers founders over operators, which in
+this sample correlates with gender (Hawkins founded Palm; Dubinsky was recruited
+as CEO). Inventing that rule to fix two pooled rows would trade a small measured
+bias for a larger unmeasured one. The pooled figures are therefore reported with
+the note that one event contributes two rows.
+
+A sweep of all 210 rows on 2026-08-22 found Palm to be the **only** shared hit
+event in the collected data. Every prize co-holder falls in a different year:
+six Fields Medals across 1936-2022, four Turing Awards across 1966-2019, and so
+on — the Bengio/Liskov contrast above generalises.
 
 ## 24. Steering away from fame is still steering
 

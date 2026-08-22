@@ -1,8 +1,15 @@
 # Sampling Frame — FROZEN
 
-Frozen 2026-07-31; revised 2026-08-11 after the 10-person pilot. Do not edit
-after wave 1 begins. Changing the frame mid-collection invalidates the stopping
-rule, because the sample composition would no longer be stable across waves.
+Frozen 2026-07-31; revised 2026-08-11 after the 10-person pilot; amended
+2026-08-22 to state the unit of observation (see "One row per hit event"). Do
+not edit after wave 1 begins. Changing the frame mid-collection invalidates the
+stopping rule, because the sample composition would no longer be stable across
+waves.
+
+The 2026-08-22 amendment is admissible under that constraint because it changes
+no qualifying criterion and admits no one the earlier frame excluded. It writes
+down a de-duplication rule that has been applied at roster draw since wave 6,
+so sample composition from wave 6 onward is unaffected by stating it.
 
 ## Field quotas
 
@@ -103,6 +110,22 @@ Look up the nominal threshold for a revenue year with:
 
 For non-USD accounts, convert at the **spot rate for the revenue year**, then
 compare against that year's nominal threshold.
+
+### One row per hit event
+
+The unit of observation is a **hit event** — an entity plus the year its
+criterion fired — not a person. Two co-founders of one company share one
+crossing; they are two people but one event, and admitting both enters a single
+observation twice.
+
+At roster draw, reject a candidate whose likely hit entity already appears in
+`data/roster.csv` or `data/anchors.csv` with the same crossing. Enforced from
+wave 6 onward, where five such candidates (Razorpay, Zepto, Meesho, Auth0, Palm)
+were replaced before research.
+
+The test is a shared **event**, not a shared institution. Two Fields medallists
+in different years are two events and both belong. See `docs/BIASES.md` 23,
+including the one pair already in the data and the decision recorded there.
 
 ### Commercial buckets
 
