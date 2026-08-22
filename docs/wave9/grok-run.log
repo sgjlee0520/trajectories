@@ -1,0 +1,97 @@
+exclusions: 210 names, 183 entities
+I'll draw Wave 9 by walking each assigned list in published order, starting with the research brief, frame, already-used list, and roster format.I'll load the sourcing rules, frame, already-used list, and roster format before walking any ranking.I'll inspect prior roster rows for those lists and the exact `source_list` names, so I can resume from the right place without repeating anyone.I'll pull the live lists next and walk each one in published order, skipping only the four allowed rejections.The YC ranking is in hand. Next I’ll pull founder pages and the other source lists so I can take the first eligible names in order.I have the billionaire ranking. Next I’ll extract the self-made consumer, healthcare, and logistics names in rank order, then pull the remaining prize and founder lists.I have enough of the lists to start writing rows. Next I’ll pull membership quotes and gender sources, then append each person as I finish them.I have the membership quotes and skip log. Next I’ll append the 25 roster rows in id order.25 rows are in `docs/wave9/roster-w9.csv` (p211–p235). Each was taken by walking the named list in published order and applying only the four allowed rejections.
+
+---
+
+## software_internet (p211–p216) — Y Combinator Top Companies
+
+**List:** https://yc-oss.github.io/api/companies/top.json (91 companies, published order).  
+**Started:** entry 1. **Stopped:** entry 19 (Airbnb).
+
+**Skipped:** 1 PlanGrid (r1), 2 Gusto (r1), 3 Matterport (r1 and r3 hardware), 4 Amplitude (r1), 5 Sendwave (r1), 6 Codecademy (r1), 7 Segment (r1), 8 HelloSign (r1), 9 Fivestars (r1), 10 GOAT Group (r1 and r3 consumer), 11 DrChrono (r1), 12 Presto (r3: tags `Food Service Robots & Machines` / restaurant hardware), 13 FutureAdvisor (r1).
+
+**Took:** 14 Alex Solomon (PagerDuty), 15 Pete Koomen (Optimizely), 16 Patrick Collison (Stripe; first founder in the page’s founders array), 17 Bill Clerico (WePay), 18 Suhail Doshi (Mixpanel), 19 Brian Chesky (Airbnb). First-listed founder on each company page.
+
+---
+
+## consumer_retail_industrial (p217–p220) — Forbes World's Billionaires (self-made)
+
+**List:** 2026 billionaires API, rank 1, `selfMade: true` only, industries that sit in this bucket (Fashion & Retail, Food & Beverage, Manufacturing as industrial, Automotive as in p117, Construction & Engineering).  
+**Started:** rank 1. **Stopped:** rank 116.
+
+**Skipped (among others):** Ortega (r1), Zhong Shanshan (r1), Yanai (r1), He Xiangjian (r1), Wuerth (r1), Dangote (r1), Hendricks (r1); everyone else r3 or r4.
+
+**Took:** rank 68 Phil Knight (Nike), 81 François Pinault (Kering), 115 Todd Graves (Raising Cane’s), 116 Ernest Garcia II (Carvana / used cars). Knight was not skipped for fame.
+
+---
+
+## hardware_deeptech (p221–p223) — Computer History Museum Fellow Awards
+
+**List:** https://computerhistory.org/hall-of-fellows/ year order, most recent first.  
+**Started:** 2026. **Stopped:** 2024 Jensen Huang.
+
+**2026 skipped:** John Chowning (r3, computer music / FM synthesis), Ed Colligan (r2 Palm), Donna Dubinsky (r1/r2 Palm), Jeff Hawkins (r1/r2 Palm), Brewster Kahle (r3, Internet Archive / search).  
+**2024 skipped:** Elizabeth “Jake” Feinler (r3, ARPANET/NIC/DNS).
+
+**Took:** Allan Alcorn (2024, Pong / arcade electronics), Nolan Bushnell (2024, Atari cofounder — Atari is not an existing hit entity; Alcorn was an employee, so not the same own-venture event), Jensen Huang (2024, NVIDIA). Huang was not skipped for fame.
+
+---
+
+## healthcare_biotech (p224–p226) — Forbes World's Billionaires (self-made)
+
+**Started:** rank 1. **Stopped:** rank 346. Healthcare + `selfMade: true`.
+
+**Skipped:** Frist (r1), Poonawalla (r4 and r1), Shanghvi (r1), Zhong Huijuan (r1), Sun Piaoyang (r1), Andreas Struengmann (r2 Hexal), Thomas Struengmann (r1), Chung Yong-ji (r1), Carl Cook (r4), Bertarelli (r4), Zhu Yi (r1), Mills (r4), Li Xiting (r2 Mindray, same event as Xu Hang), Soon-Shiong (r1), Divi (r1).
+
+**Took:** rank 271 Robert Duggan, 323 Sulaiman Al Habib, 346 Seo Jung-jin.
+
+---
+
+## science_research (p227–p229)
+
+**Economics — Nobel, most recent first.** Started 2025 (2026 not announced). First-named 2025 laureate: **Joel Mokyr**. Aghion and Howitt not taken (one row). Stopped at 2025 Mokyr.
+
+**Physics — Nobel, most recent first.** Entire 2025 class skipped (r2): Clarke, Devoret, Martinis share the 2025 prize; Devoret is already p157. Next year 2024, first-named: **John J. Hopfield**. Stopped there.
+
+**Breakthrough — most recent first.** 2026 announcement. First-named 2026 Life Sciences laureate: **Jean Bennett**. Different year of that prize is a different event. Stopped there.
+
+---
+
+## investors_finance (p230–p231)
+
+**Midas List 2026** from rank 1. Skipped 1–7 all r1 (Khosla, Shen, Vishria, Raanan, Thiel, Gil, Stephens). **Took rank 8 Douglas Leone.** Stopped there.
+
+**Midas List Europe 2025** (2026 Europe JSON empty). From rank 1. **Took rank 1 Danny Rimer.** Stopped there.
+
+---
+
+## media_creators (p232–p233)
+
+**Pulitzer 2026**, published order (Journalism first). Public Service / Breaking News / Investigative winners are organizations or “Staff of …” — no named-person page, so they cannot enter. First named individual winners: Explanatory Reporting. **Took first-named: Susie Neilson.** Stopped there.
+
+**Grammy, 68th Annual (1 Feb 2026), General Field order.** Record of the Year Kendrick Lamar & SZA (r1 both), Album of the Year Bad Bunny (r1), Song of the Year Billie Eilish (r1). Next General Field category Best New Artist: **Olivia Dean.** Stopped there.
+
+---
+
+## trade_import_logistics (p234–p235) — Forbes World's Billionaires (self-made)
+
+**Started:** rank 1. Logistics + `selfMade: true`. **Stopped:** rank 487.
+
+**Skipped:** Aponte (r1), Rafaela Aponte-Diamant (r2 MSC), Kuehne (r4), Fredriksen (r1), Razon (r4), Saadé family (r4), Dennis Washington (r3: JSON industry Logistics but source “Construction, mining” / Washington Companies), Angelicoussis (r4), Marinakis (r4).
+
+**Took:** rank 166 Brad Jacobs, rank 487 Kjell Inge Rokke (shipping). Jacobs’s Forbes industry is Logistics; his profile lead currently emphasizes QXO roofing — that is a later-research problem, not a reason to skip here.
+
+---
+
+## Temptation / recall
+
+I recognized Stripe/Collison, Airbnb/Chesky, Phil Knight, Jensen Huang, Hopfield, and Mokyr before I reached them. I did **not** start from those names. They entered only when the walk landed on them, and I did not skip them for being famous. That is the failure mode the brief forbids in both directions.
+
+I was tempted to skip Knight and Huang as “too obvious,” and tempted to skip Bushnell as maybe the same Atari event as Alcorn. I did not skip Knight or Huang. I kept Bushnell because Alcorn was an Atari employee (later own ventures) and Atari is not an existing hit entity.
+
+I did not rebalance by country, era, or sex. This wave is heavily male and US-weighted because that is what the lists produced in order.
+=== ROSTER DRAW DONE: docs/wave9/roster-w9.csv ===
+rows: 25
+by bucket: {'software_internet': 6, 'consumer_retail_industrial': 4, 'hardware_deeptech': 3, 'healthcare_biotech': 3, 'science_research': 3, 'investors_finance': 2, 'media_creators': 2, 'trade_import_logistics': 2}
+rows with NO membership URL: none
+duplicate names in draw: none

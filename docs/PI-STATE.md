@@ -20,7 +20,7 @@
 |---|---|
 | people researched | **210** (`data/anchors.csv`), schema 0 errors |
 | included | 181 · excluded 29 (14%) |
-| roster | 210 names, exhausted — wave 9 needs a fresh draw |
+| roster | **235 names** (wave 9 drawn 2026-08-22); 210 researched |
 | revenue-strict n | **83** (waves 7–8 folded in 2026-08-22 after audit) |
 | median at n=83 | **9.0 yr**, 95% CI [8.0, 12.5], half-width 2.25 |
 | median history | 10.0, 9.0, 8.8, 9.0, 9.0, 9.8, 9.2, 9.0 |
@@ -34,25 +34,17 @@ second machine, merged here, and were **audited 2026-08-22 — contradiction rat
 
 ## OPEN ITEMS, in priority order
 
-1. **Wave 9.** The roster is exhausted at 210, so a fresh draw comes before any
-   research. The allocator has already been run for a 25-person wave:
+1. **Research wave 9.** The roster is drawn and merged — p211–p235 in
+   `data/roster.csv`. Nothing about them is researched yet. Run in batches of
+   about five:
 
-   | bucket | n |
-   |---|---|
-   | software_internet | 6 |
-   | consumer_retail_industrial | 4 |
-   | hardware_deeptech | 3 |
-   | healthcare_biotech | 3 |
-   | science_research | 3 |
-   | investors_finance | 2 |
-   | media_creators | 2 |
-   | trade_import_logistics | 2 |
+       scripts/grok-batch.sh docs/wave9/w9-a.csv p211 p212 p213 p214 p215
 
-   Enumerate the source lists in `frame.md`; do not recall then verify
-   (`BIASES.md` 20), and do not steer toward or away from fame (`BIASES.md` 24).
-   Screen every candidate against the new one-row-per-hit-event rule in
-   `frame.md` (`BIASES.md` 23). Then research via `scripts/grok-batch.sh`,
-   validate, and audit via `scripts/grok-audit.sh` before recomputing.
+   then `scripts/merge-batches.sh`, `python3 -m src.schema data/anchors.csv`,
+   and audit with `scripts/grok-audit.sh` before recomputing. **Read
+   `docs/wave9/NOTES.md` first** — it names two rows whose hit entity must be
+   confirmed before the merge absorbs them (p221/p222 Atari, p231 Index
+   Ventures).
 
 2. **The LaTeX paper.** Not started. Claude's job. Should carry: the survivorship
    framing, the constant-dollar method, the full bias catalogue, the audit
@@ -65,6 +57,12 @@ second machine, merged here, and were **audited 2026-08-22 — contradiction rat
    range stands and the wave is unaffected (`BIASES.md` 19) — but an 8-year
    range on a private company is the weakest surviving row in those waves and is
    the first thing a rescue pass should attack.
+
+4. **Wave 9 will move the covariates and that is allowed.** The drawn wave is
+   6/25 non-US and 3/25 women against a study at 59% and 27%. Recorded, not
+   corrected (`frame.md`, Recorded covariates). Expect the pooled shares to drop
+   when these rows are researched, and say so in the paper rather than
+   explaining it away.
 
 ## Done since the last reset (2026-08-22)
 
@@ -86,6 +84,11 @@ second machine, merged here, and were **audited 2026-08-22 — contradiction rat
   enforced at roster draw since wave 6.
 - **Recomputed** `analysis/clocks.csv`, `analysis/analysis.md`, and the median
   history. 207 tests pass.
+- **Wave 9 roster drawn** (p211–p235) by walking the named lists in published
+  order. The new one-row-per-hit-event rule made five rejections on its first
+  use, and the anti-fame steer from `BIASES.md` 24 did not recur — Knight and
+  Huang were taken in rank order with the temptation to skip them logged.
+  Details, the two rows to watch, and one process failure: `docs/wave9/NOTES.md`.
 
 ## The rules that must not drift
 
@@ -115,5 +118,7 @@ figure **short**, so it reads as a floor.
 - `docs/superpowers/RUNBOOK.md` — the 8-step wave procedure
 - `scripts/grok-batch.sh` — run one Grok research batch
 - `scripts/grok-audit.sh` — run a blind second pass in a clean scratch dir
+- `scripts/grok-roster.sh` — draw a wave's roster; regenerates the exclusion list first
+- `docs/GROK-ROSTER-BRIEF.md` — the roster brief; carries the two ways drawing has gone wrong
 - `docs/GROK-AUDIT-BRIEF.md` — the audit brief; overrides four points of the research brief
 - `scripts/merge-batches.sh` — merge batch files, refuses on column/id problems

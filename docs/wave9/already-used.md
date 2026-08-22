@@ -1,0 +1,407 @@
+# Already in the study — reject any candidate matching these
+
+Generated from `data/roster.csv` and `data/anchors.csv`.
+
+## 210 people already drawn
+
+- Aadit Palicha
+- Aileen Lee
+- Alain Aspect
+- Alan J. Perlis
+- Aleksandr Konotopskyi
+- Alfred Mann
+- Alice Zhang
+- Aliko Dangote
+- Alyson Friedensohn
+- Amancio Ortega
+- An Wang
+- Andrea Pizzarulli
+- Angélique Kidjo
+- Anita Roddick
+- Ann Miura-Ko
+- Apoorva Mehta
+- Arooj Aftab
+- Austin Russell
+- Bad Bunny
+- Barbara Liskov
+- Bess Wohl
+- Betsie Larkin
+- Billie Eilish
+- Bo Lu
+- Bom Kim
+- Bong Joon-ho
+- Carolyn Bertozzi
+- Carver Mead
+- Caucher Birkar
+- Chip Wilson
+- Chloé Zhao
+- Chris Wanstrath
+- Chung Yong-ji
+- Claudia Goldin
+- Colson Whitehead
+- Cyrus Poonawalla
+- Daniel Ek
+- Daniel Kraus
+- David Gausebeck
+- David Sun
+- Dennis Gaitsgory
+- Diane Hendricks
+- Dietmar Hopp
+- Dilip Shanghvi
+- Domee Shi
+- Donna Dubinsky
+- Donna Strickland
+- Drew Durbin
+- Eddy Lu
+- Edward Witten
+- Eileen Burbidge
+- Elad Gil
+- Emmanuelle Charpentier
+- Enric Asunción
+- Eric Vishria
+- Eugenio Pace
+- Federico Faggin
+- Frank Wang
+- Fred Smith
+- Gautam Adani
+- Gene Amdahl
+- Gianluigi Aponte
+- Gili Raanan
+- Gordon Moore
+- Harshil Mathur
+- He Xiangjian
+- Hemant Taneja
+- Hoang Nguyen
+- Huang Zheng
+- Ilya Volodarsky
+- Ismael Belkhayat
+- James Burkhardt
+- James Dyson
+- Jane Campion
+- Jason Borschow
+- Jason Kelly
+- Jay McHarg
+- Jean-Marie Lehn
+- Jeff Bezos
+- Jeff Hawkins
+- Jeff Lawson
+- Jill Lepore
+- Jim Ratcliffe
+- Johan Brenner
+- John Fredriksen
+- Josh Reeves
+- Judy Faulkner
+- Karim Beguir
+- Karsanbhai Patel
+- Katalin Kariko
+- Katrina Lake
+- Kazuhiko Nishi
+- Ken Olsen
+- Kendrick Lamar
+- Kevin Systrom
+- Kim Sung-joo
+- Kiran Mazumdar-Shaw
+- Kirsten Green
+- Kishore Biyani
+- Konrad Zuse
+- Kosuke Sogo
+- Kunal Bahl
+- Lakshmi Mittal
+- Larry Ellison
+- Larry Page
+- Lars Valerian Ahlfors
+- Laurel Bowden
+- Laurent Schwartz
+- Lei Jun
+- Leonard Schleifer
+- Luca Rossettini
+- Luciana Lixandru
+- Ma Huateng
+- Maggie Kang
+- Maria Jose Madero
+- Mariya Nurislamova
+- Mark Zuckerberg
+- Martin Mignot
+- Martua Sitorus
+- Mary Meeker
+- Maryam Mirzakhani
+- Maryna Viazovska
+- Mateo Marietti
+- Maurice V. Wilkes
+- Melanie Perkins
+- Michael Carvin
+- Michael Nusimow
+- Michel H. Devoret
+- Michelle Zatlyn
+- Min Kao
+- Morris Chang
+- Mudassir Sheikha
+- Murali Divi
+- Nadiem Makarim
+- Neal O'Mara
+- Neil Shen
+- Olugbenga Agboola
+- Omar M. Yaghi
+- Ondrej Bartos
+- Patrick Soon-Shiong
+- Paul Thomas Anderson
+- Peter Thiel
+- Qin Yinglin
+- Radhakishan Damani
+- Raghuram Rajan
+- Ragnar Frisch
+- Rana el Kaliouby
+- Raycho Raychev
+- Reinhold Wuerth
+- Reshma Sohoni
+- Rita Levi-Montalcini
+- Robert Kuok
+- Robert Pera
+- Robin Li
+- Robin Zeng
+- Rodney Brooks
+- Ryan Petersen
+- SZA
+- Sajith Wickramasekara
+- Sandra Kurtzig
+- Sara Blakely
+- Shigenobu Nagamori
+- Shimon Sakaguchi
+- Shiv Nadar
+- Shola Akinlade
+- Sid Sijbrandij
+- Simon Brendle
+- Sonali De Rycker
+- Sophie Wilson
+- Spenser Skates
+- Stephanie Shirley
+- Stephen Lake
+- Steve Wozniak
+- Sun Piaoyang
+- Tadashi Yanai
+- Taika Waititi
+- Tems
+- Terry Gou
+- Thomas Frist Jr.
+- Thomas Struengmann
+- Toni Morrison
+- Tracy Young
+- Trae Stephens
+- Trevor Martin
+- Tu Youyou
+- Tuan Ee Loi
+- Veronica Pascual Boe
+- Victor Ho
+- Vidit Aatrey
+- Viet Thanh Nguyen
+- Vinod Khosla
+- Wade Foster
+- Wang Chuanfu
+- Wang Wei
+- Wei Deng
+- William Ding
+- Xu Hang
+- Yoshi Yokokawa
+- Yoshikazu Tanaka
+- Yoshua Bengio
+- Youssou N'Dour
+- Zach Sims
+- Zhang Yiming
+- Zhang Yin
+- Zhong Huijuan
+- Zhong Shanshan
+- Zhou Qunfei
+- Zhu Gongshan
+- Zhu Yi
+- Özlem Türeci
+
+## 183 hit entities already used
+
+A candidate whose hit would be one of these is the SAME EVENT as an
+existing row and must be rejected (`frame.md`, One row per hit event).
+Prizes are per-year: a different year of the same prize is a different
+event and is allowed.
+
+- "7 Seconds" (with Neneh Cherry)
+- ABC Supply
+- ACM A.M. Turing Award
+- ASCII
+- ASK Computer Systems
+- ASTI Mobile Robotics
+- Abarca Health
+- Accel London IV
+- Accel London VI
+- Adani Exports (now Adani Enterprises Ltd)
+- Adolf Wuerth KG (Wuerth Group)
+- AeroSafe Global (American Aerogel Corporation)
+- Affectiva
+- Ajax Systems
+- Alpaca (AlpacaDB, Inc.)
+- Amazon.com, Inc.
+- Amdahl Corporation
+- America Chung Nam
+- American Pharmaceutical Partners, Inc.
+- Amperex Technology Limited (ATL)
+- Amplitude, Inc.
+- AnyMind Group (AdAsia Holdings)
+- Apple Computer, Inc.
+- Arc de Triomphe WWI centenary performance
+- Auth0
+- Avenue Supermarts (DMart)
+- BYD Company (Shenzhen BYD Battery)
+- Baidu
+- Bao
+- Ben & Frank
+- Benchmark Capital Partners IX, L.P.
+- Biocon
+- Boogie Nights
+- Breakthrough Prize in Life Sciences
+- Breakthrough Prize in Mathematics
+- Buymed (thuocsi.vn)
+- ByteDance
+- Camintonn Corporation
+- Canva
+- Careem
+- Caregen Co., Ltd.
+- Chari
+- Civitanavi Systems
+- Clipboard Health
+- Cloudflare
+- Codecademy (Ryzac, Inc.)
+- Confecciones GOA (later Inditex)
+- Cosmic - Aleph 1, L.P.
+- Coupang
+- Cowboy Ventures III
+- Creandum V
+- Credo Stage 3
+- Ctrl
+- Cyberstarts Venture Fund II, L.P.
+- D-Orbit
+- DJI
+- Dangote Group
+- Digital Equipment Corporation
+- Diles (2016 single/video)
+- Divi's Laboratories (founded as Divi's Research Centre)
+- DrChrono
+- Dyson
+- Element 14
+- EnduroSat
+- Epic Systems
+- Essence (with Wizkid)
+- Facebook (Thefacebook, Inc.)
+- Fairchild Semiconductor
+- Farm Fresh (The Holstein Milk Company)
+- Fast Retailing
+- Federal Express
+- Fields Medal
+- Fivestars
+- Flexport
+- Floodgate Fund III, L.P.
+- Flutterwave
+- Forerunner Partners III, L.P.
+- Founders Fund II
+- Founders Fund IX, LP
+- Freelance Programmers / F International
+- FutureAdvisor
+- GOAT
+- GREE, Inc.
+- Ganymed Pharmaceuticals
+- Garmin
+- General Catalyst Group VI
+- Ginkgo Bioworks
+- GitHub
+- GitLab
+- Gojek
+- Google Inc.
+- Greylock Israel II
+- Gusto (ZenPayroll)
+- HCL (Hindustan Computers Limited)
+- Hansoh Pharmaceutical (Jiangsu Hansoh / Haosen)
+- HelloSign (JN Projects, Inc., d/b/a HelloSign)
+- Hexal
+- Hon Hai (Foxconn)
+- Honeylove
+- Hospital Corporation of America
+- Hunt for the Wilderpeople
+- Index Ventures IX (Jersey), L.P.
+- Inspec Group
+- InstaDeep
+- Instacart (Maplebear Inc.)
+- Instagram
+- Institutional Investor All-America Research Team (Internet)
+- Jasper Infotech (MoneySaver / Snapdeal)
+- Joyo.com
+- KPop Demon Hunters (2025)
+- Kleiner Perkins Caufield & Byers VI
+- Lens Technology
+- Luminar Technologies
+- Malayan Sugar Manufacturing Co. Bhd.
+- Mammoth Biosciences
+- Matterport, Inc.
+- Mediterranean Shipping Company
+- Meesho
+- Memories of Murder
+- Midea
+- Mohabbat (Vulture Prince)
+- NetEase
+- Nidec (Nihon Densan)
+- Nirma
+- Nobel Prize in Chemistry
+- Nobel Prize in Economic Sciences
+- Nobel Prize in Physics
+- Nobel Prize in Physiology or Medicine
+- Nomadland
+- Nongfu Spring
+- Ocean Eyes (2015 SoundCloud single)
+- Odeko
+- Oracle (founded as Software Development Laboratories)
+- Ouku.com (欧酷网)
+- POP (Sushi Pop)
+- PT Ispat Indo
+- Pacesetter Systems
+- Palm Computing
+- Passion Capital
+- Paystack
+- PlanGrid
+- Razorpay
+- Regeneron
+- SAP
+- SF Express
+- Scentbird
+- Seedcamp Fund IV
+- Segment (Segment.io, Inc.)
+- Sendwave (Chime Inc.)
+- Sequoia Capital China (first fund 2005 / China II 2007)
+- Serum Institute of India
+- Shenzhen Mindray Bio-Medical Electronics Co., Ltd. (Mindray Medical International)
+- Sichuan Biokin Pharmaceutical (founded 1996 as Sichuan Baili Pharmaceutical)
+- Silicon Compilers Inc.
+- Song of Solomon
+- Spanx
+- Spotify
+- Stitch Fix
+- Sun Pharmaceutical Industries
+- Sungjoo International
+- TSMC
+- Taicang Poly Xiexin Thermal Power Co., Ltd.
+- Tencent
+- Thalmic Labs (North)
+- The Body Shop
+- The New Yorker essays (from "People Power", 24 October 2005)
+- The Piano
+- The Sympathizer
+- The Underground Railroad
+- Twilio
+- Ubiquiti Networks
+- Verge Genomics
+- Wallbox
+- Wang Laboratories
+- Westbeach
+- Whalefall (2023) / Angel Down (2025) / The Shape of Water (2018)
+- Wilmar Trading Pte Ltd / Wilmar Group
+- Zapier
+- Zepto
+- Zilog
+- Zuse KG
+- good kid, m.A.A.d city
+- iRobot Corporation (IS Robotics, Inc.)
