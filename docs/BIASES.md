@@ -560,6 +560,27 @@ has silently stopped being blind looks exactly like a blind audit that passed.
 result in this study is contingent on agents having honoured an instruction
 they could have ignored undetectably.
 
+**CONFIRMED AT WAVE 6, and it is not hypothetical.** Wave 6 ran four first-pass
+research agents concurrently. All four shared one scratchpad directory, and they
+left 54 artifacts in it — scraped HTML, downloaded PDFs, and per-person JSON files
+carrying their finished answers, one per row. Any auditor spawned from the same
+session would have started in that directory. The exposure was noticed and the 54
+files were moved outside the scratchpad *before* either auditor was dispatched, and
+both auditors were given the archive path as an explicit do-not-read. Both reported
+clean blinds and neither encountered first-pass content.
+
+So wave 6's audit is sound, but only because the leak was caught by hand. Parallel
+first-pass agents make this worse, not better: one agent leaves its own working
+files, four agents leave a near-complete copy of the wave.
+
+**A second defect surfaced in the same wave, in the brief itself.** Both wave-6
+auditors reported, independently and unprompted, that `docs/RESEARCH-RULES.md`
+instructs every agent to open `data/anchors.csv` to match column style — which is
+exactly the file a blind second pass must not see. Both declined and disclosed. The
+standing brief therefore contains an instruction that, followed literally by an
+auditor, silently destroys the blind. Audit prompts must carve this out explicitly
+until the brief distinguishes first-pass from second-pass readers.
+
 **Mitigation:** none in place. The real fix is to run the second pass in a
 clean working directory with no access to the first pass's artifacts, or on a
 separate machine or account entirely. Until then, treat audit agreement as
