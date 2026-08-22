@@ -4,7 +4,8 @@ Written so this project can be picked up cold: a different Claude account, a
 different machine, a different tool entirely. **No conversation history is
 needed.** Everything below is in the repo.
 
-Run everything from the repo root, `~/trajectories`, on branch `main`.
+Run everything from the repo root, `~/trajectories`, on branch `main`. Git identity is
+already configured in the repo; `git push origin main` works.
 
 ---
 
@@ -23,38 +24,73 @@ actually takes among people who succeeded.
 3. `docs/BIASES.md` — 24 recorded biases, several discovered the hard way. Read before quoting any number.
 4. `docs/superpowers/RUNBOOK.md` — the 8-step wave procedure.
 
-## Current state (as of commit d6b4940)
+## Current state (as of commit 95a1a41, wave 6 closed and pushed)
 
 | | |
 |---|---|
-| people researched | 135 (`data/anchors.csv`) |
-| included | 113 |
-| roster | 160 names (`data/roster.csv`) — wave 6 drawn, not researched |
-| revenue-strict n | 52 |
-| **median** | **9.8 yr, 95% CI [8.0, 13.0]** |
-| stopping rule | `STOP: False` — drift 0.80 yr, needs < 0.50 |
-| tests | `python3 -m unittest discover -s tests -t .` |
+| people researched | 160 (`data/anchors.csv`) |
+| included | 134 (26 excluded) |
+| roster | 160 names (`data/roster.csv`) — fully researched, **wave 7 not yet drawn** |
+| revenue-strict n | 60 |
+| **median** | **9.2 yr, 95% CI [8.5, 13.0]**, half-width 2.25 |
+| stopping rule | `STOP: False` — drift 0.80 and 0.60 yr, needs both < 0.50 |
+| tests | `python -m unittest discover -s tests -t .` (207 tests) |
 
-Waves completed: pilot (10), then waves 1–5 (25 each). Wave 6's roster exists;
-none of it is researched.
+Waves completed: pilot (10), then waves 1-6 (25 each). Wave 6's audit came back at
+**0.00 disagreement** on 10 drawn rows, with one second-only miss (p146).
+
+Two data-quality facts worth knowing before reading any number: **64 of the 134
+included rows carry a bounded `a5`**, so the bounded-row sensitivity run matters; and
+**31 included rows have `a2_education_end = unknown`**, which means they contribute
+nothing to the headline clock. `a2` is now the study's binding constraint, not `a5`.
 
 ## IMMEDIATE NEXT ACTION
 
-**Five wave-6 roster rows must be replaced before any research begins:**
-`p136, p137, p138, p140, p142`.
+Run wave 7. Nothing is half-finished — wave 6 is merged, validated, audited,
+committed and pushed. Allocation for wave 7, already computed from the 160 rows:
 
-Each is a co-founder of a company already in the sample (Razorpay, Zepto,
-Meesho, Auth0, Palm). A company crosses the threshold once, so co-founders
-share one hit event and are not independent observations. Because the stopping
-rule keys off the bootstrap CI half-width, correlated rows narrow the interval
-without adding information — the study could stop early on precision it has not
-earned. See `docs/BIASES.md` 23.
+    software_internet 6   hardware_deeptech 4   consumer_retail_industrial 3
+    healthcare_biotech 3  investors_finance 3   science_research 3
+    media_creators 2      trade_import_logistics 1
 
-Replace them with people whose hit entity appears **nowhere** in
-`data/anchors.csv` (`hit_entity` column) or `data/roster.csv`. Same buckets:
-four `software_internet`, one `hardware_deeptech`.
+Draw p161-p185 into `data/roster.csv` from the enumerated lists in `frame.md`.
 
-Then research all 25 (p136–p160) using `docs/RESEARCH-RULES.md` as the brief.
+## Wave 6 lessons — read these before dispatching any agent
+
+1. **This is Windows.** Use `python`, never `python3`. Set `PYTHONUTF8=1` before any
+   python that handles the em dashes and non-ASCII names in the CSVs, or it dies on
+   cp1252.
+2. **`data/anchors.csv` is CRLF, UTF-8, QUOTE_MINIMAL.** APPEND to it. A full
+   `csv.DictWriter` round-trip reflows quoting on every existing row and turns a
+   25-row change into a 160-row diff. Same for `data/roster.csv`.
+3. **Parallel agents leak the blind audit.** Wave 6 ran four concurrent research
+   agents; all four shared one scratchpad and left 54 artifacts in it, including
+   per-person JSON files with their finished answers. Any auditor spawned from that
+   session would have started in that directory. Give each agent its own output file,
+   and MOVE every first-pass artifact out of the shared scratchpad before dispatching
+   a single auditor. See `docs/BIASES.md` 22.
+4. **`docs/RESEARCH-RULES.md` breaks the blind if handed to an auditor unchanged.**
+   It tells every agent to open `data/anchors.csv` for column style. Both wave-6
+   auditors caught this themselves and declined. Audit prompts must carve it out
+   explicitly.
+5. **Roster membership URLs in the roster are not trustworthy until fetched.** Wave 6
+   found three Endeavor entries citing directory paging URLs that name nobody, and one
+   roster row that misdescribed the company (Ben & Frank is eyewear, not apparel).
+6. **Fetch quirks, all verified in wave 6:** `sec.gov` needs
+   `curl -H "User-Agent: research <contact>"`. `nobelprize.org`, `pulitzer.org` and
+   `grammy.com` all 403 WebFetch but work fine with curl plus a browser UA — the
+   roster's notes claiming otherwise were wrong. `oscars.org` genuinely 403s even with
+   a full UA; use third-party named-person sources. `startupintros.com` is unreliable
+   and misattributes foundings — do not use it.
+7. **Serial founders are the dominant risk in commercial buckets.** Three of six rows
+   in one wave-6 batch were serial founders and it changed the answer in all three.
+   The hit is the FIRST venture to cross, not the famous one.
+8. **Selection rule that worked, and is non-steering:** enumerate a list in published
+   order and take the first entries whose hit entity appears nowhere in
+   `data/anchors.csv` or `data/roster.csv`. The YC Top Companies list is machine-
+   enumerable at `https://yc-oss.github.io/api/companies/top.json` (91 entries, YC's
+   own top-company flag); entries 1-5 are used, the rest are not. Do NOT skip names
+   for being famous — that is `BIASES.md` 24 and it is as much a bias as recalling them.
 
 ## The rules that matter most
 
@@ -94,7 +130,8 @@ and `analysis.md`. That floor is now passed, so the number prints.
 
 ## Known open items
 
-- **Palm pair** — p70 Dubinsky and p94 Hawkins both date to 1995 at Palm Computing. Same event, two rows. Needs a decision (`BIASES.md` 23).
+- **Palm pair** — p70 Dubinsky and p94 Hawkins both date to 1995 at Palm Computing. Same event, two rows. Needs a decision (`BIASES.md` 23). Wave 6 introduced no new shared hit events; a check for entity+year collisions across all 160 rows found only this pair.
+- **`docs/OPEN-QUESTIONS.md` now has 7 questions, three added by wave 6.** Q5 (p141 Alpaca) and Q7 (p146 CookUnity/Sushi Pop) each decide whether a recorded row should be included or excluded — Q7 is the row where the blind audit's second pass reached a different verdict, invisible to the disagreement metric because the first pass returned `unknown`.
 - **Blind audits are not environment-enforced** (`BIASES.md` 22). A wave-5 auditor found the first pass's scraped files in its scratchpad. It declined to open them and disclosed it, but the isolation depends on agents honouring an instruction. Run second passes in a clean directory.
 - **`investors_finance` and `trade_import_logistics` have no dedicated sampling list** (`BIASES.md` 12).
 - **`docs/OPEN-QUESTIONS.md`** — stuck factual questions worth a search-first tool.
