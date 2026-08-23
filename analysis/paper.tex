@@ -234,6 +234,18 @@ The rule passes in \textbf{272 of 300 (90.7\%)}; the remaining 28 seeds give
 fixed in code in advance, so the stop is legitimate under the pre-specified
 procedure, but it is a boundary stop and we report it as one.
 
+A second check separates the two things a boundary stop puts at risk. Adding one
+hypothetical row to the 93, at \emph{any} clock value from 0 to 100 years, moves
+the median by \textbf{0.00 years} --- a median over 93 observations simply does
+not care about one more. But a single added row of 12 years or more widens the
+interval to [8.0, 11.0], a half-width of 1.50, and the stopping rule would
+\textbf{not} have fired.
+
+That is the honest characterisation of this study's ending. \textbf{The estimate
+is robust and the stopping decision is not.} One more person --- and the roster
+was exhausted, not the population --- could have kept collection running without
+changing the number it would eventually report.
+
 The natural criticism of a boundary stop is optional stopping --- that
 collection ran until the number looked right. Against that, an interim report
 committed the day before collection ended, at 160 people and a revenue-strict
