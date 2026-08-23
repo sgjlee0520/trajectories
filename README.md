@@ -57,13 +57,14 @@ retains 98% of eligible rows against the headline clock's 77%.
 ## Reproducing the result
 
 ```bash
-python3 -m src.schema  data/anchors.csv                  # must say 0 errors
-python3 -m src.clocks  data/anchors.csv analysis/clocks.csv
-python3 -m src.stats   analysis/clocks.csv
-python3 -m unittest discover -s tests -t .               # 207 tests
+python3 -m src.schema data/anchors.csv
+python3 -m src.clocks data/anchors.csv analysis/clocks.csv
+python3 -m src.stats analysis/clocks.csv
+python3 -m unittest discover -s tests -t .
 ```
 
-The bootstrap uses a fixed seed, so the interval reproduces exactly.
+The first must report `0 errors`; the last runs 207 tests. The bootstrap uses a
+fixed seed, so the interval reproduces exactly.
 
 ## Two things a reader should know before citing this
 
