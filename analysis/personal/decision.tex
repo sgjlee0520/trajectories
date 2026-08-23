@@ -1,0 +1,212 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1.05in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+
+\title{\bfseries What This Study Can and Cannot Tell You\\[0.35em]
+\large Applying the trajectories data to a PhD-or-build decision}
+\date{\normalsize 23 August 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Read this before any number below}
+
+You collected this data. You already know the caveat, so this is the short
+version: \textbf{the median is a duration, not a probability.} It says how long
+the road ran for people who reached the end. It says nothing about how many set
+out.
+
+That has a specific consequence for the decision in front of you. This study
+\textbf{cannot} tell you whether to do a PhD or start a company, because it
+never sampled anyone who tried either and failed. Both arms of your decision are
+represented here only by their winners. Any sentence of the form ``the data says
+path A beats path B'' is unsupported, and I am not going to write one.
+
+What the data \emph{can} do is describe the shape and timing of careers that
+worked. That is genuinely useful for planning, and useless for forecasting.
+
+\section{The four numbers that bear on your decision}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrl}
+\toprule
+Quantity & Median & Spread \\
+\midrule
+Age at first hit & \textbf{33.0} & IQR 30--39, $n$=105 \\
+\quad if the hit landed post-1995 & 32.0 & IQR 28.8--36.0 \\
+Years from age 18 to first hit & 15.0 & IQR 12--21 \\
+\textbf{Years from starting the venture that worked} & \textbf{4.2} & IQR 3.0--7.2, $n$=118 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+You are 22. The median person in this dataset who eventually crossed \$10M
+constant did it at 33. That is eleven years from where you stand, and
+\textbf{both of your options fit inside it.} A five-year PhD ending at 27 leaves
+you six years to the median. Starting a company now leaves you eleven.
+
+Nothing about the timing forces the choice. That is the first useful finding: on
+this evidence, the decision is not a race against a closing window.
+
+\section{The reframe: the long pole is not the company}
+
+Put two of those numbers next to each other. From age 18 to the hit is a median
+of 15 years. From \emph{starting the venture that worked} to the hit is 4.2.
+
+\begin{quote}
+\textbf{Roughly eleven of those fifteen years happen before the winning venture
+starts.}
+\end{quote}
+
+The company is the short part. The long part is whatever you were doing
+beforehand --- and in this sample, that period is not idle. It is where domain
+knowledge, capital, credibility and the earlier failed attempts accumulate. The
+study's own rule that a serial founder is dated at their \textbf{first} company
+to cross, not their famous one, means those earlier attempts are inside the
+eleven years, not excluded from them.
+
+So the real question is not ``PhD or company.'' It is:
+
+\begin{quote}
+\emph{Which pre-venture decade puts me in a position where a venture takes four
+years instead of never working at all?}
+\end{quote}
+
+A PhD is one way to spend part of that decade. So is building and failing twice.
+So is working for someone competent in an industry you intend to attack. This
+data cannot rank them. But it does say the pre-venture period is where the time
+actually goes, which means choosing it casually is the expensive error --- not
+choosing it slowly.
+
+\section{Where the two paths diverge in the data}
+
+The one place this dataset speaks directly to research-versus-commerce is the
+venture clock by field, and it is stark:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Field & $n$ & Median years from venture start to hit \\
+\midrule
+Software / internet & 54 & 4.0 \\
+Hardware / deep tech & 33 & 4.0 \\
+\textbf{Science / research} & 10 & \textbf{14.0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Read this carefully, because the obvious reading is wrong.} These are
+not the same test. For the commercial fields, the hit is \$10M of revenue in
+constant dollars --- a good business, achieved by thousands of people per
+decade. For science, the hit criterion is a \textbf{major prize}: a Nobel, a
+Fields Medal, a Turing Award, a Breakthrough Prize. That is a handful of people
+per year on the planet.
+
+So the honest statement is: \emph{reaching the very top of academic science
+takes about fourteen years from starting the work, while building a
+\$10M business takes about four from starting the company.} Those are not
+comparable outcomes and the ratio between them is not a return on investment. If
+anything the comparison flatters research, because the science rows are sampled
+at a far more extreme threshold and still show up in a dataset this small.
+
+What you can take from it: \textbf{academic recognition is a slow clock even for
+its winners}, and the sample contains nobody who got there quickly. Also note
+$n$=10. Treat that 14.0 as an impression, not a measurement.
+
+Also relevant: software has the youngest median age at hit in the study, 30.0,
+against 34.5 for hardware and 36.0 for healthcare. Fields differ in when they
+pay, by five or six years.
+
+\section{The factor this data cannot see, and it may dominate}
+
+Your decision has a structural asymmetry the dataset has no column for:
+\textbf{immigration status.}
+
+Nobody in this sample was selected on visa constraints. Several were immigrants
+--- but the study recorded where their career ran, never what permitted it to
+run there. That is a real hole for you specifically, and it cuts one way:
+
+\begin{itemize}
+\item A US PhD is not only training. It is roughly five more years of lawful
+presence, an assistantship that pays, OPT afterwards, repeated H-1B lottery
+entries, and eligibility arguments for EB-1B or an EB-2 national interest waiver
+that a bachelor's alone does not support.
+\item Going home to Busan after the bachelor's to build is not a neutral pause.
+It substantially closes the US route for years, and reopening it later is
+harder than not closing it.
+\item A US business started on F-1 has narrow lawful room to operate before OPT,
+and that constraint is on the timeline whether or not the business is good.
+\end{itemize}
+
+I want to be precise about the logic here: \textbf{this is not an argument that
+the PhD is better.} It is an argument that the two options are not symmetric in
+what they foreclose. One of them keeps more branches open at roughly equal cost
+in years. When a decision is genuinely close on the merits --- and on this
+evidence it is --- optionality is the tiebreaker that survives being wrong.
+
+The camera-import business is the interesting third case precisely because it is
+the one that could plausibly run from either country, which makes it the option
+least coupled to this asymmetry. That is worth more than it sounds.
+
+\section{What would actually change my read}
+
+Rather than a recommendation, here is what I would want you to answer, because
+each one moves the decision more than any number in this study:
+
+\begin{enumerate}
+\item \textbf{Do you have a specific thing to build, or a category?} Everyone in
+this dataset crossed with a particular product for a particular buyer. ``Start a
+business'' is not a plan and the four-year venture clock does not apply to it.
+If the answer is a category, the eleven pre-venture years have not started
+being spent well yet.
+\item \textbf{Is the PhD in something adjacent to what you would build?} Physics
+to deep tech or instrumentation keeps both paths alive at once. Physics to
+academic physics is a commitment to the 14-year clock and its far narrower gate.
+\item \textbf{Can you test the business inside the next twelve months without
+giving anything up?} The camera-import idea is unusually testable --- it has
+real customers, real margins, and a real cash cycle you can observe. A quarter
+of genuine trading tells you more than this entire study can.
+\item \textbf{What happens if you are still pre-hit at 33?} The median says
+half of the winners were. Whichever path leaves you employable, solvent and in a
+country you chose at 33 is the one that survives the median outcome rather than
+the lucky one.
+\end{enumerate}
+
+\section{The honest summary}
+
+The data supports exactly three statements about your decision:
+
+\begin{enumerate}
+\item \textbf{You are not late, and there is no closing window.} The median
+winner crossed at 33; the middle half crossed between 30 and 39.
+\item \textbf{The venture is the short part.} About eleven of the fifteen years
+from age 18 happen before the winning company starts. Choose the pre-venture
+decade deliberately; that is where the time actually goes.
+\item \textbf{Top-of-field academic recognition is a slow clock even for
+winners}, roughly fourteen years from starting the work, on thin evidence and at
+a far more extreme threshold than the commercial rows.
+\end{enumerate}
+
+Everything past that is not in the data. The visa asymmetry is real and points
+toward keeping US presence. The strongest argument for building now is having
+something specific to build, and this study cannot tell you whether you do.
+
+\vspace{1em}
+\hrule
+\vspace{0.6em}
+
+\emph{\small One last time, because it is the misreading this dataset invites
+most: nine years, or thirty-three, is how long it took the people who made it.
+It is not your odds, and it is not a schedule. The people who spent the same
+decade and got nothing are not in this file --- not because they were rare, but
+because the study was built in a way that cannot see them.}
+
+\end{document}
