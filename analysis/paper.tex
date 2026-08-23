@@ -1,0 +1,279 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1.05in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\floor}{\emph{\small Reminder: every median in this paper is
+time-to-hit \textbf{among people who already succeeded}. The sample is
+conditioned on the outcome and has no denominator. No figure here supports any
+statement about the odds of succeeding.}\par\medskip}
+
+\title{\bfseries How Long Before the First Hit?\\[0.35em]
+\large A conditioned-on-success estimate of time from education to a first
+\$10M-constant crossing, with its biases enumerated}
+\author{\normalsize Study repository: \texttt{\textasciitilde/trajectories}}
+\date{\normalsize 23 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent We collected dated career anchors for 235 people drawn only from
+enumerated third-party lists, and measured the interval from the end of formal
+education to the first year an individual's own venture crossed \$10 million in
+\textbf{constant 2026 dollars}. Among the 93 people for whom that interval is
+computable on primary revenue evidence, the median is \textbf{9.0 years}, 95\%
+bootstrap CI \textbf{[8.0, 10.0]}. Collection stopped under a pre-specified rule
+on median stability and interval width.
+
+The estimate describes only people who eventually crossed. Those who worked for
+decades and never crossed are absent by construction, and the two strongest
+measured biases both push the figure short. \textbf{The number is a floor, not a
+forecast.} The finding we consider most useful is not the pooled median but its
+era split: careers whose hit landed before 1995 took a median of 13.0 years,
+those after 1995 took 8.0, and the sample is only 26\% pre-1995.
+\end{abstract}
+
+\floor
+
+\section{What was measured}
+
+For each person we recorded six dated anchors, each with a source URL and a
+confidence grade: birth; the end of formal education (\emph{last completed
+credential}, so a dropout is dated to their previous completed credential, not
+to the year they left); first paid work in the field the hit came from; first
+independent venture; \textbf{first hit}; and a much later scale milestone.
+
+The headline clock is education-end to first hit. Two alternative clocks --- from
+age 18, and from first venture --- are reported in Section~\ref{sec:robust}
+because they survive different missing data.
+
+\subsection{The threshold is inflation-adjusted, and this matters more than it sounds}
+
+A hit is \$10 million in annual revenue \textbf{in constant 2026 dollars}. A
+nominal \$10M threshold is not the same test across eras: crossing \$10M in 1960
+required a business roughly eleven times larger in real terms than crossing it
+today. The 1960 bar is \textbf{\$919{,}417}. Applied to a sample that is 26\%
+pre-1995 by construction, a nominal threshold would have inflated exactly the
+careers this frame works hardest to include.
+
+This was not a theoretical concern. In an early pilot a single row was dated
+eleven years late because a nominal \$10M was applied to a 1960s company. Every
+revenue year in the final data was checked against that year's computed bar, and
+each row's notes carry the pasted output of the conversion tool for the year
+used.
+
+\subsection{Selection}
+
+Names entered only by enumerating a named third-party list in its published
+order --- rankings in rank order, prizes in year order --- and taking entries as
+they came. Country, era, and sex were recorded but never used to select. The
+sole standard for entry is the money criterion.
+
+\section{Result}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+People researched & 235 \\
+Included & 201 \\
+Excluded & 34 (14\%) \\
+Included on primary revenue evidence & 121 \\
+\textbf{Headline clock computable} & \textbf{93} \\
+\midrule
+\textbf{Median education-to-hit} & \textbf{9.0 years} \\
+95\% bootstrap CI & [8.0, 10.0] \\
+CI half-width & 1.00 \\
+\bottomrule
+\end{tabular}
+\caption{Headline result. The interval is a percentile bootstrap, 10{,}000
+resamples, fixed seed.}
+\end{table}
+
+Wave medians in collection order were
+10.0, 9.0, 8.8, 9.0, 9.0, 9.8, 9.2, 9.0, 9.0.
+The estimate has been stable near nine years since roughly the fortieth person;
+the single excursion to 9.8 reversed on the following wave.
+
+\subsection{The era split is the more useful finding}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Hit era & $n$ & Median & 95\% CI \\
+\midrule
+Pre-1995  & 33 & 13.0 yr & [9.0, 18.0] \\
+Post-1995 & 60 &  8.0 yr & [6.5, 9.0] \\
+\bottomrule
+\end{tabular}
+\caption{The pooled median is a mixture, not a constant.}
+\end{table}
+
+The pooled 9.0 is not a stable property of ambitious careers. It is a weighted
+average of two eras that differ by five years, in a sample that is 74\%
+post-1995. Anyone applying this number to a career today should read the 8.0,
+and anyone applying it historically should read the 13.0. Reporting the pooled
+figure alone would be the single most misleading thing this dataset permits.
+
+We do not claim the mechanism. Faster capital formation, software distribution
+economics, and better documentation of recent private revenue would all produce
+this pattern, and the last of those is a measurement artifact rather than a
+change in the world.
+
+\section{Robustness}
+\label{sec:robust}
+
+\subsection{Missing education dates remove 23\% of the eligible sample}
+
+Of 121 people with a hit dated on primary revenue evidence, \textbf{28 have no
+sourced education-end year} and therefore cannot enter the headline clock. This
+is the largest single threat to the estimate and it is structural: the headline
+clock is anchored to a credential, and a documented credential is exactly what
+is missing for self-taught and non-traditionally-educated founders.
+
+The dropped rows are not concentrated in one region --- 13 of 28 are US-based,
+against 48\% of the retained rows --- so the missingness does not appear to be a
+proxy for country. But it is certainly not random with respect to education, and
+its direction on the median is unknown rather than benign.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Clock & $n$ (of 121) & Median & 95\% CI \\
+\midrule
+From education end & 93 (77\%) & 9.0 yr & [8.0, 10.0] \\
+From age 18 & 105 (87\%) & 15.0 yr & [14.0, 16.0] \\
+From first venture & 118 (98\%) & 4.2 yr & [4.0, 5.0] \\
+\bottomrule
+\end{tabular}
+\caption{The two alternative clocks retain more of the sample. The
+venture clock, at 98\% coverage and a half-width of 0.50, is the best-measured
+quantity in this study.}
+\end{table}
+
+The venture clock is the one we would defend most strongly on coverage grounds:
+\textbf{once someone starts the thing that eventually works, the median time to
+\$10M-constant is 4.2 years}, and that figure rests on 98\% of eligible rows
+rather than 77\%.
+
+\subsection{The stopping rule fired on the boundary}
+
+Collection stopped under a rule fixed before the last waves: median drift below
+0.50 years across the two most recent waves, and CI half-width at most 1.0 year.
+The final drift was (0.20, 0.00). The final half-width was \textbf{exactly
+1.00}, against a test that fails only above 1.0.
+
+Because that is uncomfortably close, we re-ran the bootstrap across 300 seeds.
+The rule passes in \textbf{272 of 300 (90.7\%)}; the remaining 28 seeds give
+[8.0, 11.0], a half-width of 1.50, and would not have stopped. The seed was
+fixed in code in advance, so the stop is legitimate under the pre-specified
+procedure, but it is a boundary stop and we report it as one. A reader who
+prefers a stricter rule should treat collection as having ended arbitrarily at
+$n=93$ and the interval as no tighter than [8.0, 11.0].
+
+\section{Bias catalogue}
+
+Twenty-four biases were catalogued during collection, several discovered only
+after they had corrupted data. The ones that bear on the number:
+
+\textbf{Survivorship, and it dominates everything else.} The sample is
+conditioned on crossing. People who worked twenty years and never crossed are
+absent by construction, not by rarity. This is not correctable within the design
+and is the reason no odds statement can be made.
+
+\textbf{Documentation bias, pushing short.} A crossing is datable when revenue
+was published early. Companies that disclosed early skew toward faster growth
+and better funding. Undatable crossings became exclusions rather than late
+dates --- 30 of the 34 exclusions are undatable crossings --- so slow, quiet
+successes drop out rather than lengthening the tail.
+
+\textbf{Recall bias, corrected mid-study.} An early roster agent recalled names
+and then found citations for them. Every row it produced had a valid citation
+and the sample was still biased, because recall came first. Later waves
+enumerate the list and read off it in published order.
+
+\textbf{Anti-fame steering, the same error inverted.} Told to avoid names it
+would have recalled, a later agent rejected Peter Thiel, Vinod Khosla and Jensen
+Huang from enumerated lists as ``too obvious.'' That is the identical bias with
+its sign flipped. The rule is that prominence is not a criterion in either
+direction; the final wave took Phil Knight, Jensen Huang and John Hopfield in
+rank order and logged the temptation to skip them.
+
+\textbf{Correlated observations.} Co-founders of one company share one crossing,
+and the bootstrap treats every row as independent, so a co-founder pair narrows
+the interval without adding information. A rule of one row per hit \emph{event}
+--- entity plus year --- was added to the frame and rejected five candidates on
+its first use. One pair predating the rule remains, at Palm Computing in 1995;
+both rows are on fallback basis and therefore sit outside the headline set
+entirely, so they do not touch the reported interval.
+
+\textbf{Wave 1 was collected under a different design.} Its composition was
+deliberately steered before the money-only rule was adopted. The sample is a
+mixture of two sampling designs and that discontinuity cannot be undone.
+
+\section{Audit method}
+
+Each wave was audited by re-researching a drawn sample of its rows
+\textbf{blind}: a second pass that could not see the first pass's answers, run
+in a scratch directory containing only the brief and the inflation tool, after
+an early audit was found reading the first pass's cached files in a shared
+directory.
+
+Disagreement is scored as \emph{contradiction} --- two readings more than one
+year apart that do not overlap. A wave voids above 0.10 and its names are retired
+rather than reused.
+
+Two rule changes were made during the study and both are disclosed here because
+each loosened the test. First, bounded ranges that overlap count as agreement:
+forcing a researcher to collapse an honest bracket to a single year to satisfy
+the check was voiding good waves. Second, a miss --- one pass dating a row the
+other could not --- stopped counting as disagreement. A six-platform blind
+cross-check measured a single-pass miss rate near 25\%, so on ten audited rows
+two or three misses arise from search thoroughness alone; counting them voided
+waves that contained no wrong dates. Misses are now treated as rescue signals.
+
+The final two audits returned contradiction rates of \textbf{0.000}.
+
+\section{What we would not defend}
+
+\begin{itemize}
+\item \textbf{Annual recurring revenue may have been treated as calendar-year
+revenue.} One row is dated from ARR; a blind second pass using GAAP revenue gave
+a wider bracket that overlapped, so the audit did not flag it. Other SaaS rows
+may be dated the same way and were never swept.
+\item \textbf{Three rows rest on a single source} for the year that decides
+them, with the alternative reading disclosed in the row's own notes.
+\item \textbf{Seven open questions were never resolved.} One concerns a founding
+year that, if corrected, would push a bounded range past the ten-year cap and
+turn that row into an exclusion. That row is outside the headline set, so the
+reported median does not move.
+\item \textbf{Thirty-five of the earliest roster rows} predate the rule
+requiring a membership URL naming the person.
+\item \textbf{Collection was executed by language models} following written
+briefs, with a human deciding methodology. The briefs, every batch log, every
+audit pairing and every rejection are in the repository.
+\end{itemize}
+
+\section{Conclusion}
+
+Among people who eventually built something that crossed \$10 million in
+constant 2026 dollars, the median took \textbf{9.0 years from the end of formal
+education}, 95\% CI [8.0, 10.0] --- but 13.0 years if the hit landed before
+1995 and 8.0 if after, and \textbf{4.2 years from starting the venture that
+worked}.
+
+The most defensible reading is the narrowest one. This dataset measures how long
+the apprenticeship ran for people whose apprenticeship ended in a hit. It cannot
+say how many served one and got nothing, and the biases that survived
+enumeration push the surviving figure short. Treat nine years as a floor on the
+observed, not an expectation for the aspiring.
+
+\end{document}
