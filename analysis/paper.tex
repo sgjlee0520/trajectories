@@ -175,7 +175,16 @@ Because that is uncomfortably close, we re-ran the bootstrap across 300 seeds.
 The rule passes in \textbf{272 of 300 (90.7\%)}; the remaining 28 seeds give
 [8.0, 11.0], a half-width of 1.50, and would not have stopped. The seed was
 fixed in code in advance, so the stop is legitimate under the pre-specified
-procedure, but it is a boundary stop and we report it as one. A reader who
+procedure, but it is a boundary stop and we report it as one.
+
+The natural criticism of a boundary stop is optional stopping --- that
+collection ran until the number looked right. Against that, an interim report
+committed the day before collection ended, at 160 people and a revenue-strict
+$n$ of 60, already reported a median of \textbf{9.2 years}
+(\texttt{analysis/archive/}). The estimate moved 0.2 years while the
+revenue-strict sample grew by more than half, and the wave-by-wave history shows
+the same stability from roughly the fortieth person. The stop determined
+\emph{when} collection ended; it did not determine the number. A reader who
 prefers a stricter rule should treat collection as having ended arbitrarily at
 $n=93$ and the interval as no tighter than [8.0, 11.0].
 
