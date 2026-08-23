@@ -41,6 +41,63 @@ those after 1995 took 8.0, and the sample is only 26\% pre-1995.
 
 \floor
 
+\section*{Reading the statistics in this paper}
+
+Four terms carry most of the weight. None of them mean what everyday usage
+suggests, so they are defined here in full.
+
+\textbf{Median.} Line all 93 people up by how long they took and read off the
+person in the middle. Half took less, half took more. It is used here instead of
+the average because a few people took thirty years and an average would let them
+drag the figure upward; the median ignores how extreme the extremes are.
+\emph{A median is a duration, never a probability.} ``Median 9.0 years'' means
+the middle person took nine years. It does not mean anyone has a nine-year
+timeline, and it says nothing about anyone's chance of getting there.
+
+\textbf{$n$.} How many people a figure is computed from. $n$=93 is the headline;
+where a table shows $n$=10, the figure beside it is an impression rather than a
+measurement, and this paper flags those explicitly.
+
+\textbf{95\% confidence interval (CI).} A range expressing how much the median
+would wobble if we had happened to sample different people. ``[8.0, 10.0]''
+means the honest reading is \emph{somewhere around 8 to 10 years}, not exactly
+9.0. Loosely: if this study were repeated many times over, intervals built this
+way would contain the true value about 95\% of the time. \textbf{A narrow
+interval means the number is well pinned down; a wide one means the data is
+thin.} Whenever an interval appears, read the whole range --- the single number
+in front of it is only its centre.
+
+\textbf{Half-width.} Half the interval's span, a one-number summary of how tight
+it is. [8.0, 10.0] spans 2.0, so the half-width is 1.0. This study's stopping
+rule was written around it: collection continued until the half-width fell to
+1.0 or below, i.e.\ until the estimate was pinned to roughly $\pm$1 year.
+
+\textbf{Bootstrap.} How the interval is computed. Rather than assume the data
+follows a bell curve --- it does not --- the computer draws 10{,}000 random
+resamples of the 93 people, taking the median of each, and reads the interval
+off the spread of those 10{,}000 medians. It is a way of asking ``how much would
+this number have moved if the sample had come out differently?'' using only the
+data in hand.
+
+\textbf{IQR, or middle half.} Where the interquartile range is quoted, it is the
+band containing the middle 50\% of people, from the 25th to the 75th percentile.
+It describes \emph{the spread of actual people}, and should not be confused with
+the confidence interval, which describes uncertainty about the median. The
+middle half of this sample crossed between 30 and 39 years of age; the interval
+on the median age is a much narrower [32.0, 34.0]. Both are true and they answer
+different questions.
+
+\subsection*{The one that matters most}
+
+Every figure in this paper is computed over people who \textbf{already
+succeeded}. Statisticians call this conditioning on the outcome. It means the
+sample has no denominator: we know how long the winners took, and we have no
+idea how many people ran the same years and got nothing, because the study was
+built in a way that cannot see them.
+
+So no number here is a rate, a chance, or a forecast. Nine years is how long it
+took the middle winner. It is not how long it takes, and it is not the odds.
+
 \section{What was measured}
 
 For each person we recorded six dated anchors, each with a source URL and a

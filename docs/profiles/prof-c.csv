@@ -1,1 +1,61 @@
 person_id,name,hit_entity,bucket,nationality,sex,highest_degree,field_of_study,institution,expertise,basis,source
+p121,Rodney Brooks,"iRobot Corporation (IS Robotics, Inc.)",hardware_deeptech,AU,M,PhD,Computer Science,Stanford University,robotics,notes,https://en.wikipedia.org/wiki/Rodney_Brooks
+p122,Zhu Gongshan,"Taicang Poly Xiexin Thermal Power Co., Ltd.",hardware_deeptech,CN,M,Associate,Electrical Automation,Nanjing Electric Power College,cogeneration,notes,https://www.forbes.com/profile/zhu-gongshan/
+p123,Austin Russell,Luminar Technologies,hardware_deeptech,US,M,HighSchool,unknown,St. Margaret's Episcopal School,lidar,notes,https://en.wikipedia.org/wiki/Austin_Russell_(entrepreneur)
+p124,Xu Hang,"Shenzhen Mindray Bio-Medical Electronics Co., Ltd. (Mindray Medical International)",healthcare_biotech,CN,M,Masters,Biomedical Engineering,Tsinghua University,medical devices,notes,https://www.sec.gov/Archives/edgar/data/1373060/000114554906001273/h00529fv1.htm
+p125,Patrick Soon-Shiong,"American Pharmaceutical Partners, Inc.",healthcare_biotech,US,M,MD,Medicine,University of the Witwatersrand,injectable pharmaceuticals,notes,https://en.wikipedia.org/wiki/Patrick_Soon-Shiong
+p126,Sun Piaoyang,,healthcare_biotech,CN,M,Bachelors,Pharmaceutical Chemistry,China Pharmaceutical University,pharmaceuticals,notes,https://zh.wikipedia.org/wiki/%E5%AD%99%E9%A3%98%E6%89%AC
+p127,Claudia Goldin,Nobel Prize in Economic Sciences,science_research,US,F,PhD,Economics,University of Chicago,labor economics,notes,https://en.wikipedia.org/wiki/Claudia_Goldin
+p128,Barbara Liskov,ACM A.M. Turing Award,science_research,US,F,PhD,Computer Science,Stanford University,programming languages,notes,https://en.wikipedia.org/wiki/Barbara_Liskov
+p129,Caucher Birkar,Fields Medal,science_research,GB,M,PhD,Algebraic Geometry,University of Nottingham,birational geometry,notes,https://en.wikipedia.org/wiki/Caucher_Birkar
+p130,Kirsten Green,"Forerunner Partners III, L.P.",investors_finance,US,F,Bachelors,Business Economics,UCLA,consumer venture capital,notes,
+p131,Ann Miura-Ko,"Floodgate Fund III, L.P.",investors_finance,US,F,PhD,Information Security,Stanford University,seed-stage venture capital,notes,https://floodgate.com/team/ann-miura-ko
+p132,Arooj Aftab,Mohabbat (Vulture Prince),media_creators,PK,F,Bachelors,Music Production and Engineering,Berklee College of Music,jazz vocals,notes,https://en.wikipedia.org/wiki/Arooj_Aftab
+p133,Domee Shi,Bao,media_creators,CA,F,Bachelors,Animation,Sheridan College,animation direction,notes,https://en.wikipedia.org/wiki/Domee_Shi
+p134,Robert Kuok,Malayan Sugar Manufacturing Co. Bhd.,trade_import_logistics,MY,M,HighSchool,unknown,Raffles Institution,sugar trading,notes,https://en.wikipedia.org/wiki/Robert_Kuok
+p135,Martua Sitorus,Wilmar Trading Pte Ltd / Wilmar Group,trade_import_logistics,ID,M,HighSchool,unknown,SMA Budi Mulia,palm oil trading,notes,
+p136,Tracy Young,PlanGrid,software_internet,US,F,Bachelors,Construction Management,Sacramento State,construction software,notes,https://www.csus.edu/news/made/stories/archive/tracy-young.html
+p137,Josh Reeves,Gusto (ZenPayroll),software_internet,US,M,Masters,Electrical Engineering,Stanford University,payroll software,notes,
+p138,Spenser Skates,"Amplitude, Inc.",software_internet,US,M,Bachelors,Biological Engineering,MIT,product analytics,notes,https://news.mit.edu/2021/amplitude-analytics-0824
+p139,Apoorva Mehta,Instacart (Maplebear Inc.),software_internet,CA,M,Bachelors,Electrical Engineering,University of Waterloo,grocery delivery,notes,https://uwaterloo.ca/engineering/events/fireside-chat-apoorva-mehta
+p140,Drew Durbin,Sendwave (Chime Inc.),software_internet,US,M,Bachelors,unknown,Brown University,mobile remittances,notes,https://www.clay.com/dossier/wave-mobile-money-ceo
+p141,Yoshi Yokokawa,"Alpaca (AlpacaDB, Inc.)",software_internet,JP,M,Bachelors,Policy Management,Keio University,brokerage infrastructure,notes,
+p142,David Gausebeck,"Matterport, Inc.",hardware_deeptech,US,M,Bachelors,Computer Science,University of Illinois at Urbana-Champaign,3D spatial capture,notes,
+p143,Veronica Pascual Boe,ASTI Mobile Robotics,hardware_deeptech,ES,F,Masters,Business Administration,College des Ingenieurs,mobile robotics,notes,
+p144,Andrea Pizzarulli,Civitanavi Systems,hardware_deeptech,IT,M,Bachelors,Electronic Engineering,Universita Politecnica delle Marche,inertial navigation,notes,https://www.ecapital.it/wp-content/uploads/2019/08/CNS_ISTAO_20190416_v04.pdf
+p145,Raycho Raychev,EnduroSat,hardware_deeptech,BG,M,Masters,Space Management,International Space University,small satellites,notes,https://wikitia.com/wiki/Raycho_Raychev
+p146,Mateo Marietti,POP (Sushi Pop),consumer_retail_industrial,AR,M,Bachelors,Business Economics,Universidad Torcuato Di Tella,sushi restaurants,notes,https://www.endeavor.org.ar/emprendedores/mateo-marietti/
+p147,Tuan Ee Loi,Farm Fresh (The Holstein Milk Company),consumer_retail_industrial,MY,M,HighSchool,unknown,Sekolah Menengah Jenis Kebangsaan Ayer Tawar,fresh milk,notes,https://www.insage.com.my/BursaNews/Attachment/202407/20240731/FFB-AN20240731A1-3.pdf
+p148,Maria Jose Madero,Ben & Frank,consumer_retail_industrial,MX,F,Bachelors,Fashion and Textile Design,"CENTRO de Diseno, Cine y Television",eyewear,notes,https://rocketreach.co/maria-jose-madero-castelao-email_22891129
+p149,Gili Raanan,"Cyberstarts Venture Fund II, L.P.",investors_finance,IL,M,Masters,Business Administration,Recanati School of the Tel Aviv University,cybersecurity venture capital,notes,https://en.wikipedia.org/wiki/Gili_Raanan
+p150,Neil Shen,Sequoia Capital China (first fund 2005 / China II 2007),investors_finance,CN,M,Masters,Management,Yale School of Management,venture capital,notes,https://en.wikipedia.org/wiki/Neil_Shen
+p151,Martin Mignot,"Index Ventures IX (Jersey), L.P.",investors_finance,FR,M,Masters,Finance,Sciences Po,venture capital,notes,https://www.forbes.com/profile/martin-mignot/
+p152,Daniel Kraus,Whalefall (2023) / Angel Down (2025) / The Shape of Water (2018),media_creators,US,M,Masters,Library and Information Science,University of Illinois Urbana-Champaign,fiction writing,notes,https://ischool.illinois.edu/news-events/news/2026/05/kraus-wins-2026-pulitzer-prize-award-fiction
+p153,Bad Bunny,Diles (2016 single/video),media_creators,PR,M,HighSchool,unknown,unknown,Latin trap,notes,https://en.wikipedia.org/wiki/Bad_Bunny
+p154,Maggie Kang,KPop Demon Hunters (2025),media_creators,KR,F,Bachelors,Animation,Sheridan College,animation,notes,https://www.sheridancollege.ca/newsroom/articles/arts-design/maggie-kang-reflects-on-kpop-demon-hunters
+p155,Omar M. Yaghi,Nobel Prize in Chemistry,science_research,US,M,PhD,Inorganic Chemistry,University of Illinois at Urbana-Champaign,metal-organic frameworks,notes,http://yaghi.berkeley.edu/bio.html
+p156,Shimon Sakaguchi,Nobel Prize in Physiology or Medicine,science_research,JP,M,PhD,Medicine,Kyoto University,regulatory T cells,notes,https://www.osaka-u.ac.jp/en/research/nobelprize/sakaguchi/top
+p157,Michel H. Devoret,Nobel Prize in Physics,science_research,FR,M,PhD,Quantum Condensed-Matter Physics,Universite Paris-Sud,superconducting circuits,notes,https://www.universite-paris-saclay.fr/en/news/michel-devoret-phd-universite-paris-saclay-nobel-prize-physics-2025
+p158,Jason Borschow,Abarca Health,healthcare_biotech,PR,M,Bachelors,Economics,Harvard University,pharmacy benefits,notes,
+p159,Hoang Nguyen,Buymed (thuocsi.vn),healthcare_biotech,VN,M,Bachelors,unknown,Foreign Trade University,pharmaceutical e-commerce,notes,
+p160,Jay McHarg,AeroSafe Global (American Aerogel Corporation),trade_import_logistics,US,M,Masters,Business Administration,Babson College,cold-chain packaging,notes,
+p161,Amancio Ortega,Confecciones GOA (later Inditex),consumer_retail_industrial,ES,M,None,unknown,unknown,fast fashion,notes,https://www.elespanol.com/quincemil/economia/empresas/20260324/amancio-ortega-cumple-anos-nino-dejo-escuela-creador-imperio-inditex/1003744180747_0.html
+p162,Reinhold Wuerth,Adolf Wuerth KG (Wuerth Group),consumer_retail_industrial,DE,M,None,unknown,unknown,industrial fasteners,notes,https://de.wikipedia.org/wiki/Reinhold_W%C3%BCrth
+p163,Eddy Lu,GOAT,consumer_retail_industrial,US,M,Bachelors,unknown,"University of California, Berkeley",sneaker resale,notes,
+p164,Ken Olsen,Digital Equipment Corporation,hardware_deeptech,US,M,Masters,Electrical Engineering,MIT,minicomputers,notes,https://en.wikipedia.org/wiki/Ken_Olsen
+p165,Steve Wozniak,"Apple Computer, Inc.",hardware_deeptech,US,M,Bachelors,Electrical Engineering and Computer Science,"University of California, Berkeley",personal computers,notes,https://en.wikipedia.org/wiki/Steve_Wozniak
+p166,Gene Amdahl,Amdahl Corporation,hardware_deeptech,US,M,PhD,Theoretical Physics,University of Wisconsin-Madison,mainframe computers,notes,https://en.wikipedia.org/wiki/Gene_Amdahl
+p167,Konrad Zuse,Zuse KG,hardware_deeptech,DE,M,Masters,Civil Engineering,TH Berlin-Charlottenburg,computers,notes,https://www.deutsche-biographie.de/gnd118637436.html
+p168,Thomas Frist Jr.,Hospital Corporation of America,healthcare_biotech,US,M,MD,Medicine,Washington University School of Medicine,hospital chains,notes,https://commencement-archive.wustl.edu/people/thomas-f-frist-jr/
+p169,Chung Yong-ji,"Caregen Co., Ltd.",healthcare_biotech,KR,M,PhD,Molecular Biology,Cornell University,biomimetic peptides,notes,https://www.businesspost.co.kr/BP?command=article_view&num=390178
+p170,Alyson Friedensohn,,healthcare_biotech,US,F,Bachelors,Global Environmental Change and Sustainability,Johns Hopkins University,workplace mental health,notes,
+p171,Vinod Khosla,Kleiner Perkins Caufield & Byers VI,investors_finance,US,M,Masters,Business Administration,Stanford University,venture capital,notes,https://en.wikipedia.org/wiki/Vinod_Khosla
+p172,Eric Vishria,"Benchmark Capital Partners IX, L.P.",investors_finance,US,M,Bachelors,Mathematical and Computational Science,Stanford University,venture capital,notes,https://en.wikipedia.org/wiki/Eric_Vishria
+p173,Peter Thiel,Founders Fund II,investors_finance,US,M,JD,Law,Stanford Law School,venture capital,notes,https://en.wikipedia.org/wiki/Peter_Thiel
+p174,Paul Thomas Anderson,Boogie Nights,media_creators,US,M,HighSchool,unknown,Montclair College Preparatory School,film direction,notes,https://emanuellevy.com/oscar/oscar-directors-anderson-paul-thomas-background-career-awards-filmography/
+p175,SZA,Ctrl,media_creators,US,F,HighSchool,unknown,Columbia High School,alternative R&B,notes,https://en.wikipedia.org/wiki/SZA
+p176,Alan J. Perlis,ACM A.M. Turing Award,science_research,US,M,PhD,Mathematics,Massachusetts Institute of Technology,programming languages,notes,https://amturing.acm.org/award_winners/perlis_0132439.cfm
+p177,Maurice V. Wilkes,ACM A.M. Turing Award,science_research,GB,M,PhD,Physics,University of Cambridge,stored-program computers,notes,https://amturing.acm.org/award_winners/wilkes_1001395.cfm
+p178,Lars Valerian Ahlfors,Fields Medal,science_research,FI,M,PhD,Mathematics,University of Helsinki,complex analysis,notes,https://mathshistory.st-andrews.ac.uk/Biographies/Ahlfors/
+p179,Zach Sims,"Codecademy (Ryzac, Inc.)",software_internet,US,M,HighSchool,unknown,unknown,online coding education,notes,
+p180,Larry Page,Google Inc.,software_internet,US,M,Masters,Computer Science,Stanford University,web search,notes,https://engineering.stanford.edu/about/history/heroes/2014-heroes/larry-page

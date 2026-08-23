@@ -1,0 +1,44 @@
+
+Wrote **p01–p60** to `docs/profiles/prof-a.csv` (60 rows, identity fields copied from anchors).
+
+## Basis
+
+| basis | n |
+|---|---|
+| notes | 48 |
+| researched | 8 |
+| unknown | 4 |
+
+The eight researched rows are the ones whose notes were silent on education: Sara Blakely, Katalin Kariko, Tadashi Yanai, Gordon Moore, Mary Meeker, Kevin Systrom, Robin Li, and Taika Waititi (notes had already failed to date a tertiary credential; Wikipedia states a BA from Victoria University of Wellington in 1997).
+
+## `highest_degree`
+
+| degree | n |
+|---|---|
+| Masters | 21 |
+| Bachelors | 13 |
+| PhD | 12 |
+| unknown | 7 |
+| HighSchool | 4 |
+| MD | 2 |
+| None | 1 |
+
+Highest completed credential is not the same as the study’s `a2` year. Where notes record a later completed degree that `a2` skipped because it was undated or post-career-start, the profile uses the later credential: Sandra Kurtzig (Stanford master’s), Zhong Huijuan (Nanjing master’s), Sonali De Rycker (HBS MBA), Kazuhiko Nishi (Kogakuin doctorate, 1999), Olugbenga Agboola (MIT Sloan MBA), Enric Asunción (MEng), Hemant Taneja and Aileen Lee (graduate degrees named without years).
+
+German *Diplom-Ingenieur* (Dietmar Hopp) and the 1965 Italian *Laurea* (Federico Faggin) are coded as Masters. Zhou Qunfei left during the second year of junior high, so `None`.
+
+## Could not resolve (degree type `unknown`)
+
+- **Zhang Yin** — trade-school accounting mentioned, no completed credential named after two attempts in the notes.
+- **Thomas Struengmann** — Augsburg 1977 is sourced; notes explicitly disagree on MBA vs doctorate.
+- **Anita Roddick** — 1962 teaching credential at Newton Park College of Education; UK CertEd is not a listed degree type.
+- **Youssou N'Dour** — dropped out of school; no terminal year.
+- **James Dyson** — studied industrial design at the RCA 1966–1970; notes (and Wikipedia) never name a completed degree.
+- **Tems** — bios mention study in South Africa/Nigeria without completion.
+- **Cyrus Poonawalla** — Brihan Maharashtra College of Commerce is named; no sourced completion.
+
+Stephanie Shirley has a BSc in the notes but no school or subject; Karsanbhai Patel has a BSc in Chemistry with no school. Those are partial, not unresolved.
+=== DONE docs/profiles/prof-a.csv ===
+rows: 60
+degree: [('Masters', 21), ('Bachelors', 13), ('PhD', 12), ('unknown', 7), ('HighSchool', 4), ('MD', 2), ('None', 1)]
+basis : [('notes', 48), ('researched', 8), ('unknown', 4)]

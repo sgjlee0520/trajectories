@@ -1,0 +1,44 @@
+| basis | rows |
+|---|---|
+| notes | 48 |
+| researched | 8 |
+| unknown | 4 |
+
+**Researched (notes were silent; a source is in `source`):** Chris Wanstrath, Terry Gou, Trevor Martin, Eileen Burbidge, Johan Brenner, Betsie Larkin, Ismael Belkhayat, Kosuke Sogo.
+
+## `highest_degree`
+
+| degree | count |
+|---|---|
+| Bachelors | 23 |
+| Masters | 14 |
+| PhD | 10 |
+| HighSchool | 4 |
+| unknown | 4 |
+| None | 2 |
+| Associate | 1 |
+| JD | 1 |
+| MD | 1 |
+
+## Could not resolve (basis `unknown`)
+
+- **Radhakishan Damani** — commerce dropout after one year at the University of Mumbai; no named completed credential after two attempts.
+- **Angélique Kidjo** — CIM Paris jazz study and a dropped law plan are attested; neither is a completed credential. No sourced diploma.
+- **James Burkhardt** — no reliable education source. Aggregator pages claim a UT Austin BA; that is not enough.
+- **Sajith Wickramasekara** — MIT dropout; high-school work is mentioned, but no completed earlier credential is named.
+
+## Uncertainties
+
+- **Zhong Shanshan:** notes and Chinese Wikipedia give a 1985 电大 graduation in Chinese language and literature. Alumni write-ups say 专科 (Associate); the Wikipedia infobox says 本科. Recorded as `Associate`.
+- **Ondrej Bartos:** notes name VŠE Prague, Faculty of Finance & Accounting, ~2000, not the title. Pre-Bologna that was an Ing. Recorded as `Masters`.
+- **Leonard Schleifer:** notes say a completed UVA MD/PhD. Recorded as `MD`.
+- **Jane Campion:** BA Anthropology, then Sydney College of the Arts, then an AFTRS diploma. Highest listed credential is `Bachelors` (Anthropology, Victoria University of Wellington).
+- **Robin Zeng:** the 2006 CAS physics PhD is after the ATL hit, so it is not `a2`, but it is the highest completed credential.
+- **Terry Gou:** Wikipedia infobox says BS from Taipei University of Marine Technology; the school was a maritime junior college at the time. Recorded as `Bachelors` from that page, field `unknown`.
+- **Trevor Martin:** own site lists a Stanford PhD; it does not name the subject. `field_of_study` is `unknown`.
+- **He Xiangjian** and **John Fredriksen:** recorded as `None` from the notes (higher-primary / left school at ~16). Not “unknown” — the notes describe no completed secondary or tertiary credential.
+- Nationality is copied from `country_primary` throughout, including John Fredriksen (`CY`) and Dennis Gaitsgory (`DE`).
+=== DONE docs/profiles/prof-b.csv ===
+rows: 60
+degree: [('Bachelors', 23), ('Masters', 14), ('PhD', 10), ('HighSchool', 4), ('unknown', 4), ('None', 2), ('Associate', 1), ('JD', 1), ('MD', 1)]
+basis : [('notes', 48), ('researched', 8), ('unknown', 4)]

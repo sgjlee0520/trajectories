@@ -1,1 +1,61 @@
 person_id,name,hit_entity,bucket,nationality,sex,highest_degree,field_of_study,institution,expertise,basis,source
+p61,William Ding,NetEase,software_internet,CN,M,Bachelors,Communication Technology,University of Electronic Science and Technology of China,online games,notes,https://ir.netease.com/management/william-ding
+p62,Shiv Nadar,HCL (Hindustan Computers Limited),software_internet,IN,M,Bachelors,Electrical Engineering,PSG College of Technology,computer hardware,notes,https://en.wikipedia.org/wiki/Shiv_Nadar
+p63,Harshil Mathur,Razorpay,software_internet,IN,M,Bachelors,unknown,IIT Roorkee,digital payments,notes,https://in.linkedin.com/in/harshilmathur
+p64,Sid Sijbrandij,GitLab,software_internet,NL,M,Masters,Management Science,University of Twente,software collaboration,notes,https://storage.courtlistener.com/recap/gov.uscourts.cand.444595/gov.uscourts.cand.444595.1.0.pdf
+p65,Chris Wanstrath,GitHub,software_internet,US,M,HighSchool,unknown,St. Xavier High School,code hosting,researched,https://en.wikipedia.org/wiki/Chris_Wanstrath
+p66,Jeff Lawson,Twilio,software_internet,US,M,Bachelors,Computer Science,University of Michigan,communications APIs,notes,https://news.engin.umich.edu/2016/08/the-most-interesting-tech-ipo-of-the-year-was-founded-by-alums/
+p67,Robin Zeng,Amperex Technology Limited (ATL),hardware_deeptech,HK,M,PhD,Physics,Chinese Academy of Sciences,lithium-ion batteries,notes,https://en.wikipedia.org/wiki/Robin_Zeng
+p68,Robert Pera,Ubiquiti Networks,hardware_deeptech,US,M,Masters,unknown,UC San Diego,wireless networking,notes,https://en.wikipedia.org/wiki/Robert_Pera
+p69,Terry Gou,Hon Hai (Foxconn),hardware_deeptech,TW,M,Bachelors,unknown,Taipei University of Marine Technology,electronics manufacturing,researched,https://en.wikipedia.org/wiki/Terry_Gou
+p70,Donna Dubinsky,Palm Computing,hardware_deeptech,US,F,Masters,Business Administration,Harvard,handheld computing,notes,https://computerhistory.org/profile/donna-dubinsky/
+p71,Radhakishan Damani,Avenue Supermarts (DMart),consumer_retail_industrial,IN,M,unknown,unknown,unknown,supermarket retail,unknown,
+p72,Zhong Shanshan,Nongfu Spring,consumer_retail_industrial,CN,M,Associate,Chinese Language and Literature,Zhejiang Radio and Television University,bottled water,notes,https://zh.wikipedia.org/wiki/%E9%92%9F%E7%9D%92%E7%9D%92
+p73,He Xiangjian,Midea,consumer_retail_industrial,CN,M,None,unknown,unknown,home appliances,notes,
+p74,Dilip Shanghvi,Sun Pharmaceutical Industries,healthcare_biotech,IN,M,Bachelors,Commerce,University of Calcutta,generic pharmaceuticals,notes,https://www.bloomberg.com/billionaires/profiles/dilip-s-shanghvi/
+p75,Jason Kelly,Ginkgo Bioworks,healthcare_biotech,US,M,PhD,Biological Engineering,MIT,synthetic biology,notes,https://openwetware.org/wiki/Jason_Kelly
+p76,Trevor Martin,Mammoth Biosciences,healthcare_biotech,US,M,PhD,unknown,Stanford University,CRISPR diagnostics,researched,http://trevormmartin.com/
+p77,Luciana Lixandru,Accel London VI,investors_finance,RO,F,Bachelors,Mathematics and Economics,Georgetown,venture capital,notes,
+p78,Eileen Burbidge,Passion Capital,investors_finance,GB,F,Bachelors,Computer Science,University of Illinois at Urbana-Champaign,venture capital,researched,https://siebelschool.illinois.edu/about/awards/alumni-awards/alumni-awards-past-recipients/eileen-burbidge
+p79,Johan Brenner,Creandum V,investors_finance,SE,M,Masters,unknown,Stockholm School of Economics,venture capital,researched,https://www.forbes.com/profile/johan-brenner/
+p80,Emmanuelle Charpentier,Nobel Prize in Chemistry,science_research,FR,F,PhD,unknown,Pierre and Marie Curie University,CRISPR gene editing,notes,https://en.wikipedia.org/wiki/Emmanuelle_Charpentier
+p81,Simon Brendle,Breakthrough Prize in Mathematics,science_research,DE,M,PhD,unknown,University of Tübingen,geometric analysis,notes,https://en.wikipedia.org/wiki/Simon_Brendle
+p82,Maryna Viazovska,Fields Medal,science_research,UA,F,PhD,Mathematics,University of Bonn,sphere packing,notes,https://en.wikipedia.org/wiki/Maryna_Viazovska
+p83,Chloé Zhao,Nomadland,media_creators,US,F,Masters,Film,New York University,narrative film,notes,https://www.mtholyoke.edu/directory/alum/chloe-zhao
+p84,Viet Thanh Nguyen,The Sympathizer,media_creators,US,M,PhD,English,UC Berkeley,literary fiction,notes,https://dornsife.usc.edu/profile/viet-nguyen/
+p85,Wang Wei,SF Express,trade_import_logistics,CN,M,HighSchool,unknown,unknown,express logistics,notes,
+p86,Vidit Aatrey,Meesho,software_internet,IN,M,Bachelors,Electrical Engineering,IIT Delhi,social commerce,notes,https://economictimes.indiatimes.com/markets/stocks/news/bengaluru-gives-india-another-billionaire-who-is-iit-engineer-meesho-cofounder-vidit-aatrey/articleshow/125998435.cms
+p87,Aadit Palicha,Zepto,software_internet,IN,M,HighSchool,unknown,GEMS Modern Academy,quick commerce,notes,https://gulfnews.com/technology/21-year-old-dubai-school-alumnus-is-now-heading-a-14-billion-indian-startup-zepto-1.97927360
+p88,Wade Foster,Zapier,software_internet,US,M,Masters,Business Administration,University of Missouri,workflow automation,notes,https://engineering.missouri.edu/2022/150-years-of-leadership-wade-foster/
+p89,Wei Deng,Clipboard Health,software_internet,US,F,JD,Law,Yale,healthcare staffing,notes,https://www.davispolk.com/alumni/wei-deng-ny-08
+p90,Eugenio Pace,Auth0,software_internet,AR,M,Masters,Computer Science,Instituto Tecnológico de Buenos Aires,identity management,notes,https://www.endeavor.org.ar/emprendedores/eugenio-pace/
+p91,Karim Beguir,InstaDeep,software_internet,TN,M,Masters,unknown,New York University,deep learning,notes,https://instadeep.com/2018/12/ceo-of-instadeep-selected-as-endeavor-entrepreneur/
+p92,Mudassir Sheikha,Careem,software_internet,AE,M,Masters,Computer Science,Stanford University,ride-hailing,notes,https://www.weforum.org/people/mudassir-sheikha/
+p93,Sophie Wilson,Element 14,hardware_deeptech,GB,F,Bachelors,unknown,University of Cambridge,microprocessor design,notes,https://computerhistory.org/profile/sophie-wilson/
+p94,Jeff Hawkins,Palm Computing,hardware_deeptech,US,M,Bachelors,Electrical Engineering,Cornell,handheld computing,notes,https://en.wikipedia.org/wiki/Jeff_Hawkins
+p95,Frank Wang,DJI,hardware_deeptech,CN,M,Masters,unknown,Hong Kong University of Science and Technology,consumer drones,notes,https://www.scmp.com/news/hong-kong/article/1370451/apple-pearl-river-delta-dji-innovations-taking-flight
+p96,Lei Jun,Joyo.com,hardware_deeptech,CN,M,Bachelors,Computer Science,Wuhan University,e-commerce,notes,https://en.wikipedia.org/wiki/Lei_Jun
+p97,Betsie Larkin,Honeylove,consumer_retail_industrial,US,F,Bachelors,Mathematics,Boston University,shapewear,researched,https://www.huffpost.com/author/bl-692
+p98,Chip Wilson,Westbeach,consumer_retail_industrial,CA,M,Bachelors,Economics,University of Calgary,snowboard apparel,notes,https://en.wikipedia.org/wiki/Chip_Wilson
+p99,Ismael Belkhayat,Chari,consumer_retail_industrial,MA,M,Masters,Business Administration,Cornell University,B2B grocery commerce,researched,https://www.lesiteinfo.com/maroc/324747-qui-est-ismail-belkhayat-ce-jeune-entrepreneur-qui-sactive.html
+p100,Colson Whitehead,The Underground Railroad,media_creators,US,M,Bachelors,unknown,Harvard,literary fiction,notes,https://en.wikipedia.org/wiki/Colson_Whitehead
+p101,Jane Campion,The Piano,media_creators,NZ,F,Bachelors,Anthropology,Victoria University of Wellington,narrative film,notes,https://en.wikipedia.org/wiki/Jane_Campion
+p102,Angélique Kidjo,Arc de Triomphe WWI centenary performance,media_creators,BJ,F,unknown,unknown,unknown,Afropop,unknown,
+p103,Alain Aspect,Nobel Prize in Physics,science_research,FR,M,PhD,unknown,Université Paris-Sud,quantum optics,notes,https://en.wikipedia.org/wiki/Alain_Aspect
+p104,Carolyn Bertozzi,Nobel Prize in Chemistry,science_research,US,F,PhD,Chemistry,UC Berkeley,bioorthogonal chemistry,notes,https://en.wikipedia.org/wiki/Carolyn_R._Bertozzi
+p105,Dennis Gaitsgory,Breakthrough Prize in Mathematics,science_research,DE,M,PhD,unknown,Tel Aviv University,geometric Langlands,notes,https://en.wikipedia.org/wiki/Dennis_Gaitsgory
+p106,Leonard Schleifer,Regeneron,healthcare_biotech,US,M,MD,Medicine,University of Virginia,biologic drugs,notes,https://news.virginia.edu/content/qa-regeneron-founder-and-uva-mdphd-alum-discusses-covid-19-treatment
+p107,Alice Zhang,Verge Genomics,healthcare_biotech,US,F,Bachelors,Molecular Biology,Princeton,AI drug discovery,notes,https://entrepreneurs.princeton.edu/people/alice-zhang-10
+p108,Laurel Bowden,Greylock Israel II,investors_finance,ZA,F,Masters,Business Administration,INSEAD,venture capital,notes,
+p109,Ondrej Bartos,Credo Stage 3,investors_finance,CZ,M,Masters,Finance and Accounting,Prague University of Economics and Business,venture capital,notes,https://ekonom.cz/c1-55928840-jen-jedna-z-deseti-dobrych-firem-udela-homerun
+p110,John Fredriksen,,trade_import_logistics,CY,M,None,unknown,unknown,tanker shipping,notes,https://gcaptain.com/john-fredriksen-man-myth-legend/
+p111,Bom Kim,Coupang,software_internet,KR,M,Bachelors,unknown,Harvard College,e-commerce,notes,
+p112,James Burkhardt,Odeko,software_internet,US,M,unknown,unknown,unknown,cafe supply operations,unknown,
+p113,Michael Carvin,,software_internet,US,M,Bachelors,unknown,Princeton,personal finance software,notes,
+p114,Sajith Wickramasekara,,software_internet,US,M,unknown,unknown,unknown,life science software,unknown,
+p115,Yoshikazu Tanaka,"GREE, Inc.",software_internet,JP,M,Bachelors,Political Economy,Nihon University,social gaming,notes,
+p116,Kosuke Sogo,AnyMind Group (AdAsia Holdings),software_internet,JP,M,Bachelors,Commerce,Nihon University,influencer marketing,researched,https://www.jpx.co.jp/english/listing/ir-clips/interview/detail/5027.html
+p117,Wang Chuanfu,BYD Company (Shenzhen BYD Battery),consumer_retail_industrial,CN,M,Masters,unknown,Beijing Non-Ferrous Metal General Research Institute,rechargeable batteries,notes,https://en.wikipedia.org/wiki/Wang_Chuanfu
+p118,Diane Hendricks,ABC Supply,consumer_retail_industrial,US,F,HighSchool,unknown,Osseo-Fairchild High School,building materials distribution,notes,https://en.wikipedia.org/wiki/Diane_Hendricks
+p119,Kishore Biyani,,consumer_retail_industrial,IN,M,Bachelors,unknown,Bombay University,mass retail,notes,
+p120,Qin Yinglin,,consumer_retail_industrial,CN,M,Bachelors,Animal Husbandry,Henan Agricultural University,pig breeding,notes,https://en.wikipedia.org/wiki/Qin_Yinglin

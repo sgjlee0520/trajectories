@@ -1,0 +1,41 @@
+I'll start by reading the research brief and the assigned rows so I can extract from notes first and only look things up where those notes are silent.The brief requires a schema check before any rows. I'll run that, then pull p181–p235 and match the existing profile format.Schema check passed. Next I’ll pull the full notes for p181–p235 and look at an existing profile file for the column format.I'll pull the education-related notes for each person and dump them to a file I can work from.A few people still have thin education notes, and I need nationality where it may differ from `country_primary`. I’ll pull those next.There's a dedicated profile brief I should follow. Reading that next, then filling the remaining education gaps.I have enough from the notes to start writing. I'll append rows in `person_id` order and look up only the remaining gaps.Schema check on `data/anchors.csv`: **235 rows checked, 0 errors.**
+
+Wrote 55 rows, **p181–p235**, to `docs/profiles/prof-d.csv`.
+
+## Basis
+
+| basis | n | share |
+|---|---:|---:|
+| notes | 45 | 82% |
+| researched | 5 | 9% |
+| unknown | 5 | 9% |
+
+Researched (notes were silent on the credential): Neal O'Mara, Zhang Yiming, Huang Zheng, Fred Smith, Olivia Dean.
+
+## `highest_degree`
+
+| degree | n |
+|---|---:|
+| Bachelors | 20 |
+| PhD | 11 |
+| Masters | 9 |
+| HighSchool | 6 |
+| unknown | 5 |
+| None | 2 |
+| MD | 2 |
+
+`None` is resolved, not a gap: **François Pinault** left school with no qualification; **Kjell Inge Røkke** had no secondary or higher education.
+
+## Could not resolve (by name)
+
+1. **Gautam Adani** — notes already conflict: school dropout at 16 vs. finished school then left a B.Com. No completed credential both accounts agree on.
+2. **Billie Eilish** — homeschooled; no diploma or equivalency in any source the notes (or this pass) could stand on.
+3. **Patrick Collison** — MIT dropout; Leaving Certificate year never sourced, so last completed credential is not established.
+4. **Ernest Garcia II** — Forbes says University of Arizona dropout; Wikipedia says he later earned the BA. Conflict, no year.
+5. **Brad Jacobs** — Brown dropout; Wikipedia has him graduating Northfield Mount Hermon, Bloomberg has him leaving prep school without a diploma. Last completed credential cannot be named.
+
+High-school dropouts whose *diploma* is sourced (Zuckerberg, Ellison, Volodarsky, Doshi, Duggan) are recorded as `HighSchool`, not unknown. Honorary degrees were ignored (Zuckerberg’s Harvard degree; Seo Jung-jin’s pharmacy doctorate).
+=== DONE docs/profiles/prof-d.csv ===
+rows: 55
+degree: [('Bachelors', 20), ('PhD', 11), ('Masters', 9), ('HighSchool', 6), ('unknown', 5), ('None', 2), ('MD', 2)]
+basis : [('notes', 45), ('researched', 5), ('unknown', 5)]

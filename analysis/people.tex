@@ -1,0 +1,497 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=0.85in,landscape]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+
+\title{\bfseries The People\\[0.35em]
+\large A qualitative companion to the trajectories study: who they were,
+what they knew, and the cases worth reading one at a time}
+\date{\normalsize 23 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent The main paper reduces 235 careers to a single number. This companion
+puts the people back. It carries a profile row for every person in the study ---
+highest completed degree, field, institution, nationality, sex and area of
+expertise --- a chapter of descriptive statistics over those fields, and a
+chapter of individual cases chosen because their numbers argue with the median.
+
+Degree and institution facts were lifted from the sourced notes already attached
+to each row in \texttt{data/anchors.csv} (86\% of rows) and researched fresh only
+where those notes were silent. \emph{unknown} appears where nothing was found;
+the study does not guess, and 16 people have no sourced credential at all.
+
+\vspace{0.6em}
+\noindent\textbf{The same caveat governs every number here.} These are people
+who already succeeded. The sample has no denominator, so nothing in this
+document is a rate or a forecast --- see the main paper's glossary.
+\end{abstract}
+
+\clearpage
+\section{The sample in numbers}
+
+All figures below cover the 201 included people. Where a row is marked \emph{commercial}, it covers only the 121 whose hit is \$10M-constant revenue; the rest reached an equivalent threshold such as a major prize or a \$100M fund.
+
+\subsection{Highest completed degree}
+
+\begin{center}\begin{tabular}{lrr}\toprule Degree & People & Share \\\midrule
+Bachelors & 63 & 31\% \\
+Masters & 47 & 23\% \\
+PhD & 42 & 21\% \\
+HighSchool & 21 & 10\% \\
+unknown & 14 & 7\% \\
+MD & 6 & 3\% \\
+None & 4 & 2\% \\
+Associate & 2 & 1\% \\
+JD & 2 & 1\% \\
+\bottomrule\end{tabular}\end{center}
+Just over half the sample stopped at a bachelor's degree or below. That is the single most counter-intuitive number in this table for anyone assuming credentials gate outlier outcomes.
+
+\subsection{Age at first hit, by degree (commercial hits only)}
+
+\begin{center}\begin{tabular}{lrrr}\toprule Degree & $n$ & Median age & Venture clock \\\midrule
+PhD & 11 & 44.0 & 4.5 yr \\
+MD & 3 & 36.0 & 1.0 yr \\
+Masters & 31 & 33.8 & 4.0 yr \\
+Bachelors & 45 & 31.0 & 4.0 yr \\
+HighSchool & 15 & 28.5 & 4.0 yr \\
+None & 4 & 33.2 & 11.0 yr \\
+\bottomrule\end{tabular}\end{center}
+\subsection{Field of the highest degree}
+
+\begin{center}\begin{tabular}{lr}\toprule Field & People \\\midrule
+unknown & 52 \\
+Computer Science & 17 \\
+Electrical Engineering & 13 \\
+Business Administration & 9 \\
+Business & 8 \\
+Medicine & 7 \\
+Mathematics & 6 \\
+Physics & 5 \\
+Chemistry & 4 \\
+Electrical Engineering and Computer Science & 4 \\
+Finance & 3 \\
+Commerce & 3 \\
+\bottomrule\end{tabular}\end{center}
+\subsection{Where they were educated}
+
+\begin{center}\begin{tabular}{lr}\toprule Institution & People \\\midrule
+Stanford University & 12 \\
+Harvard Business School & 5 \\
+Cornell University & 4 \\
+Harvard University & 4 \\
+University of California, Berkeley & 4 \\
+University of Cambridge & 3 \\
+Massachusetts Institute of Technology & 3 \\
+MIT & 3 \\
+University of Waterloo & 3 \\
+Yale University & 3 \\
+\bottomrule\end{tabular}\end{center}
+The concentration is real but far weaker than folklore suggests: no institution accounts for more than a small fraction, and the long tail of one-appearance schools is the bulk of the sample.
+
+\subsection{Nationality and sex}
+
+\begin{center}\begin{tabular}{lr}\toprule Country & People \\\midrule
+US & 94 \\
+CN & 16 \\
+GB & 11 \\
+IN & 11 \\
+DE & 7 \\
+FR & 6 \\
+KR & 5 \\
+JP & 5 \\
+CA & 5 \\
+NG & 3 \\
+\bottomrule\end{tabular}\end{center}
+Sex: M 150 (75\%), F 51 (25\%). These are recorded covariates, never selection criteria --- the sole standard for entry was the money threshold.
+
+\subsection{Area of expertise, most common}
+
+\begin{center}\begin{tabular}{lr}\toprule Expertise & People \\\midrule
+venture capital & 12 \\
+e-commerce & 4 \\
+literary fiction & 3 \\
+seed-stage venture capital & 3 \\
+shapewear & 2 \\
+feature film directing & 2 \\
+web search & 2 \\
+electronic health records & 2 \\
+payments processing & 2 \\
+generic pharmaceuticals & 2 \\
+ride-hailing & 2 \\
+handheld computing & 2 \\
+narrative film & 2 \\
+programming languages & 2 \\
+\bottomrule\end{tabular}\end{center}
+\section{Some interesting cases}
+
+These are not the most famous people in the sample. They are the ones whose
+numbers argue with the median, and each is here because it teaches something the
+pooled figure hides.
+
+\subsection*{The ones who took a lifetime}
+
+\textbf{John Hopfield} --- neural networks, PhD, hit at \textbf{91}. Sixty-six
+years from finishing his doctorate to the 2024 Nobel. The associative memory
+network he described in 1982 was recognised four decades later, when hardware
+finally made the idea matter. His row is the single longest clock in the study
+and a clean demonstration that recognition dates the world's readiness, not the
+work.
+
+\textbf{Tu Youyou} --- artemisinin, bachelor's degree, hit at \textbf{85}. She
+isolated the compound in the early 1970s inside a classified military
+programme, without a doctorate, a postdoc, or foreign training. The Nobel came in
+2015. Her clock is 60 years and every one of them is an artifact of who was
+allowed to be recognised and when.
+
+\textbf{Rita Levi-Montalcini} --- nerve growth factor, MD, hit at 77. Began the
+work in a bedroom laboratory in wartime Italy after racial laws barred her from
+academic posts. The study cannot represent what that start cost, only that the
+interval was 50 years.
+
+\subsection*{The ones who took almost no time}
+
+\textbf{Katrina Lake} --- apparel e-commerce, hit \textbf{1.5 years} after her
+MBA, at 30. The shortest education-to-hit clock in the commercial data. She had
+worked in retail analytics and venture capital first; the MBA sat late in a
+career already pointed at the problem, which is exactly why the clock reads short.
+A reminder that a short clock often means the anchor moved, not that the work
+was quick.
+
+\textbf{Austin Russell} --- lidar, no degree, hit at \textbf{20}. Left Stanford
+on a Thiel Fellowship having started the company at 17. He and Aadit Palicha
+(quick commerce, hit at 20) are the two youngest commercial crossings in the
+study, and both skipped the credential entirely rather than finishing it fast.
+
+\textbf{Frank Wang} --- consumer drones, hit 1.5 years out of his master's at 32.
+The company was founded in his dormitory; the degree and the venture overlap
+rather than sequence. Several of the fastest clocks in this study share that
+shape, and it is worth noticing that ``fast'' usually means \emph{concurrent},
+not \emph{efficient}.
+
+\subsection*{The ones with no degree at all}
+
+Eighteen people crossed \$10M-constant with a high-school credential or less.
+The set is more varied than the stereotype:
+
+\textbf{Zhou Qunfei} left school at 16 to work in a watch-lens factory in
+Shenzhen and crossed at 34 in cover-glass manufacturing --- a capital-intensive
+industrial business, not a software one. \textbf{Amancio Ortega} began as a shirt
+shop errand boy and crossed at 32. \textbf{Robert Kuok} (sugar trading, 37) and
+\textbf{Martua Sitorus} (palm oil, 32) both built commodity trading houses.
+\textbf{Diane Hendricks} crossed at 37 in building-materials distribution after
+starting in custom home building.
+
+The pattern worth extracting: the no-degree cohort is concentrated in
+\emph{physical} businesses --- manufacturing, distribution, trading, retail ---
+where the barrier is operational competence and capital rather than credentialed
+knowledge. The famous college-dropout software founders are the minority of this
+group, not its archetype.
+
+\subsection*{The career switchers}
+
+\textbf{Sara Blakely} sold fax machines door to door for seven years before
+founding a shapewear company with no apparel background whatsoever. Her row was
+recruited into the study precisely to stress the assumption that the pre-venture
+decade must be spent in-domain.
+
+She is not an outlier. One in five of the winners entered their eventual field
+three or more years after finishing education, with a median detour of 4.5
+years, and their median age at hit --- 34.2 --- is under two years behind those
+who went straight in. \textbf{The detour is survivable and common.} What the data
+does not show is any evidence that it \emph{helps}.
+
+\subsection*{The one whose date is a warning}
+
+\textbf{Mark Zuckerberg}'s crossing is dated 2005, and the paper flags it as the
+weakest-supported figure in that wave. The 2005 revenue figure comes from a
+single trade-press sentence quoting an S-1 that does not itself disclose
+anything before 2007; the margin above the bar is 48\%, the narrowest in its
+batch. If that one sentence is wrong, the crossing moves to 2006.
+
+It is included because the alternative --- dropping every row whose evidence is
+thin --- would bias the sample toward the well-documented, which is the very
+failure mode the study spent the most effort fighting. It is called out here so
+that anyone quoting his row quotes the uncertainty with it.
+
+\subsection*{The pair that changed the method}
+
+\textbf{Donna Dubinsky} and \textbf{Jeff Hawkins} both date to 1995 at Palm
+Computing. Two people, one crossing. Because the bootstrap treats every row as
+an independent draw, correlated rows narrow the confidence interval without
+adding information --- the estimate looks more precise than the evidence
+supports.
+
+Finding them led to a rule change mid-study: one row per hit \emph{event},
+entity plus year, not per person. On its first use the rule rejected five
+candidates, including a brother pair who founded one pharmaceutical company and
+two co-holders of a single Nobel year. Both Palm rows were kept because they sit
+outside the headline set and cannot affect the reported interval --- and because
+dropping one would have required inventing a rule for choosing between a founder
+and the CEO who built it, which correlates with sex in this sample.
+
+\subsection*{The youngest crossings are not entrepreneurs}
+
+\textbf{Billie Eilish} crossed at \textbf{15} and \textbf{Olivia Dean} at 20 ---
+both on the audience criterion rather than revenue. Creative careers can reach a
+million-person audience before the person is old enough to sign a contract
+alone, and no business in this dataset does anything comparable.
+
+If you are drawn to the very young hits in this study, note which criterion they
+fired on. The youngest \emph{commercial} crossings are 20, and there are two of
+them out of 121.
+
+\section{The catalogue}
+One row per person, all 235, in the order they entered the study. \textbf{Excl.} marks a row excluded from the analysis --- almost always because the crossing year could not be sourced, which is a documentation failure and not a judgement about the person. \emph{unk} means the fact was not found; the study never guesses.
+
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
+\begin{longtable}{@{}p{2.4cm}p{2.5cm}p{1.35cm}p{1.9cm}p{2.1cm}p{0.5cm}p{0.45cm}p{2.2cm}@{}}
+\toprule \textbf{Name} & \textbf{Company / entity} & \textbf{Degree} & \textbf{Field} & \textbf{Institution} & \textbf{Nat} & \textbf{Sex} & \textbf{Expertise} \\ \midrule \endhead
+Sara Blakely & Spanx & Bachelor & Communications & Florida State University & US & F & shapewear \\
+Katalin Kariko & Breakthrough Prize in Life Sciences & PhD & Biochemistry & University of Szeged & US & F & mRNA vaccines \\
+Tadashi Yanai \textit{\scriptsize(excl.)} & Fast Retailing & Bachelor & Economics and Political Science & Waseda University & JP & M & apparel retail \\
+Gordon Moore & Fairchild Semiconductor & PhD & Chemistry & California Institute of Technology & US & M & semiconductors \\
+Bong Joon-ho & Memories of Murder & Bachelor & Sociology & Yonsei University & KR & M & feature film directing \\
+Mary Meeker & Institutional Investor All-America Research Team (Internet) & Master & Finance & Cornell University & US & F & internet equity research \\
+Kevin Systrom & Instagram & Bachelor & Management Science and Engineering & Stanford University & US & M & photo sharing \\
+Robin Li & Baidu & Master & Computer Science & University at Buffalo & CN & M & web search \\
+Daniel Ek & Spotify & High sch. & Information Technology & IT-Gymnasiet & SE & M & music streaming \\
+Zhang Yin & America Chung Nam & \textit{unk} & \textit{unk} & \textit{unk} & CN & F & recovered-paper export \\
+Stephanie Shirley & Freelance Programmers / F International & Bachelor & \textit{unk} & \textit{unk} & GB & F & freelance programming \\
+Judy Faulkner & Epic Systems & Master & Computer Sciences & University of Wisconsin–Madison & US & F & electronic health records \\
+Dietmar Hopp & SAP & Master & Telecommunications Engineering & TH Karlsruhe & DE & M & enterprise software \\
+Kazuhiko Nishi \textit{\scriptsize(excl.)} & ASCII & PhD & \textit{unk} & Kogakuin University & JP & M & personal-computer publishing \\
+Sandra Kurtzig \textit{\scriptsize(excl.)} & ASK Computer Systems & Master & Aeronautical Engineering & Stanford University & US & F & manufacturing software \\
+Shola Akinlade & Paystack & Bachelor & Computer Science & Babcock University & NG & M & payments processing \\
+Shigenobu Nagamori & Nidec (Nihon Densan) & Bachelor & Electrical Engineering & Institute of Vocational Training & JP & M & precision motors \\
+Morris Chang & TSMC & PhD & Electrical Engineering & Stanford University & TW & M & semiconductor foundries \\
+Zhou Qunfei & Lens Technology & none & \textit{unk} & \textit{unk} & CN & F & cover-glass manufacturing \\
+An Wang & Wang Laboratories & PhD & Applied Physics & Harvard University & US & M & computer systems \\
+Kiran Mazumdar-Shaw \textit{\scriptsize(excl.)} & Biocon & Master & Brewing & Ballarat College / University of Melbourne & IN & F & industrial enzymes \\
+Thomas Struengmann & Hexal & \textit{unk} & \textit{unk} & University of Augsburg & DE & M & generic pharmaceuticals \\
+Zhong Huijuan \textit{\scriptsize(excl.)} & Hansoh Pharmaceutical (Jiangsu Hansoh / Haosen) & Master & \textit{unk} & Nanjing University & CN & F & oncology pharmaceuticals \\
+Alfred Mann \textit{\scriptsize(excl.)} & Pacesetter Systems & Master & Physics & UCLA & US & M & implantable medical devices \\
+Karsanbhai Patel & Nirma & Bachelor & Chemistry & \textit{unk} & IN & M & detergent manufacturing \\
+Anita Roddick & The Body Shop & \textit{unk} & Teaching & Newton Park College of Education & GB & F & natural cosmetics retail \\
+Kim Sung-joo \textit{\scriptsize(excl.)} & Sungjoo International & Master & Business Ethics and Economics & Harvard University & KR & F & luxury brand licensing \\
+Rita Levi-Montalcini & Nobel Prize in Physiology or Medicine & MD & Medicine & University of Turin Medical School & IT & F & nerve growth factor \\
+Jean-Marie Lehn & Nobel Prize in Chemistry & PhD & Chemistry & University of Strasbourg & FR & M & supramolecular chemistry \\
+Tu Youyou & Nobel Prize in Physiology or Medicine & Bachelor & Pharmacology & Beijing Medical College & CN & F & artemisinin \\
+Sonali De Rycker & Accel London IV & Master & Business & Harvard Business School & GB & F & venture capital \\
+Raghuram Rajan \textit{\scriptsize(excl.)} & \textit{unk} & PhD & Finance & MIT Sloan & US & M & financial economics \\
+Toni Morrison & Song of Solomon & Master & American Literature & Cornell University & US & F & literary fiction \\
+Youssou N'Dour & "7 Seconds" (with Neneh Cherry) & \textit{unk} & \textit{unk} & \textit{unk} & SN & M & mbalax \\
+Ryan Petersen & Flexport & Master & Business & Columbia Business School & US & M & freight forwarding \\
+Melanie Perkins & Canva & High sch. & \textit{unk} & Sacred Heart College & AU & F & graphic design software \\
+Michelle Zatlyn & Cloudflare & Master & Business & Harvard Business School & US & F & content delivery networks \\
+Rana el Kaliouby & Affectiva & PhD & Computer Science & University of Cambridge & US & F & affective computing \\
+Nadiem Makarim & Gojek & Master & Business & Harvard Business School & ID & M & ride-hailing \\
+Olugbenga Agboola & Flutterwave & Master & Business & MIT Sloan School of Management & NG & M & payments processing \\
+Kunal Bahl & Jasper Infotech (MoneySaver / Snapdeal) & Bachelor & Management and Technology & University of Pennsylvania & IN & M & e-commerce \\
+Enric Asunción & Wallbox & Master & Engineering & Universitat Politècnica de Catalunya & ES & M & EV charging hardware \\
+Federico Faggin & Zilog & Master & Physics & University of Padua & US & M & microprocessors \\
+David Sun & Camintonn Corporation & Bachelor & Electrical Engineering & Tatung University & US & M & computer memory \\
+Min Kao & Garmin & PhD & Electrical Engineering & University of Tennessee & US & M & GPS navigation \\
+Katrina Lake & Stitch Fix & Master & Business & Harvard Business School & US & F & apparel e-commerce \\
+Aliko Dangote \textit{\scriptsize(excl.)} & Dangote Group & Bachelor & Business Administration & Al-Azhar University & NG & M & cement manufacturing \\
+James Dyson & Dyson & \textit{unk} & Industrial Design & Royal College of Art & GB & M & cyclonic vacuum design \\
+Reshma Sohoni & Seedcamp Fund IV & Master & Business & INSEAD & GB & F & seed-stage venture capital \\
+Hemant Taneja & General Catalyst Group VI & Master & Electrical Engineering and Computer Science & Massachusetts Institute of Technology & US & M & growth-stage venture capital \\
+Aileen Lee & Cowboy Ventures III & Master & Business & Harvard Business School & US & F & seed-stage venture capital \\
+Kendrick Lamar & good kid, m.A.A.d city & High sch. & \textit{unk} & \textit{unk} & US & M & West Coast hip-hop \\
+Tems & Essence (with Wizkid) & \textit{unk} & \textit{unk} & \textit{unk} & NG & F & alté R\&B \\
+Taika Waititi & Hunt for the Wilderpeople & Bachelor & Theatre & Victoria University of Wellington & NZ & M & feature film directing \\
+Donna Strickland & Nobel Prize in Physics & PhD & Optics & University of Rochester & CA & F & chirped pulse amplification \\
+Yoshua Bengio & ACM A.M. Turing Award & PhD & Computer Science & McGill University & CA & M & deep neural networks \\
+Maryam Mirzakhani & Fields Medal & PhD & Mathematics & Harvard University & US & F & hyperbolic geometry \\
+Özlem Türeci & Ganymed Pharmaceuticals & MD & Medicine & Saarland University & DE & F & cancer immunotherapy \\
+Cyrus Poonawalla \textit{\scriptsize(excl.)} & Serum Institute of India & \textit{unk} & \textit{unk} & Brihan Maharashtra College of Commerce & IN & M & vaccine manufacturing \\
+Gianluigi Aponte & Mediterranean Shipping Company & High sch. & Nautical studies & Istituto Tecnico Nautico Statale Nino Bixio & CH & M & container shipping \\
+William Ding & NetEase & Bachelor & Communication Technology & University of Electronic Science and Technology of China & CN & M & online games \\
+Shiv Nadar & HCL (Hindustan Computers Limited) & Bachelor & Electrical Engineering & PSG College of Technology & IN & M & computer hardware \\
+Harshil Mathur & Razorpay & Bachelor & \textit{unk} & IIT Roorkee & IN & M & digital payments \\
+Sid Sijbrandij & GitLab & Master & Management Science & University of Twente & NL & M & software collaboration \\
+Chris Wanstrath & GitHub & High sch. & \textit{unk} & St. Xavier High School & US & M & code hosting \\
+Jeff Lawson & Twilio & Bachelor & Computer Science & University of Michigan & US & M & communications APIs \\
+Robin Zeng & Amperex Technology Limited (ATL) & PhD & Physics & Chinese Academy of Sciences & HK & M & lithium-ion batteries \\
+Robert Pera & Ubiquiti Networks & Master & \textit{unk} & UC San Diego & US & M & wireless networking \\
+Terry Gou & Hon Hai (Foxconn) & Bachelor & \textit{unk} & Taipei University of Marine Technology & TW & M & electronics manufacturing \\
+Donna Dubinsky & Palm Computing & Master & Business Administration & Harvard & US & F & handheld computing \\
+Radhakishan Damani & Avenue Supermarts (DMart) & \textit{unk} & \textit{unk} & \textit{unk} & IN & M & supermarket retail \\
+Zhong Shanshan & Nongfu Spring & Assoc. & Chinese Language and Literature & Zhejiang Radio and Television University & CN & M & bottled water \\
+He Xiangjian & Midea & none & \textit{unk} & \textit{unk} & CN & M & home appliances \\
+Dilip Shanghvi & Sun Pharmaceutical Industries & Bachelor & Commerce & University of Calcutta & IN & M & generic pharmaceuticals \\
+Jason Kelly & Ginkgo Bioworks & PhD & Biological Engineering & MIT & US & M & synthetic biology \\
+Trevor Martin \textit{\scriptsize(excl.)} & Mammoth Biosciences & PhD & \textit{unk} & Stanford University & US & M & CRISPR diagnostics \\
+Luciana Lixandru & Accel London VI & Bachelor & Mathematics and Economics & Georgetown & RO & F & venture capital \\
+Eileen Burbidge \textit{\scriptsize(excl.)} & Passion Capital & Bachelor & Computer Science & University of Illinois at Urbana-Champaign & GB & F & venture capital \\
+Johan Brenner & Creandum V & Master & \textit{unk} & Stockholm School of Economics & SE & M & venture capital \\
+Emmanuelle Charpentier & Nobel Prize in Chemistry & PhD & \textit{unk} & Pierre and Marie Curie University & FR & F & CRISPR gene editing \\
+Simon Brendle & Breakthrough Prize in Mathematics & PhD & \textit{unk} & University of Tübingen & DE & M & geometric analysis \\
+Maryna Viazovska & Fields Medal & PhD & Mathematics & University of Bonn & UA & F & sphere packing \\
+Chloé Zhao & Nomadland & Master & Film & New York University & US & F & narrative film \\
+Viet Thanh Nguyen & The Sympathizer & PhD & English & UC Berkeley & US & M & literary fiction \\
+Wang Wei \textit{\scriptsize(excl.)} & SF Express & High sch. & \textit{unk} & \textit{unk} & CN & M & express logistics \\
+Vidit Aatrey & Meesho & Bachelor & Electrical Engineering & IIT Delhi & IN & M & social commerce \\
+Aadit Palicha & Zepto & High sch. & \textit{unk} & GEMS Modern Academy & IN & M & quick commerce \\
+Wade Foster & Zapier & Master & Business Administration & University of Missouri & US & M & workflow automation \\
+Wei Deng & Clipboard Health & JD & Law & Yale & US & F & healthcare staffing \\
+Eugenio Pace & Auth0 & Master & Computer Science & Instituto Tecnológico de Buenos Aires & AR & M & identity management \\
+Karim Beguir & InstaDeep & Master & \textit{unk} & New York University & TN & M & deep learning \\
+Mudassir Sheikha & Careem & Master & Computer Science & Stanford University & AE & M & ride-hailing \\
+Sophie Wilson & Element 14 & Bachelor & \textit{unk} & University of Cambridge & GB & F & microprocessor design \\
+Jeff Hawkins & Palm Computing & Bachelor & Electrical Engineering & Cornell & US & M & handheld computing \\
+Frank Wang & DJI & Master & \textit{unk} & Hong Kong University of Science and Technology & CN & M & consumer drones \\
+Lei Jun & Joyo.com & Bachelor & Computer Science & Wuhan University & CN & M & e-commerce \\
+Chip Wilson \textit{\scriptsize(excl.)} & Westbeach & Bachelor & Economics & University of Calgary & CA & M & snowboard apparel \\
+Ismael Belkhayat \textit{\scriptsize(excl.)} & Chari & Master & Business Administration & Cornell University & MA & M & B2B grocery commerce \\
+Colson Whitehead & The Underground Railroad & Bachelor & \textit{unk} & Harvard & US & M & literary fiction \\
+Jane Campion & The Piano & Bachelor & Anthropology & Victoria University of Wellington & NZ & F & narrative film \\
+Angélique Kidjo & Arc de Triomphe WWI centenary performance & \textit{unk} & \textit{unk} & \textit{unk} & BJ & F & Afropop \\
+Alain Aspect & Nobel Prize in Physics & PhD & \textit{unk} & Université Paris-Sud & FR & M & quantum optics \\
+Carolyn Bertozzi & Nobel Prize in Chemistry & PhD & Chemistry & UC Berkeley & US & F & bioorthogonal chemistry \\
+Dennis Gaitsgory & Breakthrough Prize in Mathematics & PhD & \textit{unk} & Tel Aviv University & DE & M & geometric Langlands \\
+Leonard Schleifer & Regeneron & MD & Medicine & University of Virginia & US & M & biologic drugs \\
+Alice Zhang & Verge Genomics & Bachelor & Molecular Biology & Princeton & US & F & AI drug discovery \\
+Laurel Bowden & Greylock Israel II & Master & Business Administration & INSEAD & ZA & F & venture capital \\
+Ondrej Bartos & Credo Stage 3 & Master & Finance and Accounting & Prague University of Economics and Business & CZ & M & venture capital \\
+John Fredriksen \textit{\scriptsize(excl.)} & \textit{unk} & none & \textit{unk} & \textit{unk} & CY & M & tanker shipping \\
+Betsie Larkin & Honeylove & Bachelor & Mathematics & Boston University & US & F & shapewear \\
+Bom Kim & Coupang & Bachelor & \textit{unk} & Harvard College & KR & M & e-commerce \\
+James Burkhardt & Odeko & \textit{unk} & \textit{unk} & \textit{unk} & US & M & cafe supply operations \\
+Michael Carvin \textit{\scriptsize(excl.)} & \textit{unk} & Bachelor & \textit{unk} & Princeton & US & M & personal finance software \\
+Sajith Wickramasekara \textit{\scriptsize(excl.)} & \textit{unk} & \textit{unk} & \textit{unk} & \textit{unk} & US & M & life science software \\
+Yoshikazu Tanaka & GREE, Inc. & Bachelor & Political Economy & Nihon University & JP & M & social gaming \\
+Kosuke Sogo & AnyMind Group (AdAsia Holdings) & Bachelor & Commerce & Nihon University & JP & M & influencer marketing \\
+Wang Chuanfu & BYD Company (Shenzhen BYD Battery) & Master & \textit{unk} & Beijing Non-Ferrous Metal General Research Institute & CN & M & rechargeable batteries \\
+Diane Hendricks & ABC Supply & High sch. & \textit{unk} & Osseo-Fairchild High School & US & F & building materials distribution \\
+Kishore Biyani \textit{\scriptsize(excl.)} & \textit{unk} & Bachelor & \textit{unk} & Bombay University & IN & M & mass retail \\
+Claudia Goldin & Nobel Prize in Economic Sciences & PhD & Economics & University of Chicago & US & F & labor economics \\
+Qin Yinglin \textit{\scriptsize(excl.)} & \textit{unk} & Bachelor & Animal Husbandry & Henan Agricultural University & CN & M & pig breeding \\
+Austin Russell & Luminar Technologies & High sch. & \textit{unk} & St. Margaret's Episcopal School & US & M & lidar \\
+Rodney Brooks & iRobot Corporation (IS Robotics, Inc.) & PhD & Computer Science & Stanford University & AU & M & robotics \\
+Patrick Soon-Shiong & American Pharmaceutical Partners, Inc. & MD & Medicine & University of the Witwatersrand & US & M & injectable pharmaceuticals \\
+Xu Hang & Shenzhen Mindray Bio-Medical Electronics Co., Ltd. (Mindray Medical International) & Master & Biomedical Engineering & Tsinghua University & CN & M & medical devices \\
+Sun Piaoyang \textit{\scriptsize(excl.)} & \textit{unk} & Bachelor & Pharmaceutical Chemistry & China Pharmaceutical University & CN & M & pharmaceuticals \\
+Zhu Gongshan & Taicang Poly Xiexin Thermal Power Co., Ltd. & Assoc. & Electrical Automation & Nanjing Electric Power College & CN & M & cogeneration \\
+Barbara Liskov & ACM A.M. Turing Award & PhD & Computer Science & Stanford University & US & F & programming languages \\
+Caucher Birkar & Fields Medal & PhD & Algebraic Geometry & University of Nottingham & GB & M & birational geometry \\
+Kirsten Green & Forerunner Partners III, L.P. & Bachelor & Business Economics & UCLA & US & F & consumer venture capital \\
+Ann Miura-Ko & Floodgate Fund III, L.P. & PhD & Information Security & Stanford University & US & F & seed-stage venture capital \\
+Arooj Aftab \textit{\scriptsize(excl.)} & Mohabbat (Vulture Prince) & Bachelor & Music Production and Engineering & Berklee College of Music & PK & F & jazz vocals \\
+Domee Shi & Bao & Bachelor & Animation & Sheridan College & CA & F & animation direction \\
+Robert Kuok & Malayan Sugar Manufacturing Co. Bhd. & High sch. & \textit{unk} & Raffles Institution & MY & M & sugar trading \\
+Martua Sitorus & Wilmar Trading Pte Ltd / Wilmar Group & High sch. & \textit{unk} & SMA Budi Mulia & ID & M & palm oil trading \\
+Tracy Young & PlanGrid & Bachelor & Construction Management & Sacramento State & US & F & construction software \\
+Josh Reeves & Gusto (ZenPayroll) & Master & Electrical Engineering & Stanford University & US & M & payroll software \\
+Spenser Skates & Amplitude, Inc. & Bachelor & Biological Engineering & MIT & US & M & product analytics \\
+Apoorva Mehta & Instacart (Maplebear Inc.) & Bachelor & Electrical Engineering & University of Waterloo & CA & M & grocery delivery \\
+Drew Durbin & Sendwave (Chime Inc.) & Bachelor & \textit{unk} & Brown University & US & M & mobile remittances \\
+Yoshi Yokokawa & Alpaca (AlpacaDB, Inc.) & Bachelor & Policy Management & Keio University & JP & M & brokerage infrastructure \\
+David Gausebeck & Matterport, Inc. & Bachelor & Computer Science & University of Illinois at Urbana-Champaign & US & M & 3D spatial capture \\
+Veronica Pascual Boe & ASTI Mobile Robotics & Master & Business Administration & College des Ingenieurs & ES & F & mobile robotics \\
+Andrea Pizzarulli & Civitanavi Systems & Bachelor & Electronic Engineering & Universita Politecnica delle Marche & IT & M & inertial navigation \\
+Raycho Raychev & EnduroSat & Master & Space Management & International Space University & BG & M & small satellites \\
+Mateo Marietti \textit{\scriptsize(excl.)} & POP (Sushi Pop) & Bachelor & Business Economics & Universidad Torcuato Di Tella & AR & M & sushi restaurants \\
+Tuan Ee Loi & Farm Fresh (The Holstein Milk Company) & High sch. & \textit{unk} & Sekolah Menengah Jenis Kebangsaan Ayer Tawar & MY & M & fresh milk \\
+Maria Jose Madero & Ben \& Frank & Bachelor & Fashion and Textile Design & CENTRO de Diseno, Cine y Television & MX & F & eyewear \\
+Gili Raanan & Cyberstarts Venture Fund II, L.P. & Master & Business Administration & Recanati School of the Tel Aviv University & IL & M & cybersecurity venture capital \\
+Neil Shen & Sequoia Capital China (first fund 2005 / China II 2007) & Master & Management & Yale School of Management & CN & M & venture capital \\
+Martin Mignot & Index Ventures IX (Jersey), L.P. & Master & Finance & Sciences Po & FR & M & venture capital \\
+Daniel Kraus \textit{\scriptsize(excl.)} & Whalefall (2023) / Angel Down (2025) / The Shape of Water (2018) & Master & Library and Information Science & University of Illinois Urbana-Champaign & US & M & fiction writing \\
+Bad Bunny & Diles (2016 single/video) & High sch. & \textit{unk} & \textit{unk} & PR & M & Latin trap \\
+Maggie Kang & KPop Demon Hunters (2025) & Bachelor & Animation & Sheridan College & KR & F & animation \\
+Omar M. Yaghi & Nobel Prize in Chemistry & PhD & Inorganic Chemistry & University of Illinois at Urbana-Champaign & US & M & metal-organic frameworks \\
+Shimon Sakaguchi & Nobel Prize in Physiology or Medicine & PhD & Medicine & Kyoto University & JP & M & regulatory T cells \\
+Michel H. Devoret & Nobel Prize in Physics & PhD & Quantum Condensed-Matter Physics & Universite Paris-Sud & FR & M & superconducting circuits \\
+Jason Borschow \textit{\scriptsize(excl.)} & Abarca Health & Bachelor & Economics & Harvard University & PR & M & pharmacy benefits \\
+Hoang Nguyen & Buymed (thuocsi.vn) & Bachelor & \textit{unk} & Foreign Trade University & VN & M & pharmaceutical e-commerce \\
+Jay McHarg \textit{\scriptsize(excl.)} & AeroSafe Global (American Aerogel Corporation) & Master & Business Administration & Babson College & US & M & cold-chain packaging \\
+Amancio Ortega & Confecciones GOA (later Inditex) & none & \textit{unk} & \textit{unk} & ES & M & fast fashion \\
+Reinhold Wuerth & Adolf Wuerth KG (Wuerth Group) & none & \textit{unk} & \textit{unk} & DE & M & industrial fasteners \\
+Eddy Lu & GOAT & Bachelor & \textit{unk} & University of California, Berkeley & US & M & sneaker resale \\
+Ken Olsen & Digital Equipment Corporation & Master & Electrical Engineering & MIT & US & M & minicomputers \\
+Steve Wozniak & Apple Computer, Inc. & Bachelor & Electrical Engineering and Computer Science & University of California, Berkeley & US & M & personal computers \\
+Gene Amdahl & Amdahl Corporation & PhD & Theoretical Physics & University of Wisconsin-Madison & US & M & mainframe computers \\
+Konrad Zuse & Zuse KG & Master & Civil Engineering & TH Berlin-Charlottenburg & DE & M & computers \\
+Thomas Frist Jr. & Hospital Corporation of America & MD & Medicine & Washington University School of Medicine & US & M & hospital chains \\
+Chung Yong-ji & Caregen Co., Ltd. & PhD & Molecular Biology & Cornell University & KR & M & biomimetic peptides \\
+Alyson Friedensohn \textit{\scriptsize(excl.)} & \textit{unk} & Bachelor & Global Environmental Change and Sustainability & Johns Hopkins University & US & F & workplace mental health \\
+Vinod Khosla & Kleiner Perkins Caufield \& Byers VI & Master & Business Administration & Stanford University & US & M & venture capital \\
+Eric Vishria & Benchmark Capital Partners IX, L.P. & Bachelor & Mathematical and Computational Science & Stanford University & US & M & venture capital \\
+Peter Thiel & Founders Fund II & JD & Law & Stanford Law School & US & M & venture capital \\
+Paul Thomas Anderson & Boogie Nights & High sch. & \textit{unk} & Montclair College Preparatory School & US & M & film direction \\
+SZA & Ctrl & High sch. & \textit{unk} & Columbia High School & US & F & alternative R\&B \\
+Alan J. Perlis & ACM A.M. Turing Award & PhD & Mathematics & Massachusetts Institute of Technology & US & M & programming languages \\
+Maurice V. Wilkes & ACM A.M. Turing Award & PhD & Physics & University of Cambridge & GB & M & stored-program computers \\
+Lars Valerian Ahlfors & Fields Medal & PhD & Mathematics & University of Helsinki & FI & M & complex analysis \\
+Zach Sims & Codecademy (Ryzac, Inc.) & High sch. & \textit{unk} & \textit{unk} & US & M & online coding education \\
+Larry Page & Google Inc. & Master & Computer Science & Stanford University & US & M & web search \\
+Ilya Volodarsky & Segment (Segment.io, Inc.) & High sch. & \textit{unk} & \textit{unk} & US & M & customer data infrastructure \\
+Jeff Bezos & Amazon.com, Inc. & Bachelor & Electrical Engineering and Computer Science & Princeton University & US & M & e-commerce \\
+Neal O'Mara & HelloSign (JN Projects, Inc., d/b/a HelloSign) & Bachelor & Computer Science & Bucknell University & US & M & electronic signatures \\
+Mark Zuckerberg & Facebook (Thefacebook, Inc.) & High sch. & \textit{unk} & Phillips Exeter Academy & US & M & social networking \\
+Gautam Adani & Adani Exports (now Adani Enterprises Ltd) & \textit{unk} & \textit{unk} & \textit{unk} & IN & M & commodities trading \\
+Mariya Nurislamova & Scentbird & Bachelor & Business Administration & Baruch College & US & F & fragrance subscription \\
+Jim Ratcliffe & Inspec Group & Master & Finance & London Business School & GB & M & petrochemicals \\
+Lakshmi Mittal & PT Ispat Indo & Bachelor & Commerce & St. Xavier's College & IN & M & steelmaking \\
+Carver Mead & Silicon Compilers Inc. & PhD & Electrical Engineering & California Institute of Technology & US & M & VLSI design \\
+Stephen Lake & Thalmic Labs (North) & Bachelor & Mechatronics Engineering & University of Waterloo & CA & M & wearable computing \\
+Aleksandr Konotopskyi & Ajax Systems & Bachelor & Telecommunication Systems and Networks & NTUU KPI & UA & M & wireless security systems \\
+Luca Rossettini & D-Orbit & PhD & Advanced Space Propulsion & Politecnico di Milano & IT & M & satellite logistics \\
+Murali Divi & Divi's Laboratories (founded as Divi's Research Centre) & PhD & Pharmaceutical Sciences & Kakatiya University & IN & M & generic API manufacturing \\
+Zhu Yi \textit{\scriptsize(excl.)} & Sichuan Biokin Pharmaceutical (founded 1996 as Sichuan Baili Pharmaceutical) & PhD & Management & Sichuan University & CN & M & oncology biologics \\
+Elad Gil & Cosmic - Aleph 1, L.P. & PhD & Biology & Massachusetts Institute of Technology & US & M & solo venture investing \\
+Trae Stephens & Founders Fund IX, LP & Bachelor & Regional and Comparative Studies & Georgetown University & US & M & defense technology investing \\
+Billie Eilish & Ocean Eyes (2015 SoundCloud single) & \textit{unk} & \textit{unk} & \textit{unk} & US & F & pop music \\
+Bess Wohl \textit{\scriptsize(excl.)} & \textit{unk} & Master & Acting & Yale University & US & F & playwriting \\
+Jill Lepore & The New Yorker essays (from "People Power", 24 October 2005) & PhD & American Studies & Yale University & US & F & American history \\
+Laurent Schwartz & Fields Medal & PhD & Mathematics & University of Strasbourg & FR & M & distribution theory \\
+Ragnar Frisch & Nobel Prize in Economic Sciences & PhD & Mathematical Statistics & University of Oslo & NO & M & econometrics \\
+Edward Witten & Fields Medal & PhD & Physics & Princeton University & US & M & string theory \\
+Victor Ho & Fivestars & Bachelor & Industrial Engineering & University of California, Berkeley & US & M & customer loyalty software \\
+Larry Ellison & Oracle (founded as Software Development Laboratories) & High sch. & \textit{unk} & South Shore High School & US & M & relational databases \\
+Michael Nusimow & DrChrono & Bachelor & Computer Engineering & Stony Brook University & US & M & electronic health records \\
+Zhang Yiming & ByteDance & Bachelor & Computer Engineering & Nankai University & CN & M & short-form video \\
+Bo Lu & FutureAdvisor & Bachelor & Computer Science & University of Illinois Urbana-Champaign & US & M & robo-advisory \\
+Ma Huateng & Tencent & Bachelor & Computer Science and Applied Engineering & Shenzhen University & CN & M & instant messaging \\
+Huang Zheng & Ouku.com (欧酷网) & Master & Computer Science & University of Wisconsin–Madison & CN & M & consumer electronics e-commerce \\
+Fred Smith & Federal Express & Bachelor & Economics & Yale University & US & M & overnight air cargo \\
+Alex Solomon & PagerDuty & Bachelor & Software Engineering & University of Waterloo & US & M & incident management \\
+Pete Koomen & Optimizely & Master & Computer Science & University of Illinois Urbana-Champaign & US & M & A/B testing \\
+Patrick Collison & Stripe & \textit{unk} & \textit{unk} & \textit{unk} & US & M & online payments \\
+Bill Clerico & WePay & Bachelor & Computer Science & Boston College & US & M & integrated payments \\
+Suhail Doshi & Mixpanel & High sch. & \textit{unk} & \textit{unk} & US & M & product analytics \\
+Brian Chesky & Airbnb & Bachelor & Industrial Design & Rhode Island School of Design & US & M & short-term lodging \\
+Phil Knight & Blue Ribbon Sports (Nike) & Master & Business Administration & Stanford University & US & M & athletic footwear \\
+François Pinault \textit{\scriptsize(excl.)} & Pinault SA & none & \textit{unk} & \textit{unk} & FR & M & timber trading \\
+Todd Graves \textit{\scriptsize(excl.)} & Raising Cane's & Bachelor & Telecommunications & University of Georgia & US & M & chicken-finger restaurants \\
+Ernest Garcia II & Ugly Duckling (later DriveTime) & \textit{unk} & \textit{unk} & \textit{unk} & US & M & used-car lending \\
+Allan Alcorn & Silicon Gaming & Bachelor & Electrical Engineering and Computer Science & University of California, Berkeley & US & M & casino gaming machines \\
+Nolan Bushnell & Atari & Bachelor & Electrical Engineering & University of Utah & US & M & coin-op video games \\
+Jensen Huang & NVIDIA & Master & Electrical Engineering & Stanford University & US & M & graphics processors \\
+Robert Duggan & Computer Motion & High sch. & \textit{unk} & \textit{unk} & US & M & surgical robotics \\
+Sulaiman Al Habib \textit{\scriptsize(excl.)} & Dr. Sulaiman Al Habib Medical Services Group & MD & Medicine & King Saud University & SA & M & hospital operations \\
+Seo Jung-jin & Celltrion & Master & Business Administration & Konkuk University & KR & M & biosimilars \\
+Joel Mokyr & Nobel Prize in Economic Sciences & PhD & Economics & Yale University & US & M & economic history \\
+John J. Hopfield & Nobel Prize in Physics & PhD & Physics & Cornell University & US & M & neural networks \\
+Jean Bennett & Breakthrough Prize in Life Sciences & MD & Medicine & Harvard University & US & F & ocular gene therapy \\
+Douglas Leone & Sequoia Capital VI & Master & Management & MIT Sloan School of Management & US & M & venture capital \\
+Danny Rimer & Barksdale Group (1999 fund) & Bachelor & History and Literature & Harvard University & GB & M & venture capital \\
+Susie Neilson \textit{\scriptsize(excl.)} & Burned (SF Chronicle series) & Master & Journalism & University of California, Berkeley & US & F & investigative journalism \\
+Olivia Dean & Reason to Stay (2018 single) & High sch. & Music & The BRIT School & GB & F & soul-pop music \\
+Brad Jacobs & United Waste Systems & \textit{unk} & \textit{unk} & \textit{unk} & US & M & solid waste management \\
+Kjell Inge Rokke \textit{\scriptsize(excl.)} & American Seafoods & none & \textit{unk} & \textit{unk} & NO & M & commercial fishing \\
+\bottomrule
+\end{longtable}
+\normalsize
+\end{document}

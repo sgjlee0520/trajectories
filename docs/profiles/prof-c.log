@@ -1,0 +1,44 @@
+| PhD | 13 |
+| Masters | 13 |
+| HighSchool | 8 |
+| MD | 2 |
+| None | 2 |
+| Associate | 1 |
+| JD | 1 |
+| unknown | 0 |
+
+## Not fully resolved
+
+Nobody has `highest_degree=unknown`. These are the people with a remaining gap:
+
+**No completed credential (recorded `None`):**
+- Amancio Ortega — left school at 14; notes name no completed credential
+- Reinhold Wuerth — withdrawn from Oberrealschule; the subsequent Lehre is not sourced as completed
+
+**Tertiary degree known, subject not:**
+- Drew Durbin (Brown)
+- Hoang Nguyen (Foreign Trade University)
+- Eddy Lu (UC Berkeley)
+
+**High school completed, school not named:**
+- Bad Bunny
+- Zach Sims (Columbia dropout; last completed credential is high school, unnamed)
+
+**University attendance not treated as a degree:**
+- Martua Sitorus — notes and Wikipedia say he studied economics at HKBP Nommensen; Forbes calls him a “former economics student.” Completion is not sourced, so the row is HighSchool at SMA Budi Mulia
+- Robert Kuok — Forbes BA from Raffles College is unconfirmed in the notes; recorded HighSchool at Raffles Institution
+
+## Judgment calls worth flagging
+
+- **Patrick Soon-Shiong:** MB BCh at Witwatersrand is recorded as `MD`, not the later MSc in Surgery
+- **Xu Hang:** two Masters-level credentials; used the academic MS in biomedical engineering at Tsinghua, not the CEIBS EMBA
+- **Sun Piaoyang:** only the 1982 bachelor’s is used; Forbes doctorate vs zh.wikipedia master’s is unresolved
+- **Zhu Gongshan:** 1981 “diploma in electrical automation” from Nanjing Electric Power College mapped to `Associate`
+- **Steve Wozniak:** later Berkeley BS in EECS (1986/87) is the highest credential *actually completed*, not the 1968 high-school a2
+- **Larry Page / Zach Sims:** unfinished programmes are not degrees; Page’s completed Stanford MS is used; Sims’s last completed credential is high school
+- **Konrad Zuse:** German Diplom-Ingenieur recorded as `Masters`
+- **Raycho Raychev:** undated, uncorroborated PhD claim in notes is not used; MSc at International Space University stands
+=== DONE docs/profiles/prof-c.csv ===
+rows: 60
+degree: [('Bachelors', 20), ('PhD', 13), ('Masters', 13), ('HighSchool', 8), ('MD', 2), ('None', 2), ('Associate', 1), ('JD', 1)]
+basis : [('notes', 60)]
