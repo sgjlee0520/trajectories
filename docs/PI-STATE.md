@@ -24,46 +24,44 @@
 
 | | |
 |---|---|
+| collection | **COMPLETE** — `STOP: True` 2026-08-23. Handoff: `docs/COLLECTION-COMPLETE.md` |
 | people researched | **235** (`data/anchors.csv`), schema 0 errors |
-| included | 201 · excluded 34 (14%) |
-| roster | **235 names**; all 235 researched — wave 10 needs a fresh draw |
-| revenue-strict n | **83** (waves 7–8 folded in 2026-08-22 after audit) |
-| median at n=83 | **9.0 yr**, 95% CI [8.0, 12.5], half-width 2.25 |
-| median history | 10.0, 9.0, 8.8, 9.0, 9.0, 9.8, 9.2, 9.0 |
-| stopping rule | not met — drift (0.60, 0.20) needs both <0.50; half-width 2.25 needs ≤1.0 |
+| included | 201 · excluded 34 (14.5%) |
+| roster | **235 names**; all 235 researched |
+| revenue-strict n | **93** |
+| median at n=93 | **9.0 yr**, 95% CI [8.0, 10.0], half-width **1.00** |
+| median history | 10.0, 9.0, 8.8, 9.0, 9.0, 9.8, 9.2, 9.0, 9.0 |
+| stopping rule | **met** — drift (0.20, 0.00) both <0.50; half-width 1.00 ≤ 1.0 |
 | tests | 207, `python3 -m unittest discover -s tests -t .` |
-| composition | pre-1995 24%, non-US 59%, women 27% — all recorded covariates, none steered |
+| composition | pre-1995 23.4% of all rows (27.0% of dated), non-US 54.9%, women 25.5% — recorded covariates, none steered |
 
-Waves done: pilot (10), waves 1–8 (25 each). Waves 7–8 were researched on a
-second machine, merged here, and were **audited 2026-08-22 — contradiction rate
-0.000, wave passes.** Their rows are now in `analysis/clocks.csv`.
+Waves done: pilot (10), waves 1–9 (25 each). Wave 9 audited 2026-08-23 —
+contradiction rate **0.000**, two first-only misses. Wave passes. Rows are in
+`analysis/clocks.csv`. Collector did not start wave 10.
 
 ## OPEN ITEMS, in priority order
 
-1. **Wave 9 is researched and merged but NOT AUDITED.** It is Grok's first job
-   under `GROK-RUN-THE-STUDY.md`, and nothing may be recomputed until the audit
-   passes. The numbers in the table above are still the pre-wave-9 figures.
-
-2. **The LaTeX paper.** Not started. Claude's job. Should carry: the survivorship
+1. **The LaTeX paper.** Not started. Claude's job. Should carry: the survivorship
    framing, the constant-dollar method, the full bias catalogue, the audit
-   methodology including its two rule changes and why, and the median with its
-   actual interval.
+   methodology including its two rule changes and why, the median with its
+   actual interval, and everything in `docs/COLLECTION-COMPLETE.md` § uncertainties.
+   Decisions for the PI: `docs/OPEN-FOR-PI.md`.
 
-3. **p183 Neal O'Mara is a standing rescue candidate.** The wave 7–8 audit's
-   second pass could not date HelloSign at all where the first pass has
-   `2011-2019` (medium). That is a miss, not a contradiction — the first pass's
-   range stands and the wave is unaffected (`BIASES.md` 19) — but an 8-year
-   range on a private company is the weakest surviving row in those waves and is
-   the first thing a rescue pass should attack.
+2. **Rescue candidates, not collection.** p183 HelloSign `2011-2019`, p214 WePay
+   `2008-2017`, p233 Olivia Dean `2018-2019`. First-pass dates stand. None of
+   them can un-fire STOP.
 
-4. **Wave 9 will move the covariates and that is allowed.** The drawn wave is
-   6/25 non-US and 3/25 women against a study at 59% and 27%. Recorded, not
-   corrected (`frame.md`, Recorded covariates). Expect the pooled shares to drop
-   when these rows are researched, and say so in the paper rather than
-   explaining it away.
+3. **Wave 9 did move the covariates, as predicted.** Drawn wave 6/25 non-US and
+   3/25 women against a pre-wave-9 file at 59% and 27%. Pooled file is now
+   54.9% non-US and 25.5% women. Recorded, not corrected (`frame.md`).
 
 ## Done since the last reset (2026-08-22)
 
+- **Wave 9 audited and collection stopped.** Blind second pass on
+  `p211 p213 p214 p218 p221 p225 p226 p231 p232 p233`. Contradiction 0.000,
+  two first-only misses. Recompute: n=93, median 9.0, CI [8.0, 10.0],
+  half-width 1.00. `STOP: True`. Handoff in `docs/COLLECTION-COMPLETE.md`.
+  Paper is Claude's. No further waves.
 - **Waves 7–8 audited.** Blind second pass on the drawn sample
   `p164 p165 p182 p183 p184 p195 p196 p202 p206 p210`, run by Grok in a scratch
   directory holding only the two briefs and `src/cpi.py` (`BIASES.md` 22).

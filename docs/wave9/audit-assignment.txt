@@ -1,0 +1,10 @@
+p211|Alex Solomon|PagerDuty|rev10
+p213|Patrick Collison|Stripe|rev10
+p214|Bill Clerico|WePay|rev10
+p218|François Pinault|Pinault SA|rev10
+p221|Allan Alcorn|Silicon Gaming|rev10
+p225|Sulaiman Al Habib|Dr. Sulaiman Al Habib Medical Services Group|rev10
+p226|Seo Jung-jin|Celltrion|rev10
+p231|Danny Rimer|Barksdale Group|fund100
+p232|Susie Neilson|Burned (SF Chronicle series)|aud1m
+p233|Olivia Dean|Reason to Stay|aud1m
