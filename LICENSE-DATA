@@ -1,0 +1,19 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Sanggun Lee
+
+The dataset, documentation and papers in this repository are licensed under the
+Creative Commons Attribution 4.0 International License. You are free to share
+and adapt this material for any purpose, including commercially, provided you
+give appropriate credit, link to the license, and indicate if changes were made.
+
+Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Applies to: data/, docs/, analysis/, frame.md, README.md, and the papers.
+
+Attribution note. If you cite the median, cite it with its framing: it measures
+time-to-hit among people who already succeeded, and says nothing about the odds
+of succeeding. Quoting the figure without that condition misrepresents it.
+
+The underlying facts are drawn from public sources -- published rankings,
+regulatory filings, prize announcements and press -- and each is cited in place.
