@@ -21,6 +21,7 @@ this repository supports a statement about the odds of succeeding.
 
 ## The papers
 
+- [sgjlee0520.github.io/trajectories-site](https://sgjlee0520.github.io/trajectories-site/) — English and Korean pages with the PDFs embedded
 - [`analysis/paper.pdf`](analysis/paper.pdf) — the study, in English
 - [`analysis/paper-ko.pdf`](analysis/paper-ko.pdf) — 한국어판
 
